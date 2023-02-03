@@ -1,0 +1,25 @@
+CREATE TABLE sotHowlUserHowler(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  howlUserId TEXT NOT NULL,
+  howlerId TEXT NOT NULL
+);
+
+selectAll:
+SELECT *
+FROM sotHowlUserHowler
+WHERE howlUserId = ?
+AND howlerId = ?;
+
+getAllByHowlerId:
+SELECT *
+FROM sotHowlUserHowler
+WHERE howlerId = ?;
+
+getAllByHowlUserId:
+SELECT *
+FROM sotHowlUserHowler
+WHERE howlUserId = ?;
+
+create:
+INSERT OR REPLACE INTO sotHowlUserHowler
+VALUES (?, ?, ?);

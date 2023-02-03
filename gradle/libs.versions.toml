@@ -1,0 +1,100 @@
+[versions]
+activity-compose = "1.4.0-beta01"
+android-min-sdk = "24"
+android-compile-sdk = "33"
+android-target-sdk = "33"
+anvil = "2.4.2"
+atomic-fu = "0.18.5"
+componentbox = "1.0.0-SNAPSHOT"
+coil-compose = "2.2.2"
+compose-androidx = "1.3.0-beta02"
+compose-compiler = "1.3.0"
+compose-jetbrains = "1.3.0-beta04-dev873"
+compose-material3 = "1.1.0-alpha02"
+compose-navigation = "2.5.2"
+coroutines = "1.6.4"
+dagger = "2.44"
+gradle = "7.3.1"
+kmm-bridge = "0.3.2"
+kotlin = "1.7.10"
+kotlinx-serialization = "1.4.0"
+ktor = "2.1.3"
+molecule = "0.6.1"
+native-coroutines = "0.13.0"
+store4 = "4.0.7"
+store5 = "5.0.0-alpha02"
+store-snapshot = "5.0.0-SNAPSHOT"
+sqldelight = "1.5.3"
+okio = "3.2.0"
+okHttp = "4.9.1"
+viewmodel = "2.6.0-alpha02"
+zipline = "0.9.10"
+
+[libraries]
+anvil-gradle-plugin = { group = "com.squareup.anvil", name = "gradle-plugin", version.ref = "anvil" }
+androidx-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "viewmodel" }
+androidx-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version = "1.5.4" }
+datastore-preferences = {group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0"}
+
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+
+componentbox-core = { group = "com.dropbox.componentbox", name = "componentbox", version.ref = "componentbox" }
+componentbox-material = { group = "com.dropbox.componentbox", name = "material", version.ref = "componentbox" }
+componentbox-kit = { group = "com.dropbox.componentbox", name = "kit", version.ref = "componentbox" }
+compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose-androidx" }
+compose-material = { group = "androidx.compose.material", name = "material", version.ref = "compose-androidx" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose-androidx" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
+
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+
+dagger-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
+
+gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
+
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-std-lib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-serialization = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
+kotlinx-atomic-fu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version.ref = "atomic-fu" }
+kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+okio-core = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+okHttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }
+
+store4 = { group = "org.mobilenativefoundation.store", name = "store4", version.ref = "store4" }
+store5 = { group = "org.mobilenativefoundation.store", name = "store5", version.ref = "store5" }
+store5-js = { group = "org.mobilenativefoundation.store", name = "store5-js", version.ref = "store5" }
+
+
+store5-snapshot = { group = "org.mobilenativefoundation.store", name = "store5", version.ref = "store-snapshot" }
+store5-snapshot-ios-arm64 = { group = "org.mobilenativefoundation.store", name = "store5-iosarm64", version.ref = "store-snapshot" }
+store5-snapshot-ios-x64 = { group = "org.mobilenativefoundation.store", name = "store5-iosx64", version.ref = "store-snapshot" }
+store5-snapshot-js = { group = "org.mobilenativefoundation.store", name = "store5-js", version.ref = "store-snapshot" }
+store5-snapshot-jvm = { group = "org.mobilenativefoundation.store", name = "store5-jvm", version.ref = "store-snapshot" }
+
+sqldelight-android-driver = { group = "com.squareup.sqldelight", name = "android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { group = "com.squareup.sqldelight", name = "coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-gradle-plugin = { group = "com.squareup.sqldelight", name = "gradle-plugin", version.ref = "sqldelight" }
+sqldelight-native-driver = { group = "com.squareup.sqldelight", name = "native-driver", version.ref = "sqldelight" }
+sqldelight-runtime = { group = "com.squareup.sqldelight", name = "runtime", version.ref = "sqldelight" }
+sqldelight-sqlite-driver = { group = "com.squareup.sqldelight", name = "sqlite-driver", version.ref = "sqldelight" }
+sqldelight-sqljs-driver = { group = "com.squareup.sqldelight", name = "sqljs-driver", version.ref = "sqldelight" }
+
+zipline-zipline = { group = "app.cash.zipline", name = "zipline", version.ref = "zipline" }
+zipline-loader = { group = "app.cash.zipline", name = "zipline-loader", version.ref = "zipline" }
+
+[plugins]
+molecule = { id = "app.cash.molecule", version.ref = "molecule" }
+sqldelight = { id = "com.squareup.slqdelight", version.ref = "sqldelight" }
+native-coroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "native-coroutines" }
