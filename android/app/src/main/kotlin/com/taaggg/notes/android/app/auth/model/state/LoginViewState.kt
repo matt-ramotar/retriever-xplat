@@ -1,6 +1,6 @@
 package com.taaggg.notes.android.app.auth.model.state
 
-import so.howl.common.storekit.entities.auth.AuthenticatedHowlUser
+import com.taaggg.notes.common.storekit.entities.user.output.User
 
 sealed class LoginViewState {
     object Initial : LoginViewState()
@@ -8,7 +8,7 @@ sealed class LoginViewState {
     sealed class Token : LoginViewState() {
         object Loading : Token()
         data class Data(
-            val user: AuthenticatedHowlUser,
+            val user: User,
             val token: String,
         ) : Token()
 
@@ -18,10 +18,10 @@ sealed class LoginViewState {
     }
 
     sealed class NoToken : LoginViewState() {
-        object WaitingForUserToSubmit: NoToken()
+        object WaitingForUserToSubmit : NoToken()
         object Syncing : NoToken()
         data class Data(
-            val user: AuthenticatedHowlUser,
+            val user: User,
             val token: String,
         ) : NoToken()
 

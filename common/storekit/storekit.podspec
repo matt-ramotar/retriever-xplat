@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'storekit'
     spec.version                  = '0.0.1'
-    spec.homepage                 = 'https://github.com/matt-ramotar/howl'
+    spec.homepage                 = 'https://github.com/matt-ramotar/notes-xplat'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
     spec.license                  = ''

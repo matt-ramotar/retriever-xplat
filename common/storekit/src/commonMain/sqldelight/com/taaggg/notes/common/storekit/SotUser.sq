@@ -1,0 +1,23 @@
+CREATE TABLE sotUser(
+  id TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  avatarUrl TEXT
+);
+
+getById:
+SELECT *
+FROM sotUser
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO sotUser
+VALUES ?;
+
+clearById:
+DELETE
+FROM sotUser
+WHERE id = ?;
+
+clearAll:
+DELETE FROM sotUser;

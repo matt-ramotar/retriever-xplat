@@ -1,4 +1,4 @@
-package so.howl.android.app.ui
+package com.taaggg.notes.android.app.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import so.howl.android.app.navigation.BottomTabs
-import so.howl.android.common.navigation.Screen
+import com.taaggg.notes.android.app.navigation.BottomTabs
+import com.taaggg.notes.android.common.navigation.Screen
 
 @Composable
 fun HowlBottomBar(navController: NavHostController) {

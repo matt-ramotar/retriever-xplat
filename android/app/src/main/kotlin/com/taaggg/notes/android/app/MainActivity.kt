@@ -1,7 +1,32 @@
 package com.taaggg.notes.android.app
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.ComponentActivity
+import com.taaggg.notes.android.app.auth.PassableUser
+import com.taaggg.notes.android.app.wiring.AppComponent
+import com.taaggg.notes.android.app.wiring.UserComponent
+import com.taaggg.notes.android.common.scoping.ComponentHolder
+import com.taaggg.notes.common.storekit.entities.user.output.User
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), ComponentHolder {
+    companion object {
+        fun getLaunchIntent(context: Context, user: PassableUser): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("USER", user)
+            return intent
+        }
+    }
 
+    private lateinit var user: User
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+
+    override lateinit var component: UserComponent
+
+    private val appComponent: AppComponent by lazy { (application as NotesApp).component }
+    private val userComponentFactory: UserComponent.Factory by lazy { appComponent.userComponentFactory() }
+    private val initialized = MutableStateFlow(false)
 }

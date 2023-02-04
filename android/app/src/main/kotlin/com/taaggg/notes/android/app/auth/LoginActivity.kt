@@ -1,31 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.taaggg.notes.android.app.auth
 
 import android.content.Context
 import android.content.Intent
-import android.content.IntentSender
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -35,25 +16,25 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
+import com.taaggg.notes.android.app.MainActivity
+import com.taaggg.notes.android.app.NotesApp
+import com.taaggg.notes.android.app.R
+import com.taaggg.notes.android.app.appDependencies
+import com.taaggg.notes.android.app.auth.model.viewmodel.LoginViewModel
+import com.taaggg.notes.android.app.auth.ui.LoginScreen
+import com.taaggg.notes.android.app.notesApp
+import com.taaggg.notes.android.app.userComponentFactory
+import com.taaggg.notes.android.app.wiring.AppComponent
+import com.taaggg.notes.android.app.wiring.AppDependencies
+import com.taaggg.notes.android.app.wiring.UserComponent
+import com.taaggg.notes.common.storekit.api.NotesApi
+import com.taaggg.notes.common.storekit.entities.auth.GoogleUser
+import com.taaggg.notes.common.storekit.entities.user.output.User
+import com.taaggg.notes.common.storekit.extension.toUser
+import com.taaggg.notes.common.storekit.result.RequestResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import so.howl.android.app.HowlApp
-import so.howl.android.app.MainActivity
-import so.howl.android.app.R
-import so.howl.android.app.appDependencies
-import com.taaggg.notes.android.app.auth.model.state.LoginViewState
-import so.howl.android.app.auth.model.viewmodel.LoginViewModel
-import so.howl.android.app.howlApp
-import so.howl.android.app.parcelizable
-import so.howl.android.app.userComponentFactory
-import com.taaggg.notes.android.app.wiring.AppComponent
-import com.taaggg.notes.android.app.wiring.AppDependencies
-import so.howl.android.app.wiring.UserComponent
-import so.howl.common.storekit.api.HowlApi
-import so.howl.common.storekit.entities.auth.AuthenticatedHowlUser
-import so.howl.common.storekit.entities.auth.GoogleUser
-import so.howl.common.storekit.result.RequestResult
 
 const val TOKEN_KEY = "TOKEN KEY"
 const val AUTH_DATA_STORE = "AUTH DATA STORE"
@@ -62,18 +43,13 @@ val Context.authDataStore: DataStore<Preferences> by preferencesDataStore(name =
 class LoginActivity : ComponentActivity() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val appComponent: AppComponent by lazy { howlApp().component }
+    private val appComponent: AppComponent by lazy { notesApp().component }
 
-    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
-    private val activityResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
-        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
-            println("ACTIVITY RESULT ----> $result")
-        }
-
     private val userComponentFactory: UserComponent.Factory by lazy { appComponent.userComponentFactory() }
     private val viewModel = viewModels<LoginViewModel> {
-        val appComponent = (application as HowlApp).component
+        val appComponent = (application as NotesApp).component
         val appDependencies = appComponent as AppDependencies
         val authRepository = appDependencies.authRepository
         val authDataStore = applicationContext.authDataStore
@@ -84,100 +60,84 @@ class LoginActivity : ComponentActivity() {
         )
     }
 
-    private val api: HowlApi by lazy {
+    private val api: NotesApi by lazy {
         appComponent.appDependencies().api
     }
 
-    private fun createUserComponent(user: AuthenticatedHowlUser) {
+    private fun createUserComponent(user: User) {
         userComponentFactory.create(user)
     }
 
-    private fun startMainActivity(user: AuthenticatedHowlUser){
-        val intent = MainActivity.getLaunchIntent(applicationContext, user.parcelizable())
+    private fun startMainActivity(user: User) {
+        val intent = MainActivity.getLaunchIntent(applicationContext, user.parcelize())
         startActivity(intent)
     }
 
-    private fun signIn() {
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener(this) { result ->
-                try {
-                    println("RESULT === $result")
-                    startIntentSenderForResult(
-                        result.pendingIntent.intentSender, 1,
-                        null, 0, 0, 0, null
-                    )
+    private fun handleToken(user: User) {
+        createUserComponent(user)
+        startMainActivity(user)
+    }
 
-                } catch (e: IntentSender.SendIntentException) {
-                    println("ERROR ==== $e")
-                }
+    private fun signIn() {
+        signInClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(this) { result ->
+
+                val intent = result.pendingIntent.intentSender
+                val requestCode = REQUEST_CODE
+                val fillInIntent = null
+                val flagsMask = 0
+                val flagsValue = 0
+                val extraFlags = 0
+                val options = null
+
+                startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValue, extraFlags, options)
             }
-            .addOnFailureListener(this) { e ->
-                // No saved credentials found. Launch the One Tap sign-up flow, or
-                // do nothing and continue presenting the signed-out UI.
-                println("FAILURE ==== $e")
+            .addOnFailureListener(this) { error ->
+                // TODO(mramotar): Display error message
+                println("Error: $error")
             }
     }
 
-
-    private suspend fun continueWithGoogle(googleUser: GoogleUser) {
-        when (val response = api.continueWithGoogle(googleUser)) {
-            is RequestResult.Exception -> {
-                println("EXCEPTION = ${response.error}")
-            }
-
+    private suspend fun continueWithGoogle(user: GoogleUser) {
+        when (val response = api.google(user)) {
+            is RequestResult.Exception -> TODO()
             is RequestResult.Success -> {
                 viewModel.value.setToken(response.data.token)
-                createUserComponent(response.data.user)
-                startMainActivity(response.data.user)
+                createUserComponent(response.data.user.toUser())
+                startMainActivity(response.data.user.toUser())
             }
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        println("RESULT === $requestCode")
         when (requestCode) {
-            1 -> {
+            REQUEST_CODE -> {
                 try {
-                    val credential = oneTapClient.getSignInCredentialFromIntent(data)
-                    val idToken = credential.googleIdToken
-                    val password = credential.password
+                    val credential = signInClient.getSignInCredentialFromIntent(data)
                     when {
-                        idToken != null -> {
-                            // Got an ID token from Google. Use it to authenticate
-                            // with your backend.
-
+                        credential.googleIdToken != null -> {
                             val name = credential.displayName
-                            val googleId = credential.publicKeyCredential
-                            val avatarUrl = credential.profilePictureUri
-                            val username = credential.id
                             val email = credential.id
-                            println("HITTING")
+                            val avatarUrl = credential.profilePictureUri
 
-                            val googleUser = GoogleUser(email, username, name, googleId?.id, avatarUrl?.toString())
+                            val googleUser = GoogleUser(name, email, avatarUrl?.toString())
 
                             coroutineScope.launch {
                                 continueWithGoogle(googleUser)
                             }
-
                         }
 
-                        password != null -> {
-                            // Got a saved username and password. Use them to authenticate
-                            // with your backend.
-                            println("PASSWORD ==== $password")
+                        credential.password != null -> {
+                            // TODO(mramotar): Handle normal login
                         }
 
-                        else -> {
-                            // Shouldn't happen.
-                            println("ELSE")
-                        }
+                        else -> {}
                     }
-                } catch (e: ApiException) {
-                    // ...
-                    println("ERROR e === $e")
+                } catch (error: ApiException) {
+                    // TODO(mramotar): Display error message
+                    println("Error: $error")
                 }
             }
         }
@@ -186,99 +146,33 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        oneTapClient = Identity.getSignInClient(this)
-        signInRequest = BeginSignInRequest.builder()
-            .setPasswordRequestOptions(
-                BeginSignInRequest.PasswordRequestOptions.builder()
-                    .setSupported(true)
-                    .build()
-            )
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    // Your server's client ID, not your Android client ID.
-                    .setServerClientId(getString(R.string.server_client_id))
-                    // Only show accounts previously used to sign in.
-                    .setFilterByAuthorizedAccounts(false)
-                    .build()
-            )
-            // Automatically sign in when exactly one credential is retrieved.
-            .setAutoSelectEnabled(false)
-            .build()
+        signInClient = signInClient()
+        signInRequest = signInRequest()
 
         setContent {
-
-            when (val viewState = viewModel.value.state.collectAsState().value.viewState) {
-                LoginViewState.Initial -> {
-                    // TODO()
-                    Text(text = "Initial")
-                }
-
-                is LoginViewState.NoToken.Data -> {
-                    // TODO()
-                    LaunchedEffect(viewState.user) {
-                        createUserComponent(viewState.user)
-                    }
-                    Text("No token - Data")
-                }
-
-                LoginViewState.NoToken.Syncing -> {
-                    // TODO()
-                    Text(text = "No token - Syncing")
-                }
-
-                LoginViewState.NoToken.WaitingForUserToSubmit -> {
-                    // TODO()
-
-                    val usernameState = remember { mutableStateOf(TextFieldValue()) }
-                    val passwordState = remember { mutableStateOf(TextFieldValue()) }
-
-                    Scaffold(topBar = {}) { paddingValues ->
-                        Column(modifier = Modifier.padding(paddingValues)) {
-                            Text(text = "No token - Waiting")
-
-                            TextField(value = usernameState.value, onValueChange = { value -> usernameState.value = value })
-                            TextField(value = passwordState.value, onValueChange = { value -> passwordState.value = value })
-
-                            Button(onClick = {
-                                println("HITTING 1")
-                                signIn()
-                            }) {
-                                Text(text = "Log in")
-                            }
-                        }
-                    }
-
-                }
-
-                is LoginViewState.Token.Data -> {
-                    // TODO()
-                    LaunchedEffect(viewState.user) {
-                        createUserComponent(viewState.user)
-                        startMainActivity(viewState.user)
-                    }
-                    
-                    Text(text = "Token - Data")
-                }
-
-                is LoginViewState.Token.Error -> {
-                    // TODO()
-                    Text(text = "Token - Error")
-                }
-
-                is LoginViewState.NoToken.Error -> {
-                    // TODO()
-                    Text(text = "No token - Error")
-                }
-
-                LoginViewState.Token.Loading -> {
-                    // TODO()
-                    Text(text = "Token - Loading")
-                }
-            }
-
+            val viewState = viewModel.value.state.collectAsState().value.viewState
+            LoginScreen(viewState, ::signIn, ::handleToken)
         }
-
     }
 
+    private fun signInClient() = Identity.getSignInClient(this)
+    private fun signInRequest() = BeginSignInRequest.builder()
+        .setPasswordRequestOptions(
+            BeginSignInRequest.PasswordRequestOptions.builder()
+                .setSupported(true)
+                .build()
+        )
+        .setGoogleIdTokenRequestOptions(
+            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                .setSupported(true)
+                .setServerClientId(getString(R.string.server_client_id))
+                .setFilterByAuthorizedAccounts(false)
+                .build()
+        )
+        .setAutoSelectEnabled(false)
+        .build()
+
+    companion object {
+        private const val REQUEST_CODE = 1
+    }
 }

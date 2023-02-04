@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":android:common:sig"))
     implementation(project(":android:common:navigation"))
     implementation(project(":android:common:scoping"))
+    implementation(project(":common:storekit"))
 
     implementation("com.google.android.gms:play-services-auth:20.4.1")
 
