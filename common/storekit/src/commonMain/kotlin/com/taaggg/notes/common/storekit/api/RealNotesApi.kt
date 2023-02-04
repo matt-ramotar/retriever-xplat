@@ -34,6 +34,6 @@ class RealNotesApi(private val client: HttpClient) : NotesApi {
     }
 
     companion object {
-        private const val ROOT_API_URL = "https://www.api.notes.taaggg.com/v1"
+        private const val ROOT_API_URL = "https://api.notes.taaggg.com"
     }
 }

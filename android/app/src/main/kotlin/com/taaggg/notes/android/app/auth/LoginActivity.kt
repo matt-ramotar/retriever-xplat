@@ -74,6 +74,7 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun handleToken(user: User) {
+        println("HANDLE TOKEN === $user")
         createUserComponent(user)
         startMainActivity(user)
     }
@@ -100,8 +101,11 @@ class LoginActivity : ComponentActivity() {
 
     private suspend fun continueWithGoogle(user: GoogleUser) {
         when (val response = api.google(user)) {
-            is RequestResult.Exception -> TODO()
+            is RequestResult.Exception -> {
+                println("ERROR == ${response.error}")
+            }
             is RequestResult.Success -> {
+                println("HITTING $user")
                 viewModel.value.setToken(response.data.token)
                 createUserComponent(response.data.user.toUser())
                 startMainActivity(response.data.user.toUser())

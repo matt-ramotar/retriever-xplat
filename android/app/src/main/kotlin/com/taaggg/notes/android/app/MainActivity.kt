@@ -2,7 +2,10 @@ package com.taaggg.notes.android.app
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.Text
 import com.taaggg.notes.android.app.auth.PassableUser
 import com.taaggg.notes.android.app.wiring.AppComponent
 import com.taaggg.notes.android.app.wiring.UserComponent
@@ -18,6 +21,14 @@ class MainActivity : ComponentActivity(), ComponentHolder {
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra("USER", user)
             return intent
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            Text(text = "Main")
         }
     }
 
