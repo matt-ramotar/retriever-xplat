@@ -13,3 +13,4 @@ data class PassableUser(
 ) : Parcelable
 
 fun User.parcelize() = PassableUser(id, name, email, avatarUrl)
+fun PassableUser.deparcelize() = User(id, name, email, avatarUrl)

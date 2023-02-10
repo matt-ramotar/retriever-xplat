@@ -2,11 +2,16 @@ package com.taaggg.notes.android.app
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import com.taaggg.notes.android.app.auth.PassableUser
+import com.taaggg.notes.android.app.auth.deparcelize
 import com.taaggg.notes.android.app.wiring.AppComponent
 import com.taaggg.notes.android.app.wiring.UserComponent
 import com.taaggg.notes.android.common.scoping.ComponentHolder
@@ -24,11 +29,17 @@ class MainActivity : ComponentActivity(), ComponentHolder {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        user = requireNotNull(intent.extras?.getParcelable("USER", PassableUser::class.java)).deparcelize()
+
         setContent {
-            Text(text = "Main")
+            Column {
+                Text(text = "Main", color = Color.White)
+                Text(text = user.email, color = Color.White)
+            }
         }
     }
 

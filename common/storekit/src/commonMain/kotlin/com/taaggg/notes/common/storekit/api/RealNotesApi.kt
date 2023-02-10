@@ -8,13 +8,22 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+data class ValidateTokenInput(
+    val token: String
+)
+
 
 class RealNotesApi(private val client: HttpClient) : NotesApi {
     override suspend fun validateToken(token: String): RequestResult<NetworkUser> = try {
         val response = client.post("$ROOT_API_URL/auth/token") {
-            setBody(buildMap<String, String> { "token" to token })
+            setBody(ValidateTokenInput(token))
             contentType(ContentType.Application.Json)
         }
         RequestResult.Success(response.body())
