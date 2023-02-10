@@ -1,2 +1,3 @@
 # Retriever
-![Retriever](retriever.png)
+
+<img src="retriever.png" height="220px"/>

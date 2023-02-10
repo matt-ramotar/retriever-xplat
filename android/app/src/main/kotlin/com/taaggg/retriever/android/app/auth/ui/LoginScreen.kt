@@ -34,7 +34,7 @@ fun LoginScreen(viewState: LoginViewState, signIn: () -> Unit, handleToken: (Use
                         .background(Color.Black), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
                 ) {
 
-                    Image(painter = painterResource(id = R.drawable.dropbox), contentDescription = null, modifier = Modifier.size(150.dp))
+                    Image(painter = painterResource(id = R.drawable.retriever), contentDescription = null, modifier = Modifier.size(150.dp))
 
                     Spacer(modifier = Modifier.size(48.dp))
 

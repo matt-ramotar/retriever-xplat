@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.taaggg.retriever.android.app"
-        minSdk = 24
+        minSdk = 33
         targetSdk = 33
     }
 

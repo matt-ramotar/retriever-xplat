@@ -81,7 +81,7 @@ android {
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 33
         targetSdk = 33
     }
 }
