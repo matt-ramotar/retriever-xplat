@@ -21,7 +21,7 @@ kotlin {
 
     cocoapods {
         summary = "StoreKit"
-        homepage = "https://github.com/matt-ramotar/notes-xplat"
+        homepage = "https://github.com/matt-ramotar/retriever-xplat"
         ios.deploymentTarget = "13"
         version = "0.0.1"
 
@@ -77,7 +77,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.taaggg.notes.common.storekit"
+    namespace = "com.taaggg.retriever.common.storekit"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
@@ -96,7 +96,7 @@ kmmbridge {
 }
 
 sqldelight {
-    database("NotesDatabase") {
-        packageName = "com.taaggg.notes.common.storekit"
+    database("RetrieverDatabase") {
+        packageName = "com.taaggg.retriever.common.storekit"
     }
 }

@@ -18,7 +18,7 @@ plugins {
 }
 
 allprojects {
-    group = "com.taaggg.notes"
+    group = "com.taaggg.retriever"
 
     repositories {
         google()

@@ -21,11 +21,14 @@ pluginManagement {
 
 }
 
-rootProject.name = "notes"
+rootProject.name = "retriever"
 
 include(":android:app")
 include(":android:common:coroutines")
 include(":android:common:sig")
 include(":android:common:navigation")
 include(":android:common:scoping")
+include(":android:feature:account_tab")
+include(":android:feature:home_tab")
+include(":android:feature:search_tab")
 include(":common:storekit")

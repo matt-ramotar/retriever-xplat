@@ -13,7 +13,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.taaggg.notes.android.app"
+        applicationId = "com.taaggg.retriever.android.app"
         minSdk = 24
         targetSdk = 33
     }
@@ -43,6 +43,9 @@ dependencies {
     implementation(project(":android:common:navigation"))
     implementation(project(":android:common:scoping"))
     implementation(project(":common:storekit"))
+    implementation(project(":android:feature:account_tab"))
+    implementation(project(":android:feature:home_tab"))
+    implementation(project(":android:feature:search_tab"))
 
     implementation("com.google.android.gms:play-services-auth:20.4.1")
 
