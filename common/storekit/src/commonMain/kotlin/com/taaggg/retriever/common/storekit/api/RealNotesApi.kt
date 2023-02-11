@@ -6,6 +6,7 @@ import com.taaggg.retriever.common.storekit.entities.user.network.NetworkUser
 import com.taaggg.retriever.common.storekit.result.RequestResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -41,7 +42,14 @@ class RealNotesApi(private val client: HttpClient) : NotesApi {
         RequestResult.Exception(error)
     }
 
+    override suspend fun login(): RequestResult<NetworkUser> = try {
+        val response = client.get("$ROOT_API_URL/auth/demo")
+        RequestResult.Success(response.body())
+    } catch (error: Throwable) {
+        RequestResult.Exception(error)
+    }
+
     companion object {
-        private const val ROOT_API_URL = "https://api.retriever.taaggg.com"
+        private const val ROOT_API_URL = "https://com-taaggg-retriever-server.herokuapp.com"
     }
 }

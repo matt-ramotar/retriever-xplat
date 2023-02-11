@@ -17,20 +17,22 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.taaggg.retriever.android.app.MainActivity
-import com.taaggg.retriever.android.app.RetrieverApp
 import com.taaggg.retriever.android.app.R
 import com.taaggg.retriever.android.app.appDependencies
-import com.taaggg.retriever.android.app.auth.model.viewmodel.LoginViewModel
+import com.taaggg.retriever.android.app.auth.model.viewmodel.DemoSignInViewModel
+import com.taaggg.retriever.android.app.auth.model.viewmodel.ValidateTokenViewModel
 import com.taaggg.retriever.android.app.auth.ui.LoginScreen
 import com.taaggg.retriever.android.app.notesApp
 import com.taaggg.retriever.android.app.userComponentFactory
 import com.taaggg.retriever.android.app.wiring.AppComponent
 import com.taaggg.retriever.android.app.wiring.AppDependencies
 import com.taaggg.retriever.android.app.wiring.UserComponent
+import com.taaggg.retriever.android.common.sig.SigTheme
 import com.taaggg.retriever.common.storekit.api.NotesApi
 import com.taaggg.retriever.common.storekit.entities.auth.GoogleUser
 import com.taaggg.retriever.common.storekit.entities.user.output.User
 import com.taaggg.retriever.common.storekit.extension.toUser
+import com.taaggg.retriever.common.storekit.repository.AuthRepository
 import com.taaggg.retriever.common.storekit.result.RequestResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,14 +50,23 @@ class LoginActivity : ComponentActivity() {
     private lateinit var signInClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
     private val userComponentFactory: UserComponent.Factory by lazy { appComponent.userComponentFactory() }
-    private val viewModel = viewModels<LoginViewModel> {
-        val appComponent = (application as RetrieverApp).component
-        val appDependencies = appComponent as AppDependencies
-        val authRepository = appDependencies.authRepository
+
+    private val appDependencies: AppDependencies by lazy { appComponent as AppDependencies }
+    private val authRepository: AuthRepository by lazy { appDependencies.authRepository }
+
+    private val validateTokenViewModel = viewModels<ValidateTokenViewModel> {
         val authDataStore = applicationContext.authDataStore
         ViewModelProvider.Factory.from(
-            ViewModelInitializer(LoginViewModel::class.java) {
-                LoginViewModel(authRepository, authDataStore)
+            ViewModelInitializer(ValidateTokenViewModel::class.java) {
+                ValidateTokenViewModel(authRepository, authDataStore)
+            }
+        )
+    }
+
+    private val demoSignInViewModel = viewModels<DemoSignInViewModel> {
+        ViewModelProvider.Factory.from(
+            ViewModelInitializer(DemoSignInViewModel::class.java) {
+                DemoSignInViewModel(authRepository)
             }
         )
     }
@@ -74,7 +85,6 @@ class LoginActivity : ComponentActivity() {
     }
 
     private fun handleToken(user: User) {
-        println("HANDLE TOKEN === $user")
         createUserComponent(user)
         startMainActivity(user)
     }
@@ -93,20 +103,18 @@ class LoginActivity : ComponentActivity() {
 
                 startIntentSenderForResult(intent, requestCode, fillInIntent, flagsMask, flagsValue, extraFlags, options)
             }
-            .addOnFailureListener(this) { error ->
+            .addOnFailureListener(this) {
                 // TODO(mramotar): Display error message
-                println("Error: $error")
             }
     }
 
     private suspend fun continueWithGoogle(user: GoogleUser) {
         when (val response = api.google(user)) {
             is RequestResult.Exception -> {
-                println("ERROR == ${response.error}")
             }
+
             is RequestResult.Success -> {
-                println("HITTING $user")
-                viewModel.value.setToken(response.data.token)
+                validateTokenViewModel.value.setToken(response.data.token)
                 createUserComponent(response.data.user.toUser())
                 startMainActivity(response.data.user.toUser())
             }
@@ -141,7 +149,6 @@ class LoginActivity : ComponentActivity() {
                     }
                 } catch (error: ApiException) {
                     // TODO(mramotar): Display error message
-                    println("Error: $error")
                 }
             }
         }
@@ -154,8 +161,11 @@ class LoginActivity : ComponentActivity() {
         signInRequest = signInRequest()
 
         setContent {
-            val viewState = viewModel.value.state.collectAsState().value.viewState
-            LoginScreen(viewState, ::signIn, ::handleToken)
+            val viewState = validateTokenViewModel.value.state.collectAsState().value.viewState
+
+            SigTheme {
+                LoginScreen(viewState, demoSignInViewModel.value, ::signIn, ::handleToken, ::startMainActivity)
+            }
         }
     }
 

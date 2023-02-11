@@ -17,3 +17,4 @@ local.properties
 /.idea/*
 /.idea/
 ./android/app/src/main/res/values/secrets.xml
+./common/storekit/src/commonMain/res/values/secrets.xml

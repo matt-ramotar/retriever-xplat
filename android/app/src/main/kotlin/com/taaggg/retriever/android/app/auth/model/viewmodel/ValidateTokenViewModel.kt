@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class ValidateTokenViewModel(
     private val authRepository: AuthRepository,
     private val authDataStore: DataStore<Preferences>
 ) : ViewModel() {
@@ -47,7 +47,6 @@ class LoginViewModel(
             setState(LoginState(LoginViewState.NoToken.WaitingForUserToSubmit))
         }
     }
-
     private fun setState(state: LoginState) {
         stateFlow.value = state
     }

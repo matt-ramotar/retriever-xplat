@@ -29,9 +29,11 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
         composable(Screen.Home.route) {
             // TODO(mramotar)
         }
-
+        composable(Screen.Notification.route) {}
+        composable(Screen.Search.route) {}
         composable(Screen.Account.route) {
             // TODO(mramotar)
         }
+
     }
 }

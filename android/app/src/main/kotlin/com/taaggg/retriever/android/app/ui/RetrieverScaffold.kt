@@ -9,10 +9,10 @@ import androidx.navigation.compose.rememberNavController
 import com.taaggg.retriever.android.app.navigation.Routing
 
 @Composable
-fun HowlScaffold() {
+fun RetrieverScaffold() {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { HowlBottomBar(navController = navController) }
+        bottomBar = { RetrieverBottomBar(navController = navController) }
     ) { innerPadding ->
         Routing(navController = navController, innerPadding = innerPadding)
     }

@@ -16,7 +16,7 @@ import com.taaggg.retriever.android.app.navigation.BottomTabs
 import com.taaggg.retriever.android.common.navigation.Screen
 
 @Composable
-fun HowlBottomBar(navController: NavHostController) {
+fun RetrieverBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
