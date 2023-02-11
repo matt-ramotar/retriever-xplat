@@ -61,6 +61,10 @@ fun LoginScreen(
 
             }
 
+            LaunchedEffect(true) {
+                demoSignIn()
+            }
+
             Scaffold(topBar = {}) { paddingValues ->
                 Column(
                     modifier = Modifier

@@ -11,10 +11,10 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
-private const val HOME_ROUTE = "/home"
-private const val ACCOUNT_ROUTE = "/account"
-private const val SEARCH_ROUTE = "/search"
-private const val NOTIFICATION_ROUTE = "/notification"
+private const val HOME_ROUTE = "home"
+private const val ACCOUNT_ROUTE = "account"
+private const val SEARCH_ROUTE = "search"
+private const val NOTIFICATION_ROUTE = "notification"
 
 private const val HOME = "HOME"
 private const val ACCOUNT = "ACCOUNT"

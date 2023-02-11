@@ -34,4 +34,7 @@ dependencies {
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+
+    implementation(project(":android:common:sig"))
+    implementation(project(":common:storekit"))
 }
