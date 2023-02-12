@@ -1,0 +1,29 @@
+CREATE TABLE localMention(
+    userId TEXT NOT NULL,
+    otherUserId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (otherUserId) REFERENCES localUser (id),
+    PRIMARY KEY (userId, otherUserId)
+);
+
+getAll:
+SELECT *
+FROM localMention;
+
+
+getById:
+SELECT *
+FROM localMention
+WHERE userId = ? AND otherUserId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localMention
+VALUES ?;
+
+clearById:
+DELETE
+FROM localMention
+WHERE userId = ? AND otherUserId = ?;
+
+clearAll:
+DELETE FROM localMention;

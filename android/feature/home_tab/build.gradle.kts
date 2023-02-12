@@ -36,5 +36,5 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(project(":common:storekit"))
     implementation(project(":android:common:navigation"))
-
+    implementation(project(":android:common:sig"))
 }

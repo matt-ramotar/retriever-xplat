@@ -1,0 +1,27 @@
+CREATE TABLE noteMention(
+    noteId TEXT NOT NULL,
+    userId TEXT NOT NULL,
+    otherUserId TEXT NOT NULL,
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    FOREIGN KEY (userId) REFERENCES localUser(id),
+    FOREIGN KEY (otherUserId) REFERENCES localUser(id),
+    FOREIGN KEY (userId, otherUserId) REFERENCES localMention(userId, otherUserId),
+    PRIMARY KEY (noteId, userId, otherUserId)
+);
+
+getById:
+SELECT *
+FROM noteMention
+WHERE noteId = ? AND userId = ? AND otherUserId = ?;
+
+upsert:
+INSERT OR REPLACE INTO noteMention
+VALUES ?;
+
+clearById:
+DELETE
+FROM noteMention
+WHERE noteId = ? AND userId = ? AND otherUserId = ?;
+
+clearAll:
+DELETE FROM noteMention;

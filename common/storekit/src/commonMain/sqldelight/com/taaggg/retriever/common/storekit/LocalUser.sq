@@ -1,0 +1,42 @@
+CREATE TABLE localUser (
+    id TEXT UNIQUE NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    avatarUrl TEXT
+);
+
+getAll:
+SELECT *
+FROM localUser;
+
+getById:
+SELECT *
+FROM localUser
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUser
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUser
+WHERE id = ?;
+
+clearAll:
+DELETE FROM localUser;
+
+
+getNotesByUserId:
+SELECT *
+FROM localUser user
+INNER JOIN localNote note
+ON user.id == note.userId
+INNER JOIN noteTag
+ON note.id == noteTag.noteId
+INNER JOIN noteMention
+ON note.id == noteMention.noteId
+INNER JOIN noteRelationship
+ON note.id == noteRelationship.noteId
+WHERE user.id = ?
+GROUP BY note.id, user.id;

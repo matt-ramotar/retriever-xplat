@@ -1,49 +1,40 @@
 package com.taaggg.retriever.common.storekit.entities.note
 
-
-interface Note {
-    val id: String
-    val content: String
-    val tags: List<Tag>
-    val mentions: List<Mention>
-    val parents: List<Reference>
-    val references: List<Reference>
-    val children: List<Reference>
-}
+import com.taaggg.retriever.common.storekit.entities.user.output.User
 
 
-data class RealNote(
-    override val id: String,
-    override val content: String,
-    override val tags: List<Tag> = listOf(),
-    override val mentions: List<Mention> = listOf(),
-    override val parents: List<Reference> = listOf(),
-    override val references: List<Reference> = listOf(),
-    override val children: List<Reference> = listOf()
-) : Note
+data class Note(
+    val id: String,
+    val user: User,
+    val content: String,
+    val isRead: Boolean,
+    val tags: List<Tag>,
+    val mentions: List<Mention>,
+    val parents: List<Relationship>,
+    val references: List<Relationship>,
+    val children: List<Relationship>
+)
 
-
-interface Tag {
+data class Tag(
+    val id: String,
     val name: String
+)
+
+data class Mention(
+    val userId: String,
+    val otherUserId: String,
+    val otherUser: User
+)
+
+data class Relationship(
+    val noteId: String,
+    val otherNoteId: String,
+    val type: Type
+) {
+    enum class Type {
+        ChildToParent,
+        ParentToChild,
+        UnidirectionalReference,
+        BidirectionalReference
+    }
 }
-
-data class RealTag(
-    override val name: String,
-) : Tag
-
-
-interface Mention {
-    val name: String
-}
-
-data class RealMention(
-    override val name: String
-) : Mention
-
-interface Reference {
-    val noteId: String
-}
-
-data class RealReference(
-    override val noteId: String
-) : Reference

@@ -1,0 +1,25 @@
+CREATE TABLE localTag(
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+getAll:
+SELECT *
+FROM localTag;
+
+getById:
+SELECT *
+FROM localTag
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO localTag
+VALUES ?;
+
+clearById:
+DELETE
+FROM localTag
+WHERE id = ?;
+
+clearAll:
+DELETE FROM localTag;
