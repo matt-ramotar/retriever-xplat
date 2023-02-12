@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -22,13 +23,11 @@ import com.taaggg.retriever.android.app.RetrieverApp
 import com.taaggg.retriever.android.app.wiring.AppDependencies
 import com.taaggg.retriever.android.common.navigation.Screen
 import com.taaggg.retriever.android.common.scoping.UserDependencies
+import com.taaggg.retriever.android.common.sig.component.Avatar
 import com.taaggg.retriever.android.feature.account_tab.AccountTab
 import com.taaggg.retriever.android.feature.home_tab.HomeTab
 import com.taaggg.retriever.android.feature.search_tab.SearchTab
-import com.taaggg.retriever.common.storekit.entities.note.Mention
-import com.taaggg.retriever.common.storekit.entities.note.Note
-import com.taaggg.retriever.common.storekit.entities.note.Tag
-import com.taaggg.retriever.common.storekit.entities.user.output.User
+import com.taaggg.retriever.common.storekit.extension.findAndPopulate
 
 @Composable
 fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
@@ -41,6 +40,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val appDependencies = appComponent as AppDependencies
     val userDependencies = userComponent as UserDependencies
     val database = appDependencies.database
+    val user = userComponent.user
 
     NavHost(
         navController = navController, startDestination = Screen.Home.route, modifier = Modifier
@@ -49,11 +49,12 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     ) {
         composable(Screen.Home.route) {
             HomeTab(
+                user = user,
                 tags = database.localTagQueries,
-                mentions = database.localMentionQueries
-            ) {
-                navController.navigate("notes/s/$it")
-            }
+                mentions = database.localMentionQueries,
+                onNavigateToMentionResults = { navController.navigate("notes/m/$it") },
+                onNavigateToTagResults = { navController.navigate("notes/t/$it") }
+            )
         }
         composable(Screen.Notification.route) {}
         composable(Screen.Search.route) {
@@ -63,7 +64,41 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             AccountTab(userComponent.user)
         }
 
-        composable("notes/s/{tag}", arguments = listOf(navArgument("tag") { type = NavType.StringType })) {
+        composable("users/{userId}", arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
+            val userId = requireNotNull(it.arguments?.getString("userId"))
+            val user = database.localUserQueries.getById(userId).executeAsOne()
+
+            Column(modifier = Modifier.fillMaxSize()) {
+                Text(text = user.name)
+
+                val avatarUrl = user.avatarUrl
+                if (avatarUrl != null) {
+                    Avatar(avatarUrl = avatarUrl)
+                }
+            }
+        }
+
+        composable("notes/m/{otherUserId}", arguments = listOf(navArgument("otherUserId") { type = NavType.StringType })) {
+
+            val otherUserId = requireNotNull(it.arguments?.getString("otherUserId"))
+            println(user.id)
+
+            val otherUser = database.localUserQueries.getById(otherUserId).executeAsOne()
+            val notes = database.localNoteQueries.getByMention(user.id, otherUserId).executeAsList()
+
+            Column {
+                Text(otherUser.name, modifier = Modifier.clickable { navController.navigate("users/$otherUserId") })
+                Spacer(modifier = Modifier.size(32.dp))
+
+                notes.forEach { row ->
+                    Row(modifier = Modifier.clickable { navController.navigate("notes/${row.id}") }) {
+                        Text(text = row.content ?: "")
+                    }
+                }
+            }
+        }
+
+        composable("notes/t/{tag}", arguments = listOf(navArgument("tag") { type = NavType.StringType })) {
 
             val tag = requireNotNull(it.arguments?.getString("tag"))
 
@@ -80,30 +115,8 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
         }
 
         composable("notes/{noteId}", arguments = listOf(navArgument("noteId") { type = NavType.StringType })) {
-
             val noteId = requireNotNull(it.arguments?.getString("noteId"))
-
-            val response = database.localNoteQueries.getByIdAndPopulateAll(noteId).executeAsList()
-            val first = response.first()
-            val user = User(
-                id = first.userId,
-                name = first.userName,
-                email = first.userEmail,
-                avatarUrl = first.userAvatarUrl
-            )
-            val tags = response.map { row -> Tag(row.tagId, row.tagName) }.distinct()
-            val mentions = response.map { row -> Mention(row.userId, row.otherUserId, User(row.otherUserId, row.otherUserName, row.otherUserEmail, row.userAvatarUrl)) }.distinct()
-            val note = Note(
-                id = first.id,
-                user = user,
-                content = first.content ?: "",
-                isRead = first.is_read,
-                tags = tags,
-                mentions = mentions,
-                parents = listOf(),
-                references = listOf(),
-                children = listOf()
-            )
+            val note = database.localNoteQueries.findAndPopulate(noteId)
 
             Column() {
                 Text(text = note.content)

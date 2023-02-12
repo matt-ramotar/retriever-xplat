@@ -30,25 +30,31 @@ DELETE FROM localNote;
 getByTag:
 SELECT *
 FROM localNote
-INNER JOIN noteTag
+LEFT JOIN noteTag
 ON localNote.id == noteTag.noteId
-INNER JOIN localTag
+LEFT JOIN localTag
 ON noteTag.tagId == localTag.id
 WHERE localTag.name = ?;
 
+getByMention:
+SELECT *
+FROM localNote
+LEFT JOIN noteMention
+ON localNote.id == noteMention.noteId
+WHERE noteMention.userId = ? AND noteMention.otherUserId = ?;
 
 getByIdAndPopulateAll:
 SELECT localNote.id, localNote.content, localNote.is_read, author.id AS "userId", author.name AS "userName", author.email AS "userEmail", author.avatarUrl AS "userAvatarUrl" ,otherUser.id AS "otherUserId", otherUser.name AS "otherUserName", otherUser.email AS "otherUserEmail", otherUser.avatarUrl AS "otherUserAvatarUrl", localTag.name AS "tagName", localTag.id AS "tagId"
 FROM localNote
-INNER JOIN noteTag
+LEFT JOIN noteTag
 ON localNote.id == noteTag.noteId
-INNER JOIN localTag
+LEFT JOIN localTag
 ON noteTag.tagId == localTag.id
-INNER JOIN noteMention
+LEFT JOIN noteMention
 ON localNote.id == noteMention.noteId
-INNER JOIN localUser AS "author"
+LEFT JOIN localUser AS "author"
 ON localNote.userId == author.id
-INNER JOIN localUser AS "otherUser"
+LEFT JOIN localUser AS "otherUser"
 ON noteMention.otherUserId == otherUser.id
 WHERE localNote.id = ?;
 

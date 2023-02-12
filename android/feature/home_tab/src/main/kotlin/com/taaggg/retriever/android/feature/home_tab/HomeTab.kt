@@ -2,7 +2,6 @@
 
 package com.taaggg.retriever.android.feature.home_tab
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,11 +35,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.taaggg.retriever.android.common.sig.color.Sig
+import com.taaggg.retriever.android.common.sig.component.Avatar
 import com.taaggg.retriever.common.storekit.LocalMentionQueries
 import com.taaggg.retriever.common.storekit.LocalTagQueries
+import com.taaggg.retriever.common.storekit.entities.user.output.User
 
 @Composable
-fun HomeTab(tags: LocalTagQueries, mentions: LocalMentionQueries, onNavigateToNotesTab: (name: String) -> Unit) {
+fun HomeTab(
+    user: User,
+    tags: LocalTagQueries,
+    mentions: LocalMentionQueries,
+    onNavigateToMentionResults: (otherUserId: String) -> Unit,
+    onNavigateToTagResults: (name: String) -> Unit
+) {
 
     val searchState = remember { mutableStateOf(TextFieldValue()) }
 
@@ -48,9 +55,12 @@ fun HomeTab(tags: LocalTagQueries, mentions: LocalMentionQueries, onNavigateToNo
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
-                Image(painter = painterResource(id = R.drawable.dropbox), contentDescription = null, modifier = Modifier.size(32.dp))
+                if (user.avatarUrl != null) {
+                    Avatar(avatarUrl = user.avatarUrl!!, size = 32.dp)
+                }
+
                 Spacer(modifier = Modifier.size(12.dp))
-                Text(text = "Dropbox", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                Text(text = user.name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
             }
 
             Icon(painter = painterResource(id = R.drawable.sort_type), contentDescription = null, modifier = Modifier.size(32.dp))
@@ -86,12 +96,12 @@ fun HomeTab(tags: LocalTagQueries, mentions: LocalMentionQueries, onNavigateToNo
             }
 
             items(mentions.getAll().executeAsList()) { mention ->
-                MentionEntryPoint(name = mention.otherUserId, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToNotesTab)
+                MentionEntryPoint(name = mention.otherUserId, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToMentionResults)
                 Spacer(modifier = Modifier.size(12.dp))
             }
 
             items(tags.getAll().executeAsList()) { tag ->
-                ChannelEntryPoint(name = tag.name, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToNotesTab)
+                ChannelEntryPoint(name = tag.name, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToTagResults)
                 Spacer(modifier = Modifier.size(12.dp))
             }
 

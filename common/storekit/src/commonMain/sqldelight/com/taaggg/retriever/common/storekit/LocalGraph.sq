@@ -1,0 +1,26 @@
+CREATE TABLE localGraph(
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    ownerId TEXT NOT NULL
+);
+
+getAll:
+SELECT *
+FROM localGraph;
+
+getById:
+SELECT *
+FROM localGraph
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO localGraph
+VALUES ?;
+
+clearById:
+DELETE
+FROM localGraph
+WHERE id = ?;
+
+clearAll:
+DELETE FROM localGraph;
