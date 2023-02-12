@@ -18,7 +18,7 @@ plugins {
 }
 
 allprojects {
-    group = "com.taaggg.retriever"
+    group = "ai.wandering.retriever"
 
     repositories {
         google()

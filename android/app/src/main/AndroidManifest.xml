@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.taaggg.retriever.android.app">
+    package="ai.wandering.retriever.android.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".RetrieverApp"
+        android:name="ai.wandering.retriever.android.app.RetrieverApp"
         android:icon="@mipmap/ic_launcher_round"
         android:label="Retriever"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".MainActivity"
+            android:name="ai.wandering.retriever.android.app.MainActivity"
             android:exported="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowNoTitle="true">
@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".auth.LoginActivity"
+            android:name="ai.wandering.retriever.android.app.auth.LoginActivity"
             android:exported="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowNoTitle="true">

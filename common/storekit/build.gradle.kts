@@ -78,7 +78,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.taaggg.retriever.common.storekit"
+    namespace = "ai.wandering.retriever.common.storekit"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
@@ -98,6 +98,6 @@ kmmbridge {
 
 sqldelight {
     database("RetrieverDatabase") {
-        packageName = "com.taaggg.retriever.common.storekit"
+        packageName = "ai.wandering.retriever.common.storekit"
     }
 }

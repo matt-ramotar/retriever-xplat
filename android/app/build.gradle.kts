@@ -13,7 +13,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.taaggg.retriever.android.app"
+        applicationId = "ai.wandering.retriever.android.app"
         minSdk = 33
         targetSdk = 33
     }
