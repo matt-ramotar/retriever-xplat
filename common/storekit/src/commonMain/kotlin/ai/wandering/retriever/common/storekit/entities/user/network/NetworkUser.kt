@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 data class NetworkUser(
     @SerialName("_id")
     val id: UserId,
+    val username: String,
     val name: String,
     val email: String,
     val avatarUrl: String? = null

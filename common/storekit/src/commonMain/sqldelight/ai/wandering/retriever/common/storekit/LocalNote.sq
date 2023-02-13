@@ -44,7 +44,7 @@ ON localNote.id == noteMention.noteId
 WHERE noteMention.userId = ? AND noteMention.otherUserId = ?;
 
 getByIdAndPopulateAll:
-SELECT localNote.id, localNote.content, localNote.is_read, author.id AS "userId", author.name AS "userName", author.email AS "userEmail", author.avatarUrl AS "userAvatarUrl" ,otherUser.id AS "otherUserId", otherUser.name AS "otherUserName", otherUser.email AS "otherUserEmail", otherUser.avatarUrl AS "otherUserAvatarUrl", localTag.name AS "tagName", localTag.id AS "tagId"
+SELECT localNote.id, localNote.content, localNote.is_read, author.id AS "userId", author.name AS "userName", author.username AS "userUsername", author.email AS "userEmail", author.avatarUrl AS "userAvatarUrl" ,otherUser.id AS "otherUserId", otherUser.name AS "otherUserName", otherUser.email AS "otherUserEmail", otherUser.avatarUrl AS "otherUserAvatarUrl", otherUser.username AS "otherUserUsername", localTag.name AS "tagName", localTag.id AS "tagId"
 FROM localNote
 LEFT JOIN noteTag
 ON localNote.id == noteTag.noteId

@@ -1,5 +1,6 @@
 package ai.wandering.retriever.common.storekit.extension
 
+import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalNoteQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
 import ai.wandering.retriever.common.storekit.LocalUserQueries
@@ -13,6 +14,22 @@ fun LocalNoteQueries.findById(id: String) = getById(id).executeAsOne()
 fun LocalUserQueries.getAllNotes(id: String) = getNotesByUserId(id).executeAsOne()
 
 
+fun LocalMentionQueries.findAndPopulateOtherUsers(userId: String): List<User> {
+    val response = findAndPopulateOtherUsersByUserId(userId).executeAsList()
+    return response
+        .filter { row -> row.id != null && row.username != null && row.name != null && row.email != null }
+        .map {
+            User(
+                id = it.id!!,
+                username = it.username!!,
+                name = it.name!!,
+                email = it.email!!,
+                avatarUrl = it.avatarUrl
+
+            )
+        }
+}
+
 fun LocalNoteQueries.findAndPopulate(id: String): Note {
     val response = getByIdAndPopulateAll(id).executeAsList()
 
@@ -20,6 +37,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
 
     val user = User(
         id = common.userId!!,
+        username = common.userUsername!!,
         name = common.userName!!,
         email = common.userEmail!!,
         avatarUrl = common.userAvatarUrl
@@ -31,7 +49,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
 
     val mentions = response
         .filter { row -> row.userId != null && row.otherUserId != null && row.otherUserName != null && row.otherUserEmail != null && row.otherUserAvatarUrl != null }
-        .map { row -> Mention(row.userId!!, row.otherUserId!!, User(row.otherUserId!!, row.otherUserName!!, row.otherUserEmail!!, row.userAvatarUrl)) }
+        .map { row -> Mention(row.userId!!, row.otherUserId!!, User(row.otherUserId, row.otherUserUsername!!, row.otherUserName!!, row.otherUserEmail!!, row.userAvatarUrl)) }
         .distinct()
 
     return Note(

@@ -1,5 +1,15 @@
 package ai.wandering.retriever.android.app.navigation
 
+import ai.wandering.retriever.android.app.MainActivity
+import ai.wandering.retriever.android.app.RetrieverApp
+import ai.wandering.retriever.android.app.wiring.AppDependencies
+import ai.wandering.retriever.android.common.navigation.Screen
+import ai.wandering.retriever.android.common.scoping.UserDependencies
+import ai.wandering.retriever.android.common.sig.component.Avatar
+import ai.wandering.retriever.android.feature.account_tab.AccountTab
+import ai.wandering.retriever.android.feature.home_tab.HomeTab
+import ai.wandering.retriever.android.feature.search_tab.SearchTab
+import ai.wandering.retriever.common.storekit.extension.findAndPopulate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,16 +28,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ai.wandering.retriever.android.app.MainActivity
-import ai.wandering.retriever.android.app.RetrieverApp
-import ai.wandering.retriever.android.app.wiring.AppDependencies
-import ai.wandering.retriever.android.common.navigation.Screen
-import ai.wandering.retriever.android.common.scoping.UserDependencies
-import ai.wandering.retriever.android.common.sig.component.Avatar
-import ai.wandering.retriever.android.feature.account_tab.AccountTab
-import ai.wandering.retriever.android.feature.home_tab.HomeTab
-import ai.wandering.retriever.android.feature.search_tab.SearchTab
-import ai.wandering.retriever.common.storekit.extension.findAndPopulate
 
 @Composable
 fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
@@ -83,6 +83,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             val otherUserId = requireNotNull(it.arguments?.getString("otherUserId"))
             println(user.id)
 
+            println(otherUserId)
             val otherUser = database.localUserQueries.getById(otherUserId).executeAsOne()
             val notes = database.localNoteQueries.getByMention(user.id, otherUserId).executeAsList()
 

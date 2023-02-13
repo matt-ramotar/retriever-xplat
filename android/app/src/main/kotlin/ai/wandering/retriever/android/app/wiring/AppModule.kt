@@ -1,13 +1,13 @@
 package ai.wandering.retriever.android.app.wiring
 
-import com.squareup.anvil.annotations.ContributesTo
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.common.storekit.api.AuthApi
 import ai.wandering.retriever.common.storekit.api.HttpClientProvider
-import ai.wandering.retriever.common.storekit.api.NotesApi
-import ai.wandering.retriever.common.storekit.api.RealNotesApi
+import ai.wandering.retriever.common.storekit.api.RealRetrieverApi
+import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.repository.AuthRepository
 import ai.wandering.retriever.common.storekit.repository.RealAuthRepository
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 
@@ -18,10 +18,10 @@ object AppModule {
     private val httpClient = HttpClientProvider().provide()
 
     @Provides
-    fun provideNotesApi(): NotesApi = RealNotesApi(httpClient)
+    fun provideRetrieverApi(): RetrieverApi = RealRetrieverApi(httpClient)
 
     @Provides
-    fun provideAuthApi(): AuthApi = RealNotesApi(httpClient)
+    fun provideAuthApi(): AuthApi = RealRetrieverApi(httpClient)
 
     @Provides
     fun provideAuthRepository(api: AuthApi): AuthRepository = RealAuthRepository(api)

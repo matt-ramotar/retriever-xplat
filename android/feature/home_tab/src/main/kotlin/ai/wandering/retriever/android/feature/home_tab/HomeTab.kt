@@ -2,6 +2,12 @@
 
 package ai.wandering.retriever.android.feature.home_tab
 
+import ai.wandering.retriever.android.common.sig.color.Sig
+import ai.wandering.retriever.android.common.sig.component.Avatar
+import ai.wandering.retriever.common.storekit.LocalMentionQueries
+import ai.wandering.retriever.common.storekit.LocalTagQueries
+import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.extension.findAndPopulateOtherUsers
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,11 +40,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import ai.wandering.retriever.android.common.sig.color.Sig
-import ai.wandering.retriever.android.common.sig.component.Avatar
-import ai.wandering.retriever.common.storekit.LocalMentionQueries
-import ai.wandering.retriever.common.storekit.LocalTagQueries
-import ai.wandering.retriever.common.storekit.entities.user.output.User
 
 @Composable
 fun HomeTab(
@@ -95,8 +96,8 @@ fun HomeTab(
                 Spacer(modifier = Modifier.size(32.dp))
             }
 
-            items(mentions.getAll().executeAsList()) { mention ->
-                MentionEntryPoint(name = mention.otherUserId, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToMentionResults)
+            items(mentions.findAndPopulateOtherUsers(user.id)) { user ->
+                MentionEntryPoint(user = user, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToMentionResults)
                 Spacer(modifier = Modifier.size(12.dp))
             }
 
@@ -113,22 +114,22 @@ fun HomeTab(
 @Composable
 private fun ChannelEntryPoint(name: String, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (tag: String) -> Unit) {
     val painter = painterResource(id = R.drawable.hashtag)
-    EntryPoint(name, painter, unreadMentions, unreadMessages, onNavigateToNotesTab)
+    EntryPoint(name, painter, unreadMentions, unreadMessages) { onNavigateToNotesTab(name) }
 }
 
 @Composable
-private fun MentionEntryPoint(name: String, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (tag: String) -> Unit) {
+private fun MentionEntryPoint(user: User, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (otherUserId: String) -> Unit) {
     val painter = painterResource(id = R.drawable.mention)
-    EntryPoint(name, painter, unreadMentions, unreadMessages, onNavigateToNotesTab)
+    EntryPoint(user.username, painter, unreadMentions, unreadMessages) { onNavigateToNotesTab(user.id) }
 }
 
 
 @Composable
-private fun EntryPoint(name: String, leadingIcon: Painter, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (tag: String) -> Unit) {
+private fun EntryPoint(name: String, leadingIcon: Painter, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: () -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            onNavigateToNotesTab(name)
+            onNavigateToNotesTab()
         }) {
         Row {
             Icon(painter = leadingIcon, contentDescription = null)

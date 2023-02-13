@@ -118,6 +118,7 @@ internal object Seeds {
     object Users {
         val Matt = LocalUser(
             id = Ids.User.MATT,
+            username = "matt",
             name = "Matthew Ramotar",
             email = "matt@wandering.ai",
             avatarUrl = "https://avatars.githubusercontent.com/u/59468153?v=4"
@@ -125,6 +126,7 @@ internal object Seeds {
 
         val Tag = LocalUser(
             id = Ids.User.TAG,
+            username = "tag",
             name = "Tag Ramotar",
             email = "tag@wandering.ai",
             avatarUrl = "https://i.imgur.com/UJ6rFC6.jpg"
@@ -132,6 +134,7 @@ internal object Seeds {
 
         val Trot = LocalUser(
             id = Ids.User.TROT,
+            username = "trot",
             name = "Trot Ramotar",
             email = "trot@wandering.ai",
             avatarUrl = "https://i.imgur.com/RSx7KUI.jpg"
@@ -139,6 +142,7 @@ internal object Seeds {
 
         val Tugg = LocalUser(
             id = Ids.User.TUGG,
+            username = "tugg",
             name = "Tugg Sleeper",
             email = "tugg@wandering.ai",
             avatarUrl = "https://i.imgur.com/J6mZ2cn.jpg"

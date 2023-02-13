@@ -5,6 +5,7 @@ import ai.wandering.retriever.common.storekit.entities.user.output.User
 
 fun NetworkUser.toUser() = User(
     id = id,
+    username = username,
     name = name,
     email = email,
     avatarUrl = avatarUrl
