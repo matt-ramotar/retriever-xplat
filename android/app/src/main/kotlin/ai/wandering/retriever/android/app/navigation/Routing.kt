@@ -122,11 +122,11 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             Column() {
                 Text(text = note.content)
 
-                note.tags.forEach { tag ->
+                note.channels.forEach { channel ->
                     Row {
                         Text(text = "#")
                         Spacer(modifier = Modifier.size(12.dp))
-                        Text(text = tag.name)
+                        Text(text = channel.tag.name)
                     }
                 }
 

@@ -1,0 +1,24 @@
+CREATE TABLE noteChannel(
+    noteId TEXT NOT NULL,
+    channelId TEXT NOT NULL,
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    FOREIGN KEY (channelId) REFERENCES localChannel (id),
+    PRIMARY KEY (noteId, channelId)
+);
+
+getById:
+SELECT *
+FROM noteChannel
+WHERE noteId = ? AND channelId = ?;
+
+upsert:
+INSERT OR REPLACE INTO noteChannel
+VALUES ?;
+
+clearById:
+DELETE
+FROM noteChannel
+WHERE noteId = ? AND channelId = ?;
+
+clearAll:
+DELETE FROM noteChannel;

@@ -9,7 +9,7 @@ data class Note(
     val user: User,
     val content: String,
     val isRead: Boolean,
-    val tags: List<Tag>,
+    val channels: List<Channel>,
     val mentions: List<Mention>,
     val parents: List<Relationship>,
     val references: List<Relationship>,
@@ -25,8 +25,9 @@ data class Tag(
 @Serializable
 data class Channel(
     val id: String,
+    val userId: String,
     val graphId: String,
-    val tagId: String
+    val tag: Tag
 )
 
 

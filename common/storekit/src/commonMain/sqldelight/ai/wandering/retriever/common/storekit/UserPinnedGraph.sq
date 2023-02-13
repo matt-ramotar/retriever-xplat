@@ -1,0 +1,28 @@
+CREATE TABLE userPinnedGraph(
+    userId TEXT NOT NULL,
+    graphId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (graphId) REFERENCES localGraph (id),
+    PRIMARY KEY (userId, graphId)
+);
+
+getAll:
+SELECT *
+FROM userPinnedGraph;
+
+getById:
+SELECT *
+FROM userPinnedGraph
+WHERE userId = ? AND graphId = ?;
+
+upsert:
+INSERT OR REPLACE INTO userPinnedGraph
+VALUES ?;
+
+clearById:
+DELETE
+FROM userPinnedGraph
+WHERE userId = ? AND graphId = ?;
+
+clearAll:
+DELETE FROM userPinnedGraph;

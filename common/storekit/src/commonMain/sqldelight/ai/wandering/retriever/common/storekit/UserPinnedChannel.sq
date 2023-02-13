@@ -1,0 +1,28 @@
+CREATE TABLE userPinnedChannel(
+    userId TEXT NOT NULL,
+    channelId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (channelId) REFERENCES localGraph (id),
+    PRIMARY KEY (userId, channelId)
+);
+
+getAll:
+SELECT *
+FROM userPinnedChannel;
+
+getById:
+SELECT *
+FROM userPinnedChannel
+WHERE userId = ? AND channelId = ?;
+
+upsert:
+INSERT OR REPLACE INTO userPinnedChannel
+VALUES ?;
+
+clearById:
+DELETE
+FROM userPinnedChannel
+WHERE userId = ? AND channelId = ?;
+
+clearAll:
+DELETE FROM userPinnedChannel;

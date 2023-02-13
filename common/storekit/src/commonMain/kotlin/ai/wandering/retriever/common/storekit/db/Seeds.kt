@@ -1,15 +1,28 @@
 package ai.wandering.retriever.common.storekit.db
 
+import ai.wandering.retriever.common.storekit.LocalGraph
 import ai.wandering.retriever.common.storekit.LocalMention
 import ai.wandering.retriever.common.storekit.LocalNote
 import ai.wandering.retriever.common.storekit.LocalTag
 import ai.wandering.retriever.common.storekit.LocalUser
+import ai.wandering.retriever.common.storekit.NoteChannel
 import ai.wandering.retriever.common.storekit.NoteMention
-import ai.wandering.retriever.common.storekit.NoteTag
+import ai.wandering.retriever.common.storekit.UserFollowingGraph
+import ai.wandering.retriever.common.storekit.UserFollowingTag
+import ai.wandering.retriever.common.storekit.UserFollowingUser
+import ai.wandering.retriever.common.storekit.UserPinnedChannel
+import ai.wandering.retriever.common.storekit.UserPinnedGraph
+import ai.wandering.retriever.common.storekit.UserPinnedNote
 
 
 internal object Seeds {
     object Ids {
+        object Graph {
+            object Matt {
+                const val MWR = "63ea2db3e27c93056213a592"
+            }
+        }
+
         object Tag {
             const val SKIING = "63e9219cb06004ccb33ab2c1"
             const val BLACK_CROWS = "63e921a90a69d79361207da7"
@@ -31,6 +44,17 @@ internal object Seeds {
             const val WORKING_ON_STORE = "63e9223b95695bef560f92f1"
             const val WORKING_ON_COMPONENTBOX = "63e92241a1761a665190c48c"
         }
+
+        object Channel {
+            object Matt {
+                const val SKIING = "63ea2ab51b3bdf812d274873"
+                const val BLACK_CROWS = "63ea2adfff11aaee12985d6b"
+                const val SERVER_DRIVEN_UI = "63ea2ae669563e4d25a42d01"
+                const val KOTLIN_MULTI_PLATFORM = "63ea2aecaa89cea612bb35d1"
+                const val COMPONENTBOX = "63ea2af73c7a6a0994f80198"
+                const val STORE = "63ea2afd975d870e955f658d"
+            }
+        }
     }
 
     object Tags {
@@ -47,6 +71,62 @@ internal object Seeds {
         val MattTag = LocalMention(Ids.User.MATT, Ids.User.TAG)
         val MattTrot = LocalMention(Ids.User.MATT, Ids.User.TROT)
         val MattTugg = LocalMention(Ids.User.MATT, Ids.User.TUGG)
+    }
+
+    object Graphs {
+        object Matt {
+            val MWR = LocalGraph(
+                id = Ids.Graph.Matt.MWR,
+                name = "MWR",
+                ownerId = Ids.User.MATT
+            )
+        }
+    }
+
+    object UserPinnedChannels {
+        object Matt {
+            val BlackCrows = UserPinnedChannel(Ids.User.MATT, Ids.Channel.Matt.BLACK_CROWS)
+        }
+    }
+
+    object UserPinnedGraphs {
+        object Matt {
+            val MWR = UserPinnedGraph(Ids.User.MATT, Ids.Graph.Matt.MWR)
+        }
+    }
+
+    object UserPinnedNotes {
+        object Matt {
+            val SkiedKillington = UserPinnedNote(Ids.User.MATT, Ids.Note.SKIED_KILLINGTON)
+        }
+    }
+
+    object UserFollowingUsers {
+        object Matt {
+            val Tag = UserFollowingUser(Ids.User.MATT, Ids.User.TAG)
+            val Trot = UserFollowingUser(Ids.User.MATT, Ids.User.TROT)
+            val Tugg = UserFollowingUser(Ids.User.MATT, Ids.User.TUGG)
+        }
+    }
+
+    object UserFollowingGraphs {
+        object Tag {
+            val MWR = UserFollowingGraph(Ids.User.TAG, Ids.Graph.Matt.MWR)
+        }
+
+        object Trot {
+            val MWR = UserFollowingGraph(Ids.User.TROT, Ids.Graph.Matt.MWR)
+        }
+
+        object Tugg {
+            val MWR = UserFollowingGraph(Ids.User.TUGG, Ids.Graph.Matt.MWR)
+        }
+    }
+
+    object UserFollowingTags {
+        object Matt {
+            val BlackCrows = UserFollowingTag(Ids.User.MATT, Ids.Tag.BLACK_CROWS)
+        }
     }
 
     object Notes {
@@ -73,25 +153,25 @@ internal object Seeds {
         )
     }
 
-    object NoteTags {
-        val SkiedKillingtonBlackCrows = NoteTag(
+    object NoteChannels {
+        val SkiedKillingtonBlackCrows = NoteChannel(
             noteId = Ids.Note.SKIED_KILLINGTON,
-            tagId = Ids.Tag.BLACK_CROWS
+            channelId = Ids.Channel.Matt.BLACK_CROWS
         )
 
-        val WorkingOnComponentBoxServerDrivenUi = NoteTag(
+        val WorkingOnComponentBoxServerDrivenUi = NoteChannel(
             noteId = Ids.Note.WORKING_ON_COMPONENTBOX,
-            tagId = Ids.Tag.SERVER_DRIVEN_UI
+            channelId = Ids.Channel.Matt.SERVER_DRIVEN_UI
         )
 
-        val WorkingOnComponentBoxKMP = NoteTag(
+        val WorkingOnComponentBoxKMP = NoteChannel(
             noteId = Ids.Note.WORKING_ON_COMPONENTBOX,
-            tagId = Ids.Tag.KOTLIN_MULTI_PLATFORM
+            channelId = Ids.Channel.Matt.KOTLIN_MULTI_PLATFORM
         )
 
-        val WorkingOnStoreKMP = NoteTag(
+        val WorkingOnStoreKMP = NoteChannel(
             noteId = Ids.Note.WORKING_ON_STORE,
-            tagId = Ids.Tag.KOTLIN_MULTI_PLATFORM
+            channelId = Ids.Channel.Matt.KOTLIN_MULTI_PLATFORM
         )
     }
 
@@ -154,6 +234,14 @@ internal object Seeds {
     val tags = listOf(Tags.Skiing, Tags.BlackCrows, Tags.ServerDrivenUi, Tags.KotlinMultiPlatform, Tags.ComponentBox, Tags.Store)
     val mentions = listOf(Mention.MattTag, Mention.MattTrot, Mention.MattTugg)
     val notes = listOf(Notes.SkiedKillington, Notes.WorkingOnStore, Notes.WorkingOnComponentBox)
-    val noteTags = listOf(NoteTags.WorkingOnComponentBoxKMP, NoteTags.WorkingOnComponentBoxServerDrivenUi, NoteTags.WorkingOnStoreKMP, NoteTags.SkiedKillingtonBlackCrows)
+    val noteChannels =
+        listOf(NoteChannels.SkiedKillingtonBlackCrows, NoteChannels.WorkingOnStoreKMP, NoteChannels.WorkingOnComponentBoxKMP, NoteChannels.WorkingOnComponentBoxServerDrivenUi)
     val noteMentions = listOf(NoteMentions.SkiedKillingtonTag, NoteMentions.SkiedKillingtonTrot, NoteMentions.SkiedKillingtonTugg)
+    val graphs = listOf(Graphs.Matt.MWR)
+    val userFollowingTags = listOf(UserFollowingTags.Matt.BlackCrows)
+    val userFollowingGraphs = listOf(UserFollowingGraphs.Tag.MWR, UserFollowingGraphs.Trot.MWR, UserFollowingGraphs.Tugg.MWR)
+    val userFollowingUsers = listOf(UserFollowingUsers.Matt.Tag, UserFollowingUsers.Matt.Trot, UserFollowingUsers.Matt.Tugg)
+    val userPinnedGraphs = listOf(UserPinnedGraphs.Matt.MWR)
+    val userPinnedChannels = listOf(UserPinnedChannels.Matt.BlackCrows)
+    val userPinnedNotes = listOf(UserPinnedNotes.Matt.SkiedKillington)
 }

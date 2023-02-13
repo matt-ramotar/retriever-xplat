@@ -4,6 +4,7 @@ import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalNoteQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
 import ai.wandering.retriever.common.storekit.LocalUserQueries
+import ai.wandering.retriever.common.storekit.entities.note.Channel
 import ai.wandering.retriever.common.storekit.entities.note.Mention
 import ai.wandering.retriever.common.storekit.entities.note.Note
 import ai.wandering.retriever.common.storekit.entities.note.Tag
@@ -42,10 +43,18 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
         email = common.userEmail!!,
         avatarUrl = common.userAvatarUrl
     )
-    val tags = response
+
+    val tagIdToTag = mutableMapOf<String, Tag>()
+
+    response
         .filter { row -> row.tagId != null && row.tagName != null }
         .map { row -> Tag(row.tagId!!, row.tagName!!) }
         .distinct()
+        .onEach { tagIdToTag[it.id] = it }
+
+    val channels = response
+        .filter { row -> row.channelId != null && row.channelTagId != null && row.channelGraphId != null && row.channelUserId != null }
+        .map { row -> Channel(row.channelId!!, row.channelUserId!!, row.channelGraphId!!, tagIdToTag[row.channelTagId!!]!!) }
 
     val mentions = response
         .filter { row -> row.userId != null && row.otherUserId != null && row.otherUserName != null && row.otherUserEmail != null && row.otherUserAvatarUrl != null }
@@ -57,7 +66,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
         user = user,
         content = common.content ?: "",
         isRead = common.is_read,
-        tags = tags,
+        channels = channels,
         mentions = mentions,
         parents = listOf(),
         references = listOf(),

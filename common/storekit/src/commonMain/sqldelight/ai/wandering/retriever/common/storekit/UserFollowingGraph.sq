@@ -1,0 +1,28 @@
+CREATE TABLE userFollowingGraph(
+    userId TEXT NOT NULL,
+    graphId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (graphId) REFERENCES localGraph (id),
+    PRIMARY KEY (userId, graphId)
+);
+
+getAll:
+SELECT *
+FROM userFollowingGraph;
+
+getById:
+SELECT *
+FROM userFollowingGraph
+WHERE userId = ? AND graphId = ?;
+
+upsert:
+INSERT OR REPLACE INTO userFollowingGraph
+VALUES ?;
+
+clearById:
+DELETE
+FROM userFollowingGraph
+WHERE userId = ? AND graphId = ?;
+
+clearAll:
+DELETE FROM userFollowingGraph;

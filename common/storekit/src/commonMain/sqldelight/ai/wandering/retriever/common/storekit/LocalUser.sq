@@ -33,8 +33,8 @@ SELECT *
 FROM localUser user
 INNER JOIN localNote note
 ON user.id == note.userId
-INNER JOIN noteTag
-ON note.id == noteTag.noteId
+INNER JOIN noteChannel
+ON note.id == noteChannel.noteId
 INNER JOIN noteMention
 ON note.id == noteMention.noteId
 INNER JOIN noteRelationship

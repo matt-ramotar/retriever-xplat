@@ -1,0 +1,28 @@
+CREATE TABLE userFollowingTag(
+    userId TEXT NOT NULL,
+    tagId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (tagId) REFERENCES localTag (id),
+    PRIMARY KEY (userId, tagId)
+);
+
+getAll:
+SELECT *
+FROM userFollowingTag;
+
+getById:
+SELECT *
+FROM userFollowingTag
+WHERE userId = ? AND tagId = ?;
+
+upsert:
+INSERT OR REPLACE INTO userFollowingTag
+VALUES ?;
+
+clearById:
+DELETE
+FROM userFollowingTag
+WHERE userId = ? AND tagId = ?;
+
+clearAll:
+DELETE FROM userFollowingTag;

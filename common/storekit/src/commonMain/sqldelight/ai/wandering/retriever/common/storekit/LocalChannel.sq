@@ -1,0 +1,27 @@
+CREATE TABLE localChannel(
+    id TEXT NOT NULL PRIMARY KEY,
+    userId TEXT NOT NULL,
+    graphId TEXT NOT NULL,
+    tagId TEXT NOT NULL
+);
+
+getAll:
+SELECT *
+FROM localChannel;
+
+getById:
+SELECT *
+FROM localChannel
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO localChannel
+VALUES ?;
+
+clearById:
+DELETE
+FROM localChannel
+WHERE id = ?;
+
+clearAll:
+DELETE FROM localChannel;
