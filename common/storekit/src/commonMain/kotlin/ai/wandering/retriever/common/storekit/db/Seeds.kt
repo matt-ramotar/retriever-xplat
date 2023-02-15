@@ -7,6 +7,7 @@ import ai.wandering.retriever.common.storekit.LocalNote
 import ai.wandering.retriever.common.storekit.LocalTag
 import ai.wandering.retriever.common.storekit.LocalUser
 import ai.wandering.retriever.common.storekit.LocalUserAction
+import ai.wandering.retriever.common.storekit.LocalUserNotification
 import ai.wandering.retriever.common.storekit.NoteChannel
 import ai.wandering.retriever.common.storekit.NoteMention
 import ai.wandering.retriever.common.storekit.UserFollowingGraph
@@ -16,6 +17,7 @@ import ai.wandering.retriever.common.storekit.UserPinnedChannel
 import ai.wandering.retriever.common.storekit.UserPinnedGraph
 import ai.wandering.retriever.common.storekit.UserPinnedNote
 import ai.wandering.retriever.common.storekit.entities.UserAction
+import ai.wandering.retriever.common.storekit.entities.UserNotification
 
 
 internal object Seeds {
@@ -321,6 +323,12 @@ internal object Seeds {
         }
     }
 
+    object UserNotifications {
+        object Matt {
+            val TagPinnedGraph = LocalUserNotification(Ids.User.MATT, Ids.User.TAG, Ids.Graph.Matt.MWR, UserNotification.Type.GraphPinned)
+        }
+    }
+
 
     val users = listOf(Users.Matt, Users.Tag, Users.Trot, Users.Tugg)
     val tags = listOf(Tags.Skiing, Tags.BlackCrows, Tags.ServerDrivenUi, Tags.KotlinMultiPlatform, Tags.ComponentBox, Tags.Store)
@@ -340,4 +348,5 @@ internal object Seeds {
         listOf(Channels.Matt.BlackCrows, Channels.Matt.KotlinMultiPlatform, Channels.Matt.ComponentBox, Channels.Matt.Skiing, Channels.Matt.Store, Channels.Matt.ServerDrivenUi)
     val userActions =
         listOf(UserActions.Matt.Create.SkiedKillington, UserActions.Matt.Create.WorkingOnStore, UserActions.Matt.Create.WorkingOnComponentBox, UserActions.Tag.PinGraph.MWR)
+    val userNotifications = listOf(UserNotifications.Matt.TagPinnedGraph)
 }

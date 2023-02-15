@@ -5,7 +5,7 @@ CREATE TABLE localUserAction(
     objectId TEXT NOT NULL,
     type TEXT AS UserAction.Type NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id),
-    PRIMARY KEY (userId, objectId)
+    PRIMARY KEY (userId, objectId, type)
 );
 
 getById:

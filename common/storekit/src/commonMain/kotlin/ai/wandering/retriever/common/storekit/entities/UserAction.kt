@@ -12,6 +12,34 @@ data class UserFeedItem(
 )
 
 @Serializable
+data class UserNotification(
+    val userId: String,
+    val otherUserId: String,
+    val objectId: String,
+    val type: Type
+) {
+    enum class Type {
+        NoteCommentedOn,
+        ThreadCommentedOn,
+        NoteSubscribedTo,
+        ThreadSubscribedTo,
+        ChannelSubscribedTo,
+        GraphSubscribedTo,
+        NotePinned,
+        ThreadPinned,
+        GraphPinned,
+        SubscribedTo,
+        ChannelStarred,
+        GraphStarred,
+        NoteUpvoted,
+        ThreadUpvoted,
+        NoteReactedTo,
+        ThreadReactedTo,
+        TaggedInNote
+    }
+}
+
+@Serializable
 data class UserAction(
     val userId: String,
     val objectId: String,

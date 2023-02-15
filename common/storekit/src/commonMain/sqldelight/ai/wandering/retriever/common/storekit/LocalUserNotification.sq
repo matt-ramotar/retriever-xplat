@@ -1,0 +1,28 @@
+import ai.wandering.retriever.common.storekit.entities.UserNotification;
+
+CREATE TABLE localUserNotification(
+    userId TEXT NOT NULL,
+    otherUserId TEXT NOT NULL,
+    objectId TEXT NOT NULL,
+    type TEXT AS UserNotification.Type NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (otherUserId) REFERENCES localUser (id),
+    PRIMARY KEY (userId, otherUserId, objectId, type)
+);
+
+getById:
+SELECT *
+FROM localUserNotification
+WHERE userId = ? AND otherUserId = ? AND objectId = ? AND type = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUserNotification
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUserNotification
+WHERE userId = ?;
+
+clearAll:
+DELETE FROM localUserNotification;
