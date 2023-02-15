@@ -1,0 +1,26 @@
+import ai.wandering.retriever.common.storekit.entities.UserAction;
+
+CREATE TABLE localUserAction(
+    userId TEXT NOT NULL,
+    objectId TEXT NOT NULL,
+    type TEXT AS UserAction.Type NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    PRIMARY KEY (userId, objectId)
+);
+
+getById:
+SELECT *
+FROM localUserAction
+WHERE userId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUserAction
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUserAction
+WHERE userId = ?;
+
+clearAll:
+DELETE FROM localUserAction;

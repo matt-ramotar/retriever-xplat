@@ -25,14 +25,20 @@ fun ProfileScreen(user: User) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        Box(modifier = Modifier
-            .padding(bottom = 50.dp)
-            .fillMaxWidth()
-            .height(200.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(bottom = 50.dp)
+                .fillMaxWidth()
+                .height(200.dp)
+        ) {
             AsyncImage(
                 user.coverImageUrl, null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop
             )
-            Row(modifier = Modifier.fillMaxSize().offset(y = 40.dp), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.Bottom) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .offset(y = 40.dp), horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.Bottom
+            ) {
                 val avatarUrl = user.avatarUrl
                 if (avatarUrl != null) {
                     Avatar(avatarUrl = avatarUrl, size = 120.dp)
@@ -53,6 +59,10 @@ fun ProfileScreen(user: User) {
 
         user.followed.forEach {
             Text("Following: ${it.name}")
+        }
+        if (user.actions.isNotEmpty()) {
+            Text(text = "Activity")
+            user.actions.forEach { action -> Text(text = action.type.name) }
         }
 
 

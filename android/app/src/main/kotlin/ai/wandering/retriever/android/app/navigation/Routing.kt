@@ -9,6 +9,7 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
+import ai.wandering.retriever.common.storekit.entities.UserAction
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
 import ai.wandering.retriever.common.storekit.extension.findAndPopulateByUserId
 import androidx.compose.foundation.clickable
@@ -66,7 +67,19 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             )
         }
         composable(Screen.Activity.route) {
-            Text("Activity")
+            val user = database.localUserQueries.findAndPopulateByUserId(user.id)
+            val followedIds = user.followed.map { it.id }
+            val userActionsResponse = database.localUserQueries.getUserActionsByUserId(followedIds).executeAsList()
+            val userActions = userActionsResponse.map { UserAction(it.userId, it.objectId, it.type) }.distinct()
+
+            Column {
+
+                Text("Activity")
+
+                userActions.forEach {
+                    Text(text = it.type.name)
+                }
+            }
         }
         composable(Screen.Notification.route) {}
         composable(Screen.Search.route) {

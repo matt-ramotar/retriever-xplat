@@ -6,6 +6,7 @@ import ai.wandering.retriever.common.storekit.LocalMention
 import ai.wandering.retriever.common.storekit.LocalNote
 import ai.wandering.retriever.common.storekit.LocalTag
 import ai.wandering.retriever.common.storekit.LocalUser
+import ai.wandering.retriever.common.storekit.LocalUserAction
 import ai.wandering.retriever.common.storekit.NoteChannel
 import ai.wandering.retriever.common.storekit.NoteMention
 import ai.wandering.retriever.common.storekit.UserFollowingGraph
@@ -14,6 +15,7 @@ import ai.wandering.retriever.common.storekit.UserFollowingUser
 import ai.wandering.retriever.common.storekit.UserPinnedChannel
 import ai.wandering.retriever.common.storekit.UserPinnedGraph
 import ai.wandering.retriever.common.storekit.UserPinnedNote
+import ai.wandering.retriever.common.storekit.entities.UserAction
 
 
 internal object Seeds {
@@ -99,6 +101,10 @@ internal object Seeds {
     object UserPinnedGraphs {
         object Matt {
             val MWR = UserPinnedGraph(Ids.User.MATT, Ids.Graph.Matt.MWR)
+        }
+
+        object Tag {
+            val MWR = UserPinnedGraph(Ids.User.TAG, Ids.Graph.Matt.MWR)
         }
     }
 
@@ -299,6 +305,22 @@ internal object Seeds {
         )
     }
 
+    object UserActions {
+        object Matt {
+            object Create {
+                val SkiedKillington = LocalUserAction(Ids.User.MATT, Ids.Note.SKIED_KILLINGTON, UserAction.Type.CreateNote)
+                val WorkingOnComponentBox = LocalUserAction(Ids.User.MATT, Ids.Note.WORKING_ON_COMPONENTBOX, UserAction.Type.CreateNote)
+                val WorkingOnStore = LocalUserAction(Ids.User.MATT, Ids.Note.WORKING_ON_STORE, UserAction.Type.CreateNote)
+            }
+        }
+
+        object Tag {
+            object PinGraph {
+                val MWR = LocalUserAction(Ids.User.TAG, Ids.Graph.Matt.MWR, UserAction.Type.PinGraph)
+            }
+        }
+    }
+
 
     val users = listOf(Users.Matt, Users.Tag, Users.Trot, Users.Tugg)
     val tags = listOf(Tags.Skiing, Tags.BlackCrows, Tags.ServerDrivenUi, Tags.KotlinMultiPlatform, Tags.ComponentBox, Tags.Store)
@@ -311,9 +333,11 @@ internal object Seeds {
     val userFollowingTags = listOf(UserFollowingTags.Matt.BlackCrows)
     val userFollowingGraphs = listOf(UserFollowingGraphs.Tag.MWR, UserFollowingGraphs.Trot.MWR, UserFollowingGraphs.Tugg.MWR)
     val userFollowingUsers = listOf(UserFollowingUsers.Matt.Tag, UserFollowingUsers.Matt.Trot, UserFollowingUsers.Matt.Tugg)
-    val userPinnedGraphs = listOf(UserPinnedGraphs.Matt.MWR)
+    val userPinnedGraphs = listOf(UserPinnedGraphs.Matt.MWR, UserPinnedGraphs.Tag.MWR)
     val userPinnedChannels = listOf(UserPinnedChannels.Matt.BlackCrows)
     val userPinnedNotes = listOf(UserPinnedNotes.Matt.SkiedKillington)
     val channels =
         listOf(Channels.Matt.BlackCrows, Channels.Matt.KotlinMultiPlatform, Channels.Matt.ComponentBox, Channels.Matt.Skiing, Channels.Matt.Store, Channels.Matt.ServerDrivenUi)
+    val userActions =
+        listOf(UserActions.Matt.Create.SkiedKillington, UserActions.Matt.Create.WorkingOnStore, UserActions.Matt.Create.WorkingOnComponentBox, UserActions.Tag.PinGraph.MWR)
 }

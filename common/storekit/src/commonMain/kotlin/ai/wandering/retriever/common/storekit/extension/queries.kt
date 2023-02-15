@@ -4,6 +4,7 @@ import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalNoteQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
 import ai.wandering.retriever.common.storekit.LocalUserQueries
+import ai.wandering.retriever.common.storekit.entities.UserAction
 import ai.wandering.retriever.common.storekit.entities.note.Channel
 import ai.wandering.retriever.common.storekit.entities.note.Mention
 import ai.wandering.retriever.common.storekit.entities.note.Note
@@ -33,11 +34,11 @@ fun LocalMentionQueries.findAndPopulateOtherUsers(userId: String): List<User> {
 }
 
 fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
-    val response = findAndPopulate(userId).executeAsList()
+    val userResponse = findAndPopulate(userId).executeAsList()
 
-    val common = response.first()
+    val common = userResponse.first()
 
-    val followed = response
+    val followed = userResponse
         .filter { row -> row.followedUserId != null }
         .map { row ->
             User(
@@ -51,7 +52,11 @@ fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
         }
         .distinct()
 
-    val followers = response
+    val userActionsResponse = getUserActionsByUserId(listOf(userId)).executeAsList()
+
+    val userActions = userActionsResponse.map { row -> UserAction(row.userId, row.objectId, row.type) }
+
+    val followers = userResponse
         .filter { row -> row.followerId != null }
         .map { row ->
             User(
@@ -65,12 +70,13 @@ fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
         }
         .distinct()
 
-    val graphs = response.filter { row -> row.graphId != null }.map { row -> Graph(row.graphId!!, row.graphName!!, row.graphOwnerId!!) }.distinct()
-    val followedTags = response.filter { row -> row.followedTagId != null }.map { row -> Tag(row.followedTagId!!, row.followedTagName!!) }.distinct()
+    val graphs = userResponse.filter { row -> row.graphId != null }.map { row -> Graph(row.graphId!!, row.graphName!!, row.graphOwnerId!!) }.distinct()
+    val followedTags = userResponse.filter { row -> row.followedTagId != null }.map { row -> Tag(row.followedTagId!!, row.followedTagName!!) }.distinct()
     val followedGraphs =
-        response.filter { row -> row.followedGraphId != null }.map { row -> Graph(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!) }.distinct()
-    val pinnedGraphs = response.filter { row -> row.pinnedGraphId != null }.map { row -> Graph(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }.distinct()
-    val pinnedChannels = response.filter { row -> row.pinnedChannelId != null }
+        userResponse.filter { row -> row.followedGraphId != null }.map { row -> Graph(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!) }.distinct()
+    val pinnedGraphs =
+        userResponse.filter { row -> row.pinnedGraphId != null }.map { row -> Graph(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }.distinct()
+    val pinnedChannels = userResponse.filter { row -> row.pinnedChannelId != null }
         .map { row ->
             Channel(
                 row.pinnedChannelId!!,
@@ -95,7 +101,8 @@ fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
         graphsFollowing = followedGraphs,
         pinnedGraphs = pinnedGraphs,
         pinnedChannels = pinnedChannels,
-        coverImageUrl = common.coverImageUrl
+        coverImageUrl = common.coverImageUrl,
+        actions = userActions
     )
 }
 
