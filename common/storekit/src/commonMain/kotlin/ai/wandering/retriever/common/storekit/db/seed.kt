@@ -8,6 +8,7 @@ fun RetrieverDatabase.seed() {
     Seeds.mentions.forEach { localMentionQueries.upsert(it) }
     Seeds.notes.forEach { localNoteQueries.upsert(it) }
     Seeds.graphs.forEach { localGraphQueries.upsert(it) }
+    Seeds.channels.forEach { localChannelQueries.upsert(it) }
     Seeds.noteChannels.forEach { noteChannelQueries.upsert(it) }
     Seeds.noteMentions.forEach { noteMentionQueries.upsert(it) }
     Seeds.userFollowingTags.forEach { userFollowingTagQueries.upsert(it) }

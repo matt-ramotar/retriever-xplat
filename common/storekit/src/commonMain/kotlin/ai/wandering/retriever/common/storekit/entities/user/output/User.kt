@@ -1,5 +1,7 @@
 package ai.wandering.retriever.common.storekit.entities.user.output
 
+import ai.wandering.retriever.common.storekit.entities.UserAction
+import ai.wandering.retriever.common.storekit.entities.UserFeedItem
 import ai.wandering.retriever.common.storekit.entities.note.Channel
 import ai.wandering.retriever.common.storekit.entities.note.Note
 import ai.wandering.retriever.common.storekit.entities.note.Tag
@@ -13,7 +15,8 @@ data class User(
     val name: String,
     val email: String,
     val avatarUrl: String? = null,
-    val following: List<User> = listOf(),
+    val coverImageUrl: String? = null,
+    val followed: List<User> = listOf(),
     val followers: List<User> = listOf(),
     val graphs: List<Graph> = listOf(),
     val tagsFollowing: List<Tag> = listOf(),
@@ -22,7 +25,9 @@ data class User(
     val pinnedGraphs: List<Graph> = listOf(),
     val pinnedChannels: List<Channel> = listOf(),
     val pinnedNotes: List<Note> = listOf(),
-    val bio: String? = null,
+    val actions: List<UserAction> = listOf(),
+    val feedItems: List<UserFeedItem> = listOf(),
+    val bio: String? = null
 )
 
 @Serializable

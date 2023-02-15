@@ -1,0 +1,24 @@
+CREATE TABLE localReactToThread(
+    userId TEXT NOT NULL,
+    threadId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (threadId) REFERENCES localThread (id),
+    PRIMARY KEY (userId, threadId)
+);
+
+getById:
+SELECT *
+FROM localReactToThread
+WHERE userId = ? AND threadId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localReactToThread
+VALUES ?;
+
+clearById:
+DELETE
+FROM localReactToThread
+WHERE userId = ? AND threadId = ?;
+
+clearAll:
+DELETE FROM localReactToThread;

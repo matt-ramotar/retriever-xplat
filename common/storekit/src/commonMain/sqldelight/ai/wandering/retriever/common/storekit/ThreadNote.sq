@@ -1,0 +1,26 @@
+CREATE TABLE threadNote(
+    threadId TEXT NOT NULL,
+    noteId TEXT NOT NULL,
+    parentNoteId TEXT,
+    FOREIGN KEY (threadId) REFERENCES localThread (id),
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    FOREIGN KEY (parentNoteId) REFERENCES localNote (id),
+    PRIMARY KEY (threadId, noteId, parentNoteId)
+);
+
+getById:
+SELECT *
+FROM threadNote
+WHERE threadId = ? AND noteId = ? AND parentNoteId = ?;
+
+upsert:
+INSERT OR REPLACE INTO threadNote
+VALUES ?;
+
+clearById:
+DELETE
+FROM threadNote
+WHERE threadId = ? AND noteId = ? AND parentNoteId = ?;
+
+clearAll:
+DELETE FROM threadNote;

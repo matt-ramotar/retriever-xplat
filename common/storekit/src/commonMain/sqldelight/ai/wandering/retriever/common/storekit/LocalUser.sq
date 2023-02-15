@@ -3,7 +3,9 @@ CREATE TABLE localUser (
     username TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    avatarUrl TEXT
+    avatarUrl TEXT,
+    coverImageUrl TEXT,
+    bio TEXT
 );
 
 getAll:
@@ -27,6 +29,105 @@ WHERE id = ?;
 clearAll:
 DELETE FROM localUser;
 
+findAndPopulate:
+SELECT user.id, user.username, user.name, user.email, user.avatarUrl, user.coverImageUrl, user.bio,
+       -- Followed
+       followed.id AS "followedUserId",
+       followed.username AS "followedUsername",
+       followed.name AS "followedName",
+       followed.email AS "followedEmail",
+       followed.avatarUrl AS "followedAvatarUrl",
+       followed.coverImageUrl AS "followedCoverImageUrl",
+       followed.bio AS "followedBio",
+       -- Followers
+       follower.id AS "followerId",
+       follower.username AS "followerUsername",
+       follower.name AS "followerName",
+       follower.email AS "followerEmail",
+       follower.avatarUrl AS "followerAvatarUrl",
+       follower.coverImageUrl AS "followerCoverImageUrl",
+       follower.bio AS "followerBio",
+       -- Graphs
+       localGraph.id AS "graphId",
+       localGraph.ownerId AS "graphOwnerId",
+       localGraph.name AS "graphName",
+       -- Tags following
+       followedTag.id AS "followedTagId",
+       followedTag.name AS "followedTagName",
+       -- Graphs following
+       followedGraph.id AS "followedGraphId",
+       followedGraph.name AS "followedGraphName",
+       followedGraph.ownerId AS "followedGraphOwnerId",
+       -- Graphs depending on
+       -- Pinned graphs
+       pinnedGraph.id AS "pinnedGraphId",
+       pinnedGraph.name AS "pinnedGraphName",
+       pinnedGraph.ownerId AS "pinnedGraphOwnerId",
+       -- Pinned channels
+       pinnedChannel.id AS "pinnedChannelId",
+       pinnedChannel.userId AS "pinnedChannelUserId",
+       pinnedChannel.graphId AS "pinnedChannelGraphId",
+       pinnedChannel.tagId AS "pinnedChannelTagId",
+       pinnedChannelTag.name AS "pinnedChannelTagName",
+       -- Pinned notes
+       pinnedNote.id AS "pinnedNoteId",
+       pinnedNote.userId AS "pinnedNoteUserId",
+       pinnedNote.content AS "pinnedNoteContent",
+       pinnedNote.is_read AS "pinnedNoteIsRead"
+FROM localUser user
+
+-- Following
+LEFT JOIN userFollowingUser
+ON user.id == userFollowingUser.userId
+LEFT JOIN localUser followed
+ON userFollowingUser.otherUserId == followed.id
+
+-- Followers
+LEFT JOIN userFollowingUser followers
+ON user.id == followers.otherUserId
+LEFT JOIN localUser follower
+ON follower.id == followers.userId
+
+-- Graphs
+LEFT JOIN localGraph
+ON localGraph.ownerId == user.id
+
+-- Tags following
+LEFT JOIN userFollowingTag
+ON user.id == userFollowingTag.userId
+LEFT JOIN localTag followedTag
+ON followedTag.id == userFollowingTag.tagId
+
+-- Graphs following
+LEFT JOIN userFollowingGraph
+ON user.id == userFollowingGraph.userId
+LEFT JOIN localGraph followedGraph
+ON followedGraph.id == userFollowingGraph.graphId
+
+-- Graphs depending on
+
+-- Pinned graphs
+LEFT JOIN userPinnedGraph
+ON user.id == userPinnedGraph.userId
+LEFT JOIN localGraph pinnedGraph
+ON pinnedGraph.id == userPinnedGraph.graphId
+
+-- Pinned channels
+LEFT JOIN userPinnedChannel
+ON user.id == userPinnedChannel.userId
+LEFT JOIN localChannel pinnedChannel
+ON pinnedChannel.id == userPinnedChannel.channelId
+LEFT JOIN localTag pinnedChannelTag
+ON pinnedChannelTag.id == pinnedChannel.tagId
+
+-- Pinned notes
+LEFT JOIN userPinnedNote
+ON user.id == userPinnedNote.userId
+LEFT JOIN localNote pinnedNote
+ON pinnedNote.id == userPinnedNote.noteId
+
+WHERE user.id = ?;
+
 
 getNotesByUserId:
 SELECT *
@@ -41,3 +142,121 @@ INNER JOIN noteRelationship
 ON note.id == noteRelationship.noteId
 WHERE user.id = ?
 GROUP BY note.id, user.id;
+
+
+getUserActionsByUserId:
+SELECT
+-- User
+    user.id AS "userId",
+    user.name AS "userName",
+    user.username AS "userUsername",
+    user.email AS "userEmail",
+    user.bio AS "userBio",
+    user.avatarUrl AS "userAvatarUrl",
+    user.coverImageUrl AS "userCoverImageUrl",
+
+-- Create
+    localCreateNote.noteId AS "createNoteNoteId",
+    localCreateThread.threadId AS "createThreadThreadId",
+    localCreateChannel.channelId AS "createChannelChannelId",
+    localCreateGraph.graphId AS "createGraphGraphId",
+
+-- Subscribe
+    localSubscribeToNote.noteId AS "subscribeToNoteNoteId",
+    localSubscribeToThread.threadId AS "subscribeToThreadThreadId",
+    localSubscribeToChannel.channelId AS "subscribeToChannelChannelId",
+    localSubscribeToGraph.graphId AS "subscribeToGraphGraphId",
+    localSubscribeToUser.otherUserId AS "subscribeToUserOtherUserId",
+
+-- Pin
+    localPinNote.noteId AS "pinNoteNoteId",
+    localPinChannel.channelId AS "pinChannelChannelId",
+    localPinThread.threadId AS "pinThreadThreadId",
+    localPinGraph.graphId AS "pinGraphGraphId",
+
+-- Star
+    localStarChannel.channelId AS "starChannelChannelId",
+    localStarGraph.graphId AS "starGraphGraphId",
+
+-- Upvote
+    localUpvoteNote.noteId AS "upvoteNoteNoteId",
+    localUpvoteThread.threadId AS "upvoteThreadThreadId",
+
+-- React
+    localReactToNote.noteId AS "reactToNoteNoteId",
+    localReactToThread.threadId AS "reactToThreadThreadId",
+
+-- Get Tagged
+    localTaggedInNote.noteId AS "taggedInNoteNoteId"
+
+
+FROM localUser user
+
+-- Create
+LEFT JOIN localCreateNote
+ON user.id == localCreateNote.userId
+
+LEFT JOIN localCreateThread
+ON user.id == localCreateThread.userId
+
+LEFT JOIN localCreateChannel
+ON user.id == localCreateChannel.userId
+
+LEFT JOIN localCreateGraph
+ON user.id == localCreateGraph.userId
+
+-- Subscribe
+LEFT JOIN localSubscribeToNote
+ON user.id == localSubscribeToNote.userId
+
+LEFT JOIN localSubscribeToChannel
+ON user.id == localSubscribeToChannel.userId
+
+LEFT JOIN localSubscribeToThread
+ON user.id == localSubscribeToThread.userId
+
+LEFT JOIN localSubscribeToGraph
+ON user.id == localSubscribeToGraph.userId
+
+LEFT JOIN localSubscribeToUser
+ON user.id == localSubscribeToUser.userId
+
+-- Pin
+LEFT JOIN localPinNote
+ON user.id == localPinNote.userId
+
+LEFT JOIN localPinThread
+ON user.id == localPinThread.userId
+
+LEFT JOIN localPinChannel
+ON user.id == localPinChannel.userId
+
+LEFT JOIN localPinGraph
+ON user.id == localPinGraph.userId
+
+-- Star
+LEFT JOIN localStarChannel
+ON user.id == localStarChannel.userId
+
+LEFT JOIN localStarGraph
+ON user.id == localStarGraph.userId
+
+-- Upvote
+LEFT JOIN localUpvoteNote
+ON user.id == localUpvoteNote.userId
+
+LEFT JOIN localUpvoteThread
+ON user.id == localUpvoteThread.userId
+
+-- React
+LEFT JOIN localReactToNote
+ON user.id == localReactToNote.userId
+
+LEFT JOIN localReactToThread
+ON user.id == localReactToThread.userId
+
+-- Get Tagged
+LEFT JOIN localTaggedInNote
+ON user.id == localTaggedInNote.userId
+
+WHERE user.id = ?;

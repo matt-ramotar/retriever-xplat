@@ -1,0 +1,24 @@
+CREATE TABLE localSubscribeToThread(
+    userId TEXT NOT NULL,
+    threadId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (threadId) REFERENCES localThread (id),
+    PRIMARY KEY (userId, threadId)
+);
+
+getById:
+SELECT *
+FROM localSubscribeToThread
+WHERE userId = ? AND threadId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localSubscribeToThread
+VALUES ?;
+
+clearById:
+DELETE
+FROM localSubscribeToThread
+WHERE userId = ? AND threadId = ?;
+
+clearAll:
+DELETE FROM localSubscribeToThread;

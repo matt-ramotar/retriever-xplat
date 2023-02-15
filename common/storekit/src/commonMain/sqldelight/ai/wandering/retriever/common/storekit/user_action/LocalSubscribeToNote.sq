@@ -1,0 +1,24 @@
+CREATE TABLE localSubscribeToNote(
+    userId TEXT NOT NULL,
+    noteId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    PRIMARY KEY (userId, noteId)
+);
+
+getById:
+SELECT *
+FROM localSubscribeToNote
+WHERE userId = ? AND noteId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localSubscribeToNote
+VALUES ?;
+
+clearById:
+DELETE
+FROM localSubscribeToNote
+WHERE userId = ? AND noteId = ?;
+
+clearAll:
+DELETE FROM localSubscribeToNote;

@@ -1,8 +1,9 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package ai.wandering.retriever.android.feature.home_tab
+package ai.wandering.retriever.android.feature.finder_tab
 
 import ai.wandering.retriever.android.common.sig.color.Sig
+import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
@@ -25,8 +26,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,11 +41,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeTab(
+fun FinderTab(
     user: User,
     tags: LocalTagQueries,
     mentions: LocalMentionQueries,
+    onNavigateToSearchTab: () -> Unit,
     onNavigateToMentionResults: (otherUserId: String) -> Unit,
+    onNavigateToProfile: () -> Unit,
     onNavigateToTagResults: (name: String) -> Unit
 ) {
 
@@ -57,7 +58,10 @@ fun HomeTab(
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 if (user.avatarUrl != null) {
-                    Avatar(avatarUrl = user.avatarUrl!!, size = 32.dp)
+                    Row(modifier = Modifier.clickable { onNavigateToProfile() }) {
+
+                        Avatar(avatarUrl = user.avatarUrl!!, size = 32.dp)
+                    }
                 }
 
                 Spacer(modifier = Modifier.size(12.dp))
@@ -69,18 +73,16 @@ fun HomeTab(
 
         LazyColumn {
             item {
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextField(
-                        value = searchState.value,
-                        onValueChange = { searchState.value = it },
-                        placeholder = { Text(text = "Jump to...") },
-                        leadingIcon = {
-                            Icon(painter = painterResource(id = R.drawable.search), contentDescription = null)
-                        },
-                        colors = TextFieldDefaults.textFieldColors(unfocusedIndicatorColor = Color.Transparent, focusedIndicatorColor = Color.Transparent),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(systemThemeColors().opacity1)
+                        .clickable { onNavigateToSearchTab() }
+                        .padding(16.dp), horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(painterResource(id = R.drawable.search), modifier = Modifier.size(24.dp), contentDescription = null)
+                    Spacer(Modifier.size(16.dp))
+                    Text(text = "Advanced search", style = MaterialTheme.typography.labelLarge)
                 }
             }
 

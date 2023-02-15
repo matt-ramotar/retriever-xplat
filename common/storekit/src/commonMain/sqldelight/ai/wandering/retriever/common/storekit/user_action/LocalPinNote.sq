@@ -1,0 +1,24 @@
+CREATE TABLE localPinNote(
+    userId TEXT NOT NULL,
+    noteId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    PRIMARY KEY (userId, noteId)
+);
+
+getById:
+SELECT *
+FROM localPinNote
+WHERE userId = ? AND noteId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localPinNote
+VALUES ?;
+
+clearById:
+DELETE
+FROM localPinNote
+WHERE userId = ? AND noteId = ?;
+
+clearAll:
+DELETE FROM localPinNote;

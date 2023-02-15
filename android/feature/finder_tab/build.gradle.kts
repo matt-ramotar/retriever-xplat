@@ -37,4 +37,5 @@ dependencies {
     implementation(project(":common:storekit"))
     implementation(project(":android:common:navigation"))
     implementation(project(":android:common:sig"))
+    implementation(libs.coil.compose)
 }

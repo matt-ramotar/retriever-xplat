@@ -1,5 +1,6 @@
 package ai.wandering.retriever.common.storekit.db
 
+import ai.wandering.retriever.common.storekit.LocalChannel
 import ai.wandering.retriever.common.storekit.LocalGraph
 import ai.wandering.retriever.common.storekit.LocalMention
 import ai.wandering.retriever.common.storekit.LocalNote
@@ -195,13 +196,61 @@ internal object Seeds {
         )
     }
 
+    object Channels {
+        object Matt {
+            val BlackCrows = LocalChannel(
+                id = Ids.Channel.Matt.BLACK_CROWS,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.BLACK_CROWS
+            )
+
+            val Skiing = LocalChannel(
+                id = Ids.Channel.Matt.SKIING,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.SKIING
+            )
+
+            val ServerDrivenUi = LocalChannel(
+                id = Ids.Channel.Matt.SERVER_DRIVEN_UI,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.SERVER_DRIVEN_UI
+            )
+
+            val KotlinMultiPlatform = LocalChannel(
+                id = Ids.Channel.Matt.KOTLIN_MULTI_PLATFORM,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.KOTLIN_MULTI_PLATFORM
+            )
+
+            val Store = LocalChannel(
+                id = Ids.Channel.Matt.STORE,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.STORE
+            )
+
+            val ComponentBox = LocalChannel(
+                id = Ids.Channel.Matt.COMPONENTBOX,
+                userId = Ids.User.MATT,
+                graphId = Ids.Graph.Matt.MWR,
+                tagId = Ids.Tag.COMPONENTBOX
+            )
+        }
+    }
+
     object Users {
         val Matt = LocalUser(
             id = Ids.User.MATT,
             username = "matt",
             name = "Matthew Ramotar",
             email = "matt@wandering.ai",
-            avatarUrl = "https://avatars.githubusercontent.com/u/59468153?v=4"
+            avatarUrl = "https://avatars.githubusercontent.com/u/59468153?v=4",
+            bio = "Currently at Dropbox, I am Tech Lead of a multi-team initiative involving iOS, Android, and server. I co-authored and help maintain MobileNativeFoundation/Store and dropbox/componentbox. I have consulted to YC-backed startups. I love skiing, hiking, cycling, tennis, and squash. And I am the best friend of a 4-year-old Golden Retriever named Tag!",
+            coverImageUrl = "https://i.imgur.com/hnrCgWt.png"
         )
 
         val Tag = LocalUser(
@@ -209,7 +258,9 @@ internal object Seeds {
             username = "tag",
             name = "Tag Ramotar",
             email = "tag@wandering.ai",
-            avatarUrl = "https://i.imgur.com/UJ6rFC6.jpg"
+            avatarUrl = "https://i.imgur.com/UJ6rFC6.jpg",
+            bio = null,
+            coverImageUrl = "https://i.imgur.com/hnrCgWt.png"
         )
 
         val Trot = LocalUser(
@@ -217,7 +268,9 @@ internal object Seeds {
             username = "trot",
             name = "Trot Ramotar",
             email = "trot@wandering.ai",
-            avatarUrl = "https://i.imgur.com/RSx7KUI.jpg"
+            avatarUrl = "https://i.imgur.com/RSx7KUI.jpg",
+            bio = null,
+            coverImageUrl = "https://i.imgur.com/hnrCgWt.png"
         )
 
         val Tugg = LocalUser(
@@ -225,7 +278,9 @@ internal object Seeds {
             username = "tugg",
             name = "Tugg Sleeper",
             email = "tugg@wandering.ai",
-            avatarUrl = "https://i.imgur.com/J6mZ2cn.jpg"
+            avatarUrl = "https://i.imgur.com/J6mZ2cn.jpg",
+            bio = null,
+            coverImageUrl = "https://i.imgur.com/hnrCgWt.png"
         )
     }
 
@@ -244,4 +299,6 @@ internal object Seeds {
     val userPinnedGraphs = listOf(UserPinnedGraphs.Matt.MWR)
     val userPinnedChannels = listOf(UserPinnedChannels.Matt.BlackCrows)
     val userPinnedNotes = listOf(UserPinnedNotes.Matt.SkiedKillington)
+    val channels =
+        listOf(Channels.Matt.BlackCrows, Channels.Matt.KotlinMultiPlatform, Channels.Matt.ComponentBox, Channels.Matt.Skiing, Channels.Matt.Store, Channels.Matt.ServerDrivenUi)
 }

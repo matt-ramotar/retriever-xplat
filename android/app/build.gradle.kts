@@ -44,7 +44,7 @@ dependencies {
     implementation(project(":android:common:scoping"))
     implementation(project(":common:storekit"))
     implementation(project(":android:feature:account_tab"))
-    implementation(project(":android:feature:home_tab"))
+    implementation(project(":android:feature:finder_tab"))
     implementation(project(":android:feature:search_tab"))
 
     implementation("com.google.android.gms:play-services-auth:20.4.1")

@@ -35,7 +35,7 @@ anvil-gradle-plugin = { group = "com.squareup.anvil", name = "gradle-plugin", ve
 androidx-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "viewmodel" }
 androidx-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel" }
 androidx-fragment = { group = "androidx.fragment", name = "fragment", version = "1.5.4" }
-datastore-preferences = {group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0"}
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0" }
 
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 
@@ -63,6 +63,7 @@ kotlinx-atomic-fu = { group = "org.jetbrains.kotlinx", name = "atomicfu", versio
 kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.4.0" }
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }

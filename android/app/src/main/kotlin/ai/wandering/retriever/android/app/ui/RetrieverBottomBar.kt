@@ -1,5 +1,9 @@
 package ai.wandering.retriever.android.app.ui
 
+import ai.wandering.retriever.android.app.R
+import ai.wandering.retriever.android.app.navigation.BottomTabs
+import ai.wandering.retriever.android.common.navigation.Screen
+import ai.wandering.retriever.android.common.sig.color.Sig
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
@@ -10,16 +14,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ai.wandering.retriever.android.app.R
-import ai.wandering.retriever.android.app.navigation.BottomTabs
-import ai.wandering.retriever.android.common.navigation.Screen
-import ai.wandering.retriever.android.common.sig.color.Sig
 
 @Composable
 fun RetrieverBottomBar(navController: NavHostController) {
@@ -35,7 +34,7 @@ fun RetrieverBottomBar(navController: NavHostController) {
                     navController.navigate(tab.route)
                 }) {
                     val icon = if (isSelected(tab)) tab.iconSelected else tab.iconNotSelected
-                    Icon(painter = rememberVectorPainter(image = icon), contentDescription = null, modifier = Modifier.size(28.dp))
+                    Icon(painter = painterResource(id = icon), contentDescription = null, modifier = Modifier.size(28.dp))
                 }
             }
         },

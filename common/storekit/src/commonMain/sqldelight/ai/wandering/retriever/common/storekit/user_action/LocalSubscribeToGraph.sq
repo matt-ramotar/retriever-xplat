@@ -1,0 +1,24 @@
+CREATE TABLE localSubscribeToGraph(
+    userId TEXT NOT NULL,
+    graphId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (graphId) REFERENCES localGraph (id),
+    PRIMARY KEY (userId, graphId)
+);
+
+getById:
+SELECT *
+FROM localSubscribeToGraph
+WHERE userId = ? AND graphId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localSubscribeToGraph
+VALUES ?;
+
+clearById:
+DELETE
+FROM localSubscribeToGraph
+WHERE userId = ? AND graphId = ?;
+
+clearAll:
+DELETE FROM localSubscribeToGraph;

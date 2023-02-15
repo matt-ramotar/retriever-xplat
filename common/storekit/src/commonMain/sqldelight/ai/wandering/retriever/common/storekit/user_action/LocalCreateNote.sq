@@ -1,0 +1,24 @@
+CREATE TABLE localCreateNote(
+    userId TEXT NOT NULL,
+    noteId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (noteId) REFERENCES localNote (id),
+    PRIMARY KEY (userId, noteId)
+);
+
+getById:
+SELECT *
+FROM localCreateNote
+WHERE userId = ? AND noteId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localCreateNote
+VALUES ?;
+
+clearById:
+DELETE
+FROM localCreateNote
+WHERE userId = ? AND noteId = ?;
+
+clearAll:
+DELETE FROM localCreateNote;

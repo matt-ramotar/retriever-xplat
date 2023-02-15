@@ -1,0 +1,24 @@
+CREATE TABLE localPinChannel(
+    userId TEXT NOT NULL,
+    channelId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (channelId) REFERENCES localChannel (id),
+    PRIMARY KEY (userId, channelId)
+);
+
+getById:
+SELECT *
+FROM localPinChannel
+WHERE userId = ? AND channelId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localPinChannel
+VALUES ?;
+
+clearById:
+DELETE
+FROM localPinChannel
+WHERE userId = ? AND channelId = ?;
+
+clearAll:
+DELETE FROM localPinChannel;

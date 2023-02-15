@@ -5,17 +5,17 @@ import ai.wandering.retriever.android.app.RetrieverApp
 import ai.wandering.retriever.android.app.wiring.AppDependencies
 import ai.wandering.retriever.android.common.navigation.Screen
 import ai.wandering.retriever.android.common.scoping.UserDependencies
-import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.android.feature.account_tab.AccountTab
-import ai.wandering.retriever.android.feature.home_tab.HomeTab
+import ai.wandering.retriever.android.feature.finder_tab.FinderTab
+import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
+import ai.wandering.retriever.common.storekit.extension.findAndPopulateByUserId
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -43,39 +43,45 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val user = userComponent.user
 
     NavHost(
-        navController = navController, startDestination = Screen.Home.route, modifier = Modifier
+        navController = navController, startDestination = Screen.Finder.route, modifier = Modifier
             .padding(innerPadding)
             .padding(8.dp)
     ) {
         composable(Screen.Home.route) {
-            HomeTab(
+            Text("Home")
+        }
+        composable(Screen.Finder.route) {
+            FinderTab(
                 user = user,
                 tags = database.localTagQueries,
                 mentions = database.localMentionQueries,
                 onNavigateToMentionResults = { navController.navigate("notes/m/$it") },
+                onNavigateToSearchTab = {
+                    navController.navigate(Screen.Search.route)
+                },
+                onNavigateToProfile = {
+                    navController.navigate("users/${user.id}")
+                },
                 onNavigateToTagResults = { navController.navigate("notes/t/$it") }
             )
+        }
+        composable(Screen.Activity.route) {
+            Text("Activity")
         }
         composable(Screen.Notification.route) {}
         composable(Screen.Search.route) {
             SearchTab()
         }
         composable(Screen.Account.route) {
-            AccountTab(userComponent.user)
+            AccountTab(userComponent.user) {
+                navController.navigate("users/${user.id}")
+            }
         }
 
         composable("users/{userId}", arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
             val userId = requireNotNull(it.arguments?.getString("userId"))
-            val user = database.localUserQueries.getById(userId).executeAsOne()
-
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(text = user.name)
-
-                val avatarUrl = user.avatarUrl
-                if (avatarUrl != null) {
-                    Avatar(avatarUrl = avatarUrl)
-                }
-            }
+            val otherUser = database.localUserQueries.findAndPopulateByUserId(userId)
+            ProfileScreen(user = otherUser)
         }
 
         composable("notes/m/{otherUserId}", arguments = listOf(navArgument("otherUserId") { type = NavType.StringType })) {
@@ -107,9 +113,9 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                 Text(tag ?: "Screen")
                 Spacer(modifier = Modifier.size(32.dp))
 
-                database.localNoteQueries.getByTag(tag).executeAsList().forEach { getByTag ->
-                    Row(modifier = Modifier.clickable { navController.navigate("notes/${getByTag.noteId}") }) {
-                        Text(text = getByTag.content ?: "")
+                database.localNoteQueries.getByTagName(tag).executeAsList().forEach { row ->
+                    Row(modifier = Modifier.clickable { navController.navigate("notes/${row.noteId}") }) {
+                        Text(text = row.content ?: "")
                     }
                 }
             }

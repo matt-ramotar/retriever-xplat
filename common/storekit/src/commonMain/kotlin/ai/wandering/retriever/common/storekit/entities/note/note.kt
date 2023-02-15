@@ -1,6 +1,7 @@
 package ai.wandering.retriever.common.storekit.entities.note
 
 import ai.wandering.retriever.common.storekit.entities.user.output.User
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,9 +12,17 @@ data class Note(
     val isRead: Boolean,
     val channels: List<Channel>,
     val mentions: List<Mention>,
-    val parents: List<Relationship>,
     val references: List<Relationship>,
-    val children: List<Relationship>
+    val created: Instant
+)
+
+
+@Serializable
+data class Thread(
+    val id: String,
+    val user: User,
+    val notes: List<Note>,
+    val created: Instant
 )
 
 @Serializable
@@ -27,7 +36,8 @@ data class Channel(
     val id: String,
     val userId: String,
     val graphId: String,
-    val tag: Tag
+    val tag: Tag,
+    val created: Instant
 )
 
 

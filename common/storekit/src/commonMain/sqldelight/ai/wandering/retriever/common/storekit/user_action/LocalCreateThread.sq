@@ -1,0 +1,24 @@
+CREATE TABLE localCreateThread(
+    userId TEXT NOT NULL,
+    threadId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (threadId) REFERENCES localThread (id),
+    PRIMARY KEY (userId, threadId)
+);
+
+getById:
+SELECT *
+FROM localCreateThread
+WHERE userId = ? AND threadId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localCreateThread
+VALUES ?;
+
+clearById:
+DELETE
+FROM localCreateThread
+WHERE userId = ? AND threadId = ?;
+
+clearAll:
+DELETE FROM localCreateThread;

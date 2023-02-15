@@ -1,8 +1,17 @@
 package ai.wandering.retriever.android.feature.account_tab
 
+import ai.wandering.retriever.android.common.sig.R
+import ai.wandering.retriever.android.common.sig.SigTheme
+import ai.wandering.retriever.android.common.sig.color.Sig
+import ai.wandering.retriever.android.common.sig.color.systemThemeColors
+import ai.wandering.retriever.android.common.sig.component.Avatar
+import ai.wandering.retriever.android.common.sig.component.OpacityButton
+import ai.wandering.retriever.android.common.sig.component.PrimaryButton
+import ai.wandering.retriever.common.storekit.entities.user.output.User
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +24,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,17 +33,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ai.wandering.retriever.android.common.sig.R
-import ai.wandering.retriever.android.common.sig.SigTheme
-import ai.wandering.retriever.android.common.sig.color.Sig
-import ai.wandering.retriever.android.common.sig.color.systemThemeColors
-import ai.wandering.retriever.android.common.sig.component.Avatar
-import ai.wandering.retriever.android.common.sig.component.OpacityButton
-import ai.wandering.retriever.android.common.sig.component.PrimaryButton
-import ai.wandering.retriever.common.storekit.entities.user.output.User
 
 @Composable
-fun AccountTab(user: User) {
+fun AccountTab(user: User, onNavigateToProfile: () -> Unit) {
 
     val colors = systemThemeColors()
 
@@ -45,8 +45,14 @@ fun AccountTab(user: User) {
         Column {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
 
-                Text(text = "Account")
-                Icon(Icons.Filled.Settings, null)
+                Text(text = "Account", style = MaterialTheme.typography.titleLarge)
+
+                Row {
+                    Icon(painter = painterResource(id = R.drawable.settings), contentDescription = null)
+                    Icon(painter = painterResource(id = R.drawable.show), contentDescription = null, modifier = Modifier.clickable {
+                        onNavigateToProfile()
+                    })
+                }
             }
             LazyColumn {
 

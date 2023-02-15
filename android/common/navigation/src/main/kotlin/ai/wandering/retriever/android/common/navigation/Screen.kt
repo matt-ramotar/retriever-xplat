@@ -1,35 +1,29 @@
 package ai.wandering.retriever.android.common.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.ui.graphics.vector.ImageVector
-
 private const val HOME_ROUTE = "home"
 private const val ACCOUNT_ROUTE = "account"
 private const val SEARCH_ROUTE = "search"
 private const val NOTIFICATION_ROUTE = "notification"
+private const val FINDER_ROUTE = "finder"
+private const val ACTIVITY_ROUTE = "activity"
 
 private const val HOME = "HOME"
 private const val ACCOUNT = "ACCOUNT"
 private const val SEARCH = "SEARCH"
 private const val NOTIFICATION = "NOTIFICATION"
-
+private const val FINDER = "FINDER"
+private const val ACTIVITY = "ACTIVITY"
 
 sealed class Screen(
     val route: String,
     val title: String,
-    val iconSelected: ImageVector,
-    val iconNotSelected: ImageVector
+    val iconSelected: Int,
+    val iconNotSelected: Int
 ) {
-    object Home : Screen(HOME_ROUTE, HOME, Icons.Filled.Home, Icons.Outlined.Home)
-    object Account : Screen(ACCOUNT_ROUTE, ACCOUNT, Icons.Filled.Person, Icons.Outlined.Person)
-    object Notification : Screen(NOTIFICATION_ROUTE, NOTIFICATION, Icons.Filled.Notifications, Icons.Outlined.Notifications)
-    object Search : Screen(SEARCH_ROUTE, SEARCH, Icons.Filled.Search, Icons.Outlined.Search)
+    object Home : Screen(HOME_ROUTE, HOME, R.drawable.home_fill, R.drawable.home)
+    object Account : Screen(ACCOUNT_ROUTE, ACCOUNT, R.drawable.person_fill, R.drawable.person)
+    object Notification : Screen(NOTIFICATION_ROUTE, NOTIFICATION, R.drawable.notification_fill, R.drawable.notification)
+    object Search : Screen(SEARCH_ROUTE, SEARCH, R.drawable.search, R.drawable.search)
+    object Finder : Screen(FINDER_ROUTE, FINDER, R.drawable.finder_fill, R.drawable.finder)
+    object Activity : Screen(ACTIVITY_ROUTE, ACTIVITY, R.drawable.activity_fill, R.drawable.activity)
 }

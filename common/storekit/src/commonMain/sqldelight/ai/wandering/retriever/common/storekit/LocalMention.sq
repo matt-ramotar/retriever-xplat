@@ -17,7 +17,7 @@ FROM localMention
 WHERE userId = ? AND otherUserId = ?;
 
 findAndPopulateOtherUsersByUserId:
-SELECT otherUser.id, otherUser.username, otherUser.name, otherUser.email, otherUser.avatarUrl
+SELECT otherUser.id, otherUser.username, otherUser.name, otherUser.email, otherUser.avatarUrl, otherUser.coverImageUrl
 FROM localMention
 LEFT JOIN localUser AS otherUser
 ON localMention.otherUserId == otherUser.id

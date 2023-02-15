@@ -8,6 +8,7 @@ import ai.wandering.retriever.common.storekit.entities.note.Channel
 import ai.wandering.retriever.common.storekit.entities.note.Mention
 import ai.wandering.retriever.common.storekit.entities.note.Note
 import ai.wandering.retriever.common.storekit.entities.note.Tag
+import ai.wandering.retriever.common.storekit.entities.user.output.Graph
 import ai.wandering.retriever.common.storekit.entities.user.output.User
 
 fun LocalTagQueries.getAllAsList() = getAll().executeAsList()
@@ -25,10 +26,68 @@ fun LocalMentionQueries.findAndPopulateOtherUsers(userId: String): List<User> {
                 username = it.username!!,
                 name = it.name!!,
                 email = it.email!!,
-                avatarUrl = it.avatarUrl
-
+                avatarUrl = it.avatarUrl,
             )
         }
+}
+
+fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
+    val response = findAndPopulate(userId).executeAsList()
+
+    val common = response.first()
+
+    val followed = response
+        .filter { row -> row.followedUserId != null }
+        .map { row ->
+            User(
+                id = row.followedUserId!!,
+                username = row.followedUsername!!,
+                name = row.followedName!!,
+                email = row.followedEmail!!,
+                avatarUrl = row.followedAvatarUrl,
+                bio = row.followedBio,
+            )
+        }
+        .distinct()
+
+    val followers = response
+        .filter { row -> row.followerId != null }
+        .map { row ->
+            User(
+                id = row.followerId!!,
+                username = row.followerUsername!!,
+                name = row.followerName!!,
+                email = row.followerEmail!!,
+                avatarUrl = row.followerAvatarUrl,
+                bio = row.followerBio,
+            )
+        }
+        .distinct()
+
+    val graphs = response.filter { row -> row.graphId != null }.map { row -> Graph(row.graphId!!, row.graphName!!, row.graphOwnerId!!) }.distinct()
+    val followedTags = response.filter { row -> row.followedTagId != null }.map { row -> Tag(row.followedTagId!!, row.followedTagName!!) }.distinct()
+    val followedGraphs =
+        response.filter { row -> row.followedGraphId != null }.map { row -> Graph(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!) }.distinct()
+    val pinnedGraphs = response.filter { row -> row.pinnedGraphId != null }.map { row -> Graph(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }.distinct()
+    val pinnedChannels = response.filter { row -> row.pinnedChannelId != null }
+        .map { row -> Channel(row.pinnedChannelId!!, row.id, row.pinnedChannelGraphId!!, Tag(row.pinnedChannelTagId!!, row.pinnedChannelTagName!!)) }.distinct()
+
+    return User(
+        id = common.id,
+        username = common.username,
+        name = common.name,
+        email = common.email,
+        avatarUrl = common.avatarUrl,
+        bio = common.bio,
+        followed = followed,
+        followers = followers,
+        graphs = graphs,
+        tagsFollowing = followedTags,
+        graphsFollowing = followedGraphs,
+        pinnedGraphs = pinnedGraphs,
+        pinnedChannels = pinnedChannels,
+        coverImageUrl = common.coverImageUrl
+    )
 }
 
 fun LocalNoteQueries.findAndPopulate(id: String): Note {

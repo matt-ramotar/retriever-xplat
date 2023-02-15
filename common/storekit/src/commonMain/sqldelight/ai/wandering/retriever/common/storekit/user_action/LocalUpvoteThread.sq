@@ -1,0 +1,24 @@
+CREATE TABLE localUpvoteThread(
+    userId TEXT NOT NULL,
+    threadId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (threadId) REFERENCES localThread (id),
+    PRIMARY KEY (userId, threadId)
+);
+
+getById:
+SELECT *
+FROM localUpvoteThread
+WHERE userId = ? AND threadId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUpvoteThread
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUpvoteThread
+WHERE userId = ? AND threadId = ?;
+
+clearAll:
+DELETE FROM localUpvoteThread;

@@ -27,7 +27,7 @@ WHERE id = ?;
 clearAll:
 DELETE FROM localNote;
 
-getByTag:
+getByTagName:
 SELECT *
 FROM localNote
 LEFT JOIN noteChannel
