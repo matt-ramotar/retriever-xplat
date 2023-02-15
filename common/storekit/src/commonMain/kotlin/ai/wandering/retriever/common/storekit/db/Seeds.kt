@@ -17,6 +17,11 @@ import ai.wandering.retriever.common.storekit.UserPinnedNote
 
 
 internal object Seeds {
+
+    object Instants {
+        const val NOW = "2023-02-14T20:44:00.000Z"
+    }
+
     object Ids {
         object Graph {
             object Matt {
@@ -79,7 +84,8 @@ internal object Seeds {
             val MWR = LocalGraph(
                 id = Ids.Graph.Matt.MWR,
                 name = "MWR",
-                ownerId = Ids.User.MATT
+                ownerId = Ids.User.MATT,
+                created = Instants.NOW
             )
         }
     }
@@ -135,14 +141,16 @@ internal object Seeds {
             id = Ids.Note.SKIED_KILLINGTON,
             userId = Ids.User.MATT,
             content = "Skied Killington with @Tag @Trot @Tugg. New #black-crows!",
-            is_read = false
+            is_read = false,
+            created = Instants.NOW
         )
 
         val WorkingOnComponentBox = LocalNote(
             id = Ids.Note.WORKING_ON_COMPONENTBOX,
             userId = Ids.User.MATT,
             content = "Working on ComponentBox #server-driven-UI",
-            is_read = false
+            is_read = false,
+            created = Instants.NOW
         )
 
 
@@ -150,7 +158,8 @@ internal object Seeds {
             id = Ids.Note.WORKING_ON_STORE,
             userId = Ids.User.MATT,
             content = "Working on Store #kotlin-multi-platform",
-            is_read = false
+            is_read = false,
+            created = Instants.NOW
         )
     }
 
@@ -202,42 +211,48 @@ internal object Seeds {
                 id = Ids.Channel.Matt.BLACK_CROWS,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.BLACK_CROWS
+                tagId = Ids.Tag.BLACK_CROWS,
+                created = Instants.NOW
             )
 
             val Skiing = LocalChannel(
                 id = Ids.Channel.Matt.SKIING,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.SKIING
+                tagId = Ids.Tag.SKIING,
+                created = Instants.NOW
             )
 
             val ServerDrivenUi = LocalChannel(
                 id = Ids.Channel.Matt.SERVER_DRIVEN_UI,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.SERVER_DRIVEN_UI
+                tagId = Ids.Tag.SERVER_DRIVEN_UI,
+                created = Instants.NOW
             )
 
             val KotlinMultiPlatform = LocalChannel(
                 id = Ids.Channel.Matt.KOTLIN_MULTI_PLATFORM,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.KOTLIN_MULTI_PLATFORM
+                tagId = Ids.Tag.KOTLIN_MULTI_PLATFORM,
+                created = Instants.NOW
             )
 
             val Store = LocalChannel(
                 id = Ids.Channel.Matt.STORE,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.STORE
+                tagId = Ids.Tag.STORE,
+                created = Instants.NOW
             )
 
             val ComponentBox = LocalChannel(
                 id = Ids.Channel.Matt.COMPONENTBOX,
                 userId = Ids.User.MATT,
                 graphId = Ids.Graph.Matt.MWR,
-                tagId = Ids.Tag.COMPONENTBOX
+                tagId = Ids.Tag.COMPONENTBOX,
+                created = Instants.NOW
             )
         }
     }

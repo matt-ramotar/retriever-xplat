@@ -10,6 +10,7 @@ import ai.wandering.retriever.common.storekit.entities.note.Note
 import ai.wandering.retriever.common.storekit.entities.note.Tag
 import ai.wandering.retriever.common.storekit.entities.user.output.Graph
 import ai.wandering.retriever.common.storekit.entities.user.output.User
+import kotlinx.datetime.Instant
 
 fun LocalTagQueries.getAllAsList() = getAll().executeAsList()
 fun LocalNoteQueries.findById(id: String) = getById(id).executeAsOne()
@@ -70,7 +71,15 @@ fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
         response.filter { row -> row.followedGraphId != null }.map { row -> Graph(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!) }.distinct()
     val pinnedGraphs = response.filter { row -> row.pinnedGraphId != null }.map { row -> Graph(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }.distinct()
     val pinnedChannels = response.filter { row -> row.pinnedChannelId != null }
-        .map { row -> Channel(row.pinnedChannelId!!, row.id, row.pinnedChannelGraphId!!, Tag(row.pinnedChannelTagId!!, row.pinnedChannelTagName!!)) }.distinct()
+        .map { row ->
+            Channel(
+                row.pinnedChannelId!!,
+                row.id,
+                row.pinnedChannelGraphId!!,
+                Tag(row.pinnedChannelTagId!!, row.pinnedChannelTagName!!),
+                Instant.parse(row.pinnedChannelCreated!!)
+            )
+        }.distinct()
 
     return User(
         id = common.id,
@@ -113,7 +122,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
 
     val channels = response
         .filter { row -> row.channelId != null && row.channelTagId != null && row.channelGraphId != null && row.channelUserId != null }
-        .map { row -> Channel(row.channelId!!, row.channelUserId!!, row.channelGraphId!!, tagIdToTag[row.channelTagId!!]!!) }
+        .map { row -> Channel(row.channelId!!, row.channelUserId!!, row.channelGraphId!!, tagIdToTag[row.channelTagId!!]!!, Instant.parse(row.channelCreated!!)) }
 
     val mentions = response
         .filter { row -> row.userId != null && row.otherUserId != null && row.otherUserName != null && row.otherUserEmail != null && row.otherUserAvatarUrl != null }
@@ -127,9 +136,8 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
         isRead = common.is_read,
         channels = channels,
         mentions = mentions,
-        parents = listOf(),
         references = listOf(),
-        children = listOf()
+        created = Instant.parse(common.created)
     )
 }
 

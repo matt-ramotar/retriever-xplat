@@ -33,8 +33,8 @@ class RetrieverApp : Application(), ComponentHolder {
         val application = this
         coroutineScope.launch {
             val database = database.invoke()
-            database.seed()
             component = DaggerAppComponent.factory().create(application, database, applicationContext)
+            database.seed()
             super.onCreate()
         }
     }

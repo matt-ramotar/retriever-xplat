@@ -1,7 +1,8 @@
 CREATE TABLE localGraph(
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
-    ownerId TEXT NOT NULL
+    ownerId TEXT NOT NULL,
+    created TEXT NOT NULL
 );
 
 getAll:

@@ -1,6 +1,7 @@
 CREATE TABLE localThread(
     id TEXT NOT NULL PRIMARY KEY,
     userId TEXT NOT NULL,
+    created TEXT NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
@@ -24,38 +25,3 @@ WHERE id = ?;
 
 clearAll:
 DELETE FROM localThread;
-
-getByTagName:
-SELECT *
-FROM localThread
-LEFT JOIN noteChannel
-ON localThread.id == noteChannel.noteId
-LEFT JOIN localChannel
-ON noteChannel.channelId == localChannel.id
-LEFT JOIN localTag
-ON localChannel.tagId == localTag.id
-WHERE localTag.name = ?;
-
-getByMention:
-SELECT *
-FROM localThread
-LEFT JOIN noteMention
-ON localThread.id == noteMention.noteId
-WHERE noteMention.userId = ? AND noteMention.otherUserId = ?;
-
-getByIdAndPopulateAll:
-SELECT localThread.id, localThread.content, localThread.is_read, author.id AS "userId", author.name AS "userName", author.username AS "userUsername", author.email AS "userEmail", author.avatarUrl AS "userAvatarUrl" ,otherUser.id AS "otherUserId", otherUser.name AS "otherUserName", otherUser.email AS "otherUserEmail", otherUser.avatarUrl AS "otherUserAvatarUrl", otherUser.username AS "otherUserUsername", localTag.name AS "tagName", localTag.id AS "tagId", localChannel.id AS "channelId", localChannel.graphId AS "channelGraphId", localChannel.tagId AS "channelTagId", localChannel.userId AS "channelUserId"
-FROM localThread
-LEFT JOIN noteChannel
-ON localThread.id == noteChannel.noteId
-LEFT JOIN localChannel
-ON noteChannel.channelId == localChannel.id
-LEFT JOIN localTag
-ON localChannel.tagId == localTag.id
-LEFT JOIN noteMention
-ON localThread.id == noteMention.noteId
-LEFT JOIN localUser AS "author"
-ON localThread.userId == author.id
-LEFT JOIN localUser AS "otherUser"
-ON noteMention.otherUserId == otherUser.id
-WHERE localThread.id = ?;

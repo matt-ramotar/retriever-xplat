@@ -51,6 +51,7 @@ SELECT user.id, user.username, user.name, user.email, user.avatarUrl, user.cover
        localGraph.id AS "graphId",
        localGraph.ownerId AS "graphOwnerId",
        localGraph.name AS "graphName",
+       localGraph.created AS "graphCreated",
        -- Tags following
        followedTag.id AS "followedTagId",
        followedTag.name AS "followedTagName",
@@ -58,22 +59,26 @@ SELECT user.id, user.username, user.name, user.email, user.avatarUrl, user.cover
        followedGraph.id AS "followedGraphId",
        followedGraph.name AS "followedGraphName",
        followedGraph.ownerId AS "followedGraphOwnerId",
+       followedGraph.created AS "followedGraphCreated",
        -- Graphs depending on
        -- Pinned graphs
        pinnedGraph.id AS "pinnedGraphId",
        pinnedGraph.name AS "pinnedGraphName",
        pinnedGraph.ownerId AS "pinnedGraphOwnerId",
+       pinnedGraph.created AS "pinnedGraphCreated",
        -- Pinned channels
        pinnedChannel.id AS "pinnedChannelId",
        pinnedChannel.userId AS "pinnedChannelUserId",
        pinnedChannel.graphId AS "pinnedChannelGraphId",
        pinnedChannel.tagId AS "pinnedChannelTagId",
        pinnedChannelTag.name AS "pinnedChannelTagName",
+       pinnedChannel.created AS "pinnedChannelCreated",
        -- Pinned notes
        pinnedNote.id AS "pinnedNoteId",
        pinnedNote.userId AS "pinnedNoteUserId",
        pinnedNote.content AS "pinnedNoteContent",
-       pinnedNote.is_read AS "pinnedNoteIsRead"
+       pinnedNote.is_read AS "pinnedNoteIsRead",
+       pinnedNote.created AS "pinnedNoteCreated"
 FROM localUser user
 
 -- Following

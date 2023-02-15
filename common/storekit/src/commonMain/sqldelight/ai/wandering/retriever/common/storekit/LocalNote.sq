@@ -3,6 +3,7 @@ CREATE TABLE localNote(
     userId TEXT NOT NULL,
     content TEXT,
     is_read INTEGER AS Boolean NOT NULL,
+    created TEXT NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
@@ -46,7 +47,38 @@ ON localNote.id == noteMention.noteId
 WHERE noteMention.userId = ? AND noteMention.otherUserId = ?;
 
 getByIdAndPopulateAll:
-SELECT localNote.id, localNote.content, localNote.is_read, author.id AS "userId", author.name AS "userName", author.username AS "userUsername", author.email AS "userEmail", author.avatarUrl AS "userAvatarUrl" ,otherUser.id AS "otherUserId", otherUser.name AS "otherUserName", otherUser.email AS "otherUserEmail", otherUser.avatarUrl AS "otherUserAvatarUrl", otherUser.username AS "otherUserUsername", localTag.name AS "tagName", localTag.id AS "tagId", localChannel.id AS "channelId", localChannel.graphId AS "channelGraphId", localChannel.tagId AS "channelTagId", localChannel.userId AS "channelUserId"
+SELECT
+-- Note
+localNote.id,
+localNote.content,
+localNote.is_read,
+localNote.created,
+
+-- User
+author.id AS "userId",
+author.name AS "userName",
+author.username AS "userUsername",
+author.email AS "userEmail",
+author.avatarUrl AS "userAvatarUrl",
+
+-- Other User
+otherUser.id AS "otherUserId",
+otherUser.name AS "otherUserName",
+otherUser.email AS "otherUserEmail",
+otherUser.avatarUrl AS "otherUserAvatarUrl",
+otherUser.username AS "otherUserUsername",
+
+-- Channel
+localChannel.id AS "channelId",
+localChannel.graphId AS "channelGraphId",
+localChannel.tagId AS "channelTagId",
+localChannel.userId AS "channelUserId",
+localChannel.created AS "channelCreated",
+
+-- Tag
+localTag.name AS "tagName",
+localTag.id AS "tagId"
+
 FROM localNote
 LEFT JOIN noteChannel
 ON localNote.id == noteChannel.noteId
