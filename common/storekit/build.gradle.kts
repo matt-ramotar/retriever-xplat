@@ -44,7 +44,9 @@ kotlin {
                 api(libs.kotlinx.atomic.fu)
                 api(libs.kotlinx.datetime)
                 api(libs.kotlinx.coroutines.core)
-                api(libs.socket.io)
+                implementation("io.socket:socket.io-client:2.1.0") {
+                    exclude(group = "org.json", module = "json")
+                }
             }
         }
 
@@ -53,7 +55,7 @@ kotlin {
                 implementation(libs.sqldelight.android.driver)
             }
         }
-        
+
         val desktopMain by getting {
             dependencies {
                 implementation(libs.sqldelight.sqlite.driver)

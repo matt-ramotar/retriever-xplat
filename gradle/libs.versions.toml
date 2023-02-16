@@ -70,7 +70,7 @@ ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-socket-io = { group = "dev.icerock.moko", name = "socket-io", version = "0.3.0" }
+socket-io = { group = "io.socket", name = "socket.io-client", version = "2.1.0" }
 
 okio-core = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 okHttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }

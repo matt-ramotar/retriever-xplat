@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -31,6 +30,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+
+@Serializable
+data class NotificationsResponse(
+    val notifications: List<UserNotification>
+)
 
 @Composable
 fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
@@ -46,7 +53,24 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val user = userComponent.user
     val socket = appDependencies.socket
 
-    socket.connect()
+
+    socket.getSocket().on("connection") {
+        println("ON CONNECTION $it")
+        it.forEach { message ->
+            println(message.toString())
+        }
+    }
+
+
+    socket.getSocket().on("notifications") {
+        println("ON NOTIFICATIONS ${it.toString()}")
+        it.forEach { message ->
+            println(message)
+        }
+    }
+
+    socket.getSocket().emit("notifications", user.id)
+
 
     // val notificationsState = socket.subscribeToNotifications(user.id).collectAsState(listOf())
 
