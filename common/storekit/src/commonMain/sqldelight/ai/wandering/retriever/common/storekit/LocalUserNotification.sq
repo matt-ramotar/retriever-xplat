@@ -26,3 +26,8 @@ WHERE userId = ?;
 
 clearAll:
 DELETE FROM localUserNotification;
+
+findByUserId:
+SELECT *
+FROM localUserNotification
+WHERE userId = ?;

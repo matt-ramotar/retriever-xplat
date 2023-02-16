@@ -10,6 +10,7 @@ import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
 import ai.wandering.retriever.common.storekit.entities.UserAction
+import ai.wandering.retriever.common.storekit.entities.UserNotification
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
 import ai.wandering.retriever.common.storekit.extension.findAndPopulateByUserId
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,11 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val userDependencies = userComponent as UserDependencies
     val database = appDependencies.database
     val user = userComponent.user
+    val socket = appDependencies.socket
+
+    socket.connect()
+
+    // val notificationsState = socket.subscribeToNotifications(user.id).collectAsState(listOf())
 
     NavHost(
         navController = navController, startDestination = Screen.Finder.route, modifier = Modifier
@@ -81,7 +88,24 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                 }
             }
         }
-        composable(Screen.Notification.route) {}
+        composable(Screen.Notification.route) {
+            Column {
+                Text(text = "Notifications")
+                val notifications = database.localUserNotificationQueries
+                    .findByUserId(user.id)
+                    .executeAsList()
+                    .map { row -> UserNotification(row.userId, row.otherUserId, row.objectId, row.type) }
+
+                notifications.forEach {
+                    Text(text = it.type.name)
+                }
+
+
+//                notificationsState.value.forEach {
+//                    Text(text = "Real notification: ${it.type.name}")
+//                }
+            }
+        }
         composable(Screen.Search.route) {
             SearchTab()
         }

@@ -18,5 +18,5 @@ fun RetrieverDatabase.seed() {
     Seeds.userPinnedChannels.forEach { userPinnedChannelQueries.upsert(it) }
     Seeds.userPinnedNotes.forEach { userPinnedNoteQueries.upsert(it) }
     Seeds.userActions.forEach { localUserActionQueries.upsert(it) }
-    Seeds.userNotifications.forEach { querie}
+    Seeds.userNotifications.forEach { localUserNotificationQueries.upsert(it) }
 }

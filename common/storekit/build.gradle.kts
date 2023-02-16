@@ -43,6 +43,8 @@ kotlin {
                 implementation("app.cash.sqldelight:primitive-adapters:2.0.0-alpha05")
                 api(libs.kotlinx.atomic.fu)
                 api(libs.kotlinx.datetime)
+                api(libs.kotlinx.coroutines.core)
+                api(libs.socket.io)
             }
         }
 

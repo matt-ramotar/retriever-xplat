@@ -16,8 +16,6 @@ import kotlinx.datetime.Instant
 fun LocalTagQueries.getAllAsList() = getAll().executeAsList()
 fun LocalNoteQueries.findById(id: String) = getById(id).executeAsOne()
 fun LocalUserQueries.getAllNotes(id: String) = getNotesByUserId(id).executeAsOne()
-
-
 fun LocalMentionQueries.findAndPopulateOtherUsers(userId: String): List<User> {
     val response = findAndPopulateOtherUsersByUserId(userId).executeAsList()
     return response
