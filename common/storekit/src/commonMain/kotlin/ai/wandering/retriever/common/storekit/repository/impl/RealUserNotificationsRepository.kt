@@ -1,6 +1,6 @@
 package ai.wandering.retriever.common.storekit.repository.impl
 
-import ai.wandering.retriever.common.storekit.api.collections.UserNotificationsApi
+import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.converter.asUnpopulated
 import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.entity.UserNotification
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class RealUserNotificationsRepository(api: UserNotificationsApi, user: User.Output.Unpopulated) : UserNotificationsRepository {
+class RealUserNotificationsRepository(api: UserNotificationsSocketApi, user: User.Output.Unpopulated) : UserNotificationsRepository {
     private val _notifications = MutableStateFlow<List<UserNotification.Output.Unpopulated>>(listOf())
     override val notifications: StateFlow<List<UserNotification.Output.Unpopulated>> = _notifications
 

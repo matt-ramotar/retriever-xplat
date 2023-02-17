@@ -5,19 +5,6 @@ package ai.wandering.retriever.common.storekit.entity
 import kotlinx.serialization.Serializable
 
 sealed class Channel {
-
-    sealed class Request {
-        data class Create(
-            val userId: String,
-            val graphId: String,
-            val tagId: String,
-        ) : Request()
-
-        data class Update(
-            val channel: Output.Unpopulated
-        ) : Request()
-    }
-
     @Serializable
     data class Network(
         val _id: String,

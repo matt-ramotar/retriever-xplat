@@ -5,6 +5,18 @@ package ai.wandering.retriever.common.storekit.entity
 import kotlinx.serialization.Serializable
 
 sealed class Mention {
+
+    sealed class Request {
+        data class Create(
+            val userId: String,
+            val otherUserId: String,
+        ) : Request()
+
+        data class Update(
+            val graph: Graph.Output.Unpopulated
+        ) : Request()
+    }
+
     @Serializable
     data class Network(
         val _id: String,

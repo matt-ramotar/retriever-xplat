@@ -9,10 +9,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 
 class RealChannelRestApi(private val client: HttpClient) : ChannelRestApi {
-    override suspend fun create(request: Channel.Request.Create): RequestResult<Channel.Network> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun get(id: String): RequestResult<Channel.Network> = try {
         val response = client.get("${Endpoints.CHANNEL}/$id")
         RequestResult.Success(response.body())
@@ -20,12 +16,11 @@ class RealChannelRestApi(private val client: HttpClient) : ChannelRestApi {
         RequestResult.Exception(error)
     }
 
-    override suspend fun update(request: Channel.Request.Update): RequestResult<Channel.Network> {
+    override suspend fun upsert(input: Channel.Output.Unpopulated): RequestResult<Boolean> {
         TODO("Not yet implemented")
     }
 
     override suspend fun delete(id: String): RequestResult<Boolean> {
         TODO("Not yet implemented")
     }
-
 }

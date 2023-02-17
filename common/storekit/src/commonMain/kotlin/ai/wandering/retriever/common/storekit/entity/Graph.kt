@@ -8,7 +8,6 @@ sealed class Graph {
 
     sealed class Request {
         data class Create(
-            val id: String,
             val userId: String,
             val name: String,
         ) : Request()

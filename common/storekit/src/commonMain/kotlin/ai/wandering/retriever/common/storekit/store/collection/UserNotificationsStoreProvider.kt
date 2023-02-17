@@ -1,14 +1,15 @@
-package ai.wandering.retriever.common.storekit.store
+package ai.wandering.retriever.common.storekit.store.collection
 
 import ai.wandering.retriever.common.storekit.LocalUserNotification
 import ai.wandering.retriever.common.storekit.LocalUserNotifications
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
-import ai.wandering.retriever.common.storekit.api.collections.UserNotificationsApi
+import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.converter.asLocal
 import ai.wandering.retriever.common.storekit.converter.asUnpopulated
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.entity.UserNotifications
 import ai.wandering.retriever.common.storekit.result.RequestResult
+import ai.wandering.retriever.common.storekit.store.MutableStoreProvider
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import org.mobilenativefoundation.store.store5.Bookkeeper
@@ -21,7 +22,7 @@ import org.mobilenativefoundation.store.store5.Updater
 import org.mobilenativefoundation.store.store5.UpdaterResult
 
 
-class UserNotificationsStoreProvider(private val api: UserNotificationsApi, private val db: RetrieverDatabase) :
+class UserNotificationsStoreProvider(private val api: UserNotificationsSocketApi, private val db: RetrieverDatabase) :
     MutableStoreProvider<String, UserNotifications, List<UserNotification.Output.Unpopulated>, List<LocalUserNotification>, Boolean> {
     override fun provideConverter(): Converter<UserNotifications, List<UserNotification.Output.Unpopulated>, List<LocalUserNotification>> =
         Converter.Builder<UserNotifications, List<UserNotification.Output.Unpopulated>, List<LocalUserNotification>>()
