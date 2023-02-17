@@ -1,0 +1,23 @@
+import kotlin.collections.List;
+
+CREATE TABLE localUserNotifications(
+    userId TEXT NOT NULL PRIMARY KEY,
+    notificationIds TEXT AS List<String> NOT NULL
+);
+
+findById:
+SELECT *
+FROM localUserNotifications
+WHERE userId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUserNotifications
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUserNotifications
+WHERE userId = ?;
+
+clearAll:
+DELETE FROM localUserNotifications;

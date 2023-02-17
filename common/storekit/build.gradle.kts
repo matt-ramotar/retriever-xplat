@@ -44,6 +44,7 @@ kotlin {
                 api(libs.kotlinx.atomic.fu)
                 api(libs.kotlinx.datetime)
                 api(libs.kotlinx.coroutines.core)
+                api("org.jetbrains.kotlin:kotlin-stdlib")
                 implementation("io.socket:socket.io-client:2.1.0") {
                     exclude(group = "org.json", module = "json")
                 }

@@ -1,11 +1,11 @@
-import ai.wandering.retriever.common.storekit.entities.UserAction;
+import ai.wandering.retriever.common.storekit.entity.UserAction;
 
 CREATE TABLE localUserAction(
+    id TEXT NOT NULL PRIMARY KEY,
     userId TEXT NOT NULL,
     objectId TEXT NOT NULL,
     type TEXT AS UserAction.Type NOT NULL,
-    FOREIGN KEY (userId) REFERENCES localUser (id),
-    PRIMARY KEY (userId, objectId, type)
+    FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
 getById:

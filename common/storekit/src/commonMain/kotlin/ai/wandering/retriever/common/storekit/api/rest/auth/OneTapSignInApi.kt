@@ -1,4 +1,4 @@
-package ai.wandering.retriever.common.storekit.api.auth
+package ai.wandering.retriever.common.storekit.api.rest.auth
 
 import ai.wandering.retriever.common.storekit.entity.auth.GoogleAuthResponse
 import ai.wandering.retriever.common.storekit.entity.auth.GoogleUser

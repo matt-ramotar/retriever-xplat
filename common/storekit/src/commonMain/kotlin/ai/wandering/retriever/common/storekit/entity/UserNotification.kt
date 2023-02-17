@@ -37,6 +37,7 @@ sealed class UserNotification {
     @Serializable
     data class Network(
         val _id: String,
+        val userId: String,
         val actionId: String,
         val type: String
     ) : UserNotification()
@@ -46,6 +47,7 @@ sealed class UserNotification {
         @Serializable
         data class Populated<out T : Any>(
             val id: String,
+            val user: User.Output.Unpopulated,
             val action: UserAction.Output.Populated<T>,
             val type: Type
         ) : Output()
@@ -53,6 +55,7 @@ sealed class UserNotification {
         @Serializable
         data class Unpopulated(
             val id: String,
+            val userId: String,
             val actionId: String,
             val type: Type
         ) : Output()

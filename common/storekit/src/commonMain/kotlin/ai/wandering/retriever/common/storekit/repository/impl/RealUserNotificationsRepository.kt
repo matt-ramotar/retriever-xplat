@@ -1,7 +1,7 @@
 package ai.wandering.retriever.common.storekit.repository.impl
 
-import ai.wandering.retriever.common.storekit.api.UserNotificationsApi
-import ai.wandering.retriever.common.storekit.converter.toUnpopulatedOutput
+import ai.wandering.retriever.common.storekit.api.collections.UserNotificationsApi
+import ai.wandering.retriever.common.storekit.converter.asUnpopulated
 import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
@@ -26,7 +26,7 @@ class RealUserNotificationsRepository(api: UserNotificationsApi, user: User.Outp
                     }
 
                     is RequestResult.Success -> {
-                        _notifications.value = result.data.notifications.map { it.toUnpopulatedOutput() }
+                        _notifications.value = result.data.notifications.map { it.asUnpopulated() }
                     }
                 }
             }

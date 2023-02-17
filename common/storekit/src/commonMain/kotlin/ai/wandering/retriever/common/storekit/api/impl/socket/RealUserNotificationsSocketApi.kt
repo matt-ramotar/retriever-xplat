@@ -1,7 +1,8 @@
-package ai.wandering.retriever.common.storekit.api.impl
+package ai.wandering.retriever.common.storekit.api.impl.socket
 
 import ai.wandering.retriever.common.socket.Socket
-import ai.wandering.retriever.common.storekit.api.UserNotificationsApi
+import ai.wandering.retriever.common.storekit.api.impl.SocketEvents
+import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.entity.UserNotifications
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import kotlinx.coroutines.flow.Flow
@@ -9,9 +10,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-class RealUserNotificationsApi(private val serializer: Json, private val socket: Socket) : UserNotificationsApi {
-
-    override fun subscribe(userId: String): Flow<RequestResult<UserNotifications>> = MutableSharedFlow<RequestResult<UserNotifications>>().also { sharedFlow ->
+class RealUserNotificationsSocketApi(private val serializer: Json, private val socket: Socket) : UserNotificationsSocketApi {
+    override fun subscribe(id: String): Flow<RequestResult<UserNotifications>> = MutableSharedFlow<RequestResult<UserNotifications>>().also { sharedFlow ->
         socket.on(SocketEvents.NOTIFICATIONS) { response ->
             try {
                 val notificationsJson = response.firstOrNull()?.toString()
@@ -26,7 +26,7 @@ class RealUserNotificationsApi(private val serializer: Json, private val socket:
             }
         }
 
-        socket.emit(SocketEvents.NOTIFICATIONS, userId)
+        socket.emit(SocketEvents.NOTIFICATIONS, id)
 
     }
 }
