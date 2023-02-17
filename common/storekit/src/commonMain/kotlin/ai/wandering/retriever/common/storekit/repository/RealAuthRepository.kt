@@ -1,6 +1,6 @@
 package ai.wandering.retriever.common.storekit.repository
 
-import ai.wandering.retriever.common.storekit.api.AuthApi
+import ai.wandering.retriever.common.storekit.api.auth.AuthApi
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleAuthResponse
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleUser
 import ai.wandering.retriever.common.storekit.entities.user.network.NetworkUser
@@ -15,5 +15,5 @@ class RealAuthRepository(private val api: AuthApi) : AuthRepository {
     }
 
     override suspend fun google(googleUser: GoogleUser): RequestResult<GoogleAuthResponse> = api.google(googleUser)
-    override suspend fun login(): RequestResult<NetworkUser> = api.login()
+    override suspend fun login(): RequestResult<NetworkUser> = api.signIn()
 }

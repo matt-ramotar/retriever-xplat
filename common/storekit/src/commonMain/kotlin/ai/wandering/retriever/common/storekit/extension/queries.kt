@@ -7,7 +7,7 @@ import ai.wandering.retriever.common.storekit.LocalUserQueries
 import ai.wandering.retriever.common.storekit.entities.UserAction
 import ai.wandering.retriever.common.storekit.entities.note.Channel
 import ai.wandering.retriever.common.storekit.entities.note.Mention
-import ai.wandering.retriever.common.storekit.entities.note.Note
+import ai.wandering.retriever.common.storekit.entities.`Note.Output.Populated`
 import ai.wandering.retriever.common.storekit.entities.note.Tag
 import ai.wandering.retriever.common.storekit.entities.user.output.Graph
 import ai.wandering.retriever.common.storekit.entities.user.output.User
@@ -104,7 +104,7 @@ fun LocalUserQueries.findAndPopulateByUserId(userId: String): User {
     )
 }
 
-fun LocalNoteQueries.findAndPopulate(id: String): Note {
+fun LocalNoteQueries.findAndPopulate(id: String): `Note.Output.Populated` {
     val response = getByIdAndPopulateAll(id).executeAsList()
 
     val common = response.first()
@@ -134,7 +134,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note {
         .map { row -> Mention(row.userId!!, row.otherUserId!!, User(row.otherUserId, row.otherUserUsername!!, row.otherUserName!!, row.otherUserEmail!!, row.userAvatarUrl)) }
         .distinct()
 
-    return Note(
+    return `Note.Output.Populated`(
         id = common.id,
         user = user,
         content = common.content ?: "",

@@ -1,4 +1,4 @@
-package ai.wandering.retriever.common.storekit.api
+package ai.wandering.retriever.common.storekit.networking
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation

@@ -23,7 +23,7 @@ class RetrieverNotificationManager @Inject constructor(api: RetrieverApi, user: 
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            api.subscribeToNotifications(user.id).collectLatest { _notifications.value = it }
+            api.subscribe(user.id).collectLatest { _notifications.value = it }
         }
     }
 

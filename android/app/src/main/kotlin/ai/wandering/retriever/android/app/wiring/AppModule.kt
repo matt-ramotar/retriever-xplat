@@ -2,8 +2,8 @@ package ai.wandering.retriever.android.app.wiring
 
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.common.socket.Socket
-import ai.wandering.retriever.common.storekit.api.AuthApi
-import ai.wandering.retriever.common.storekit.api.HttpClientProvider
+import ai.wandering.retriever.common.storekit.api.auth.AuthApi
+import ai.wandering.retriever.common.storekit.networking.HttpClientProvider
 import ai.wandering.retriever.common.storekit.api.RealRetrieverApi
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.repository.AuthRepository

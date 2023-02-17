@@ -1,99 +1,88 @@
+@file:Suppress("PropertyName")
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package ai.wandering.retriever.common.storekit.entities
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 
+sealed class UserAction {
 
-@Serializable
-data class UserFeedItem(
-    val userAction: UserAction,
-    val seen: Instant? = null,
-    val interactions: List<Instant> = listOf()
-)
-
-
-
-
-@Serializable
-data class UserNotification(
-    val userId: String,
-    val otherUserId: String,
-    val objectId: String,
-    val type: Type
-) {
     @Serializable
-    enum class Type {
-        @OptIn(ExperimentalSerializationApi::class)
+    enum class Type(val value: String) {
         @JsonNames(
-            "NoteCommentedOn",
-            "ThreadCommentedOn",
-            "NoteSubscribedTo",
-            "ThreadSubscribedTo",
-            "ChannelSubscribedTo",
-            "GraphSubscribedTo",
-            "NotePinned",
-            "ThreadPinned",
-            "GraphPinned",
-            "SubscribedTo",
-            "ChannelStarred",
-            "GraphStarred",
-            "NoteUpvoted",
-            "ThreadUpvoted",
-            "NoteReactedTo",
-            "ThreadReactedTo",
+            "CreateNote",
+            "CreateThread",
+            "CreateChannel",
+            "CreateGraph",
+            "CommentOnNote",
+            "CommentOnThread",
+            "SubscribeToNote",
+            "SubscribeToThread",
+            "SubscribeToChannel",
+            "SubscribeToGraph",
+            "SubscribeToUser",
+            "PinNote",
+            "PinThread",
+            "PinChannel",
+            "PinGraph",
+            "StarChannel",
+            "StarGraph",
+            "UpvoteNote",
+            "UpvoteThread",
+            "ReactToNote",
+            "ReactToThread",
             "TaggedInNote"
         )
-        NoteCommentedOn,
-        ThreadCommentedOn,
-        NoteSubscribedTo,
-        ThreadSubscribedTo,
-        ChannelSubscribedTo,
-        GraphSubscribedTo,
-        NotePinned,
-        ThreadPinned,
-        GraphPinned,
-        SubscribedTo,
-        ChannelStarred,
-        GraphStarred,
-        NoteUpvoted,
-        ThreadUpvoted,
-        NoteReactedTo,
-        ThreadReactedTo,
-        TaggedInNote
+        CreateNote("CreateNote"),
+        CreateThread("CreateThread"),
+        CreateChannel("CreateChannel"),
+        CreateGraph("CreateGraph"),
+        CommentOnNote("CommentOnNote"),
+        CommentOnThread("CommentOnThread"),
+        SubscribeToNote("SubscribeToNote"),
+        SubscribeToThread("SubscribeToThread"),
+        SubscribeToChannel("SubscribeToChannel"),
+        SubscribeToGraph("SubscribeToGraph"),
+        SubscribeToUser("SubscribeToUser"),
+        PinNote("PinNote"),
+        PinThread("PinThread"),
+        PinChannel("PinChannel"),
+        PinGraph("PinGraph"),
+        StarChannel("StarChannel"),
+        StarGraph("StarGraph"),
+        UpvoteNote("UpvoteNote"),
+        UpvoteThread("UpvoteThread"),
+        ReactToNote("ReactToNote"),
+        ReactToThread("ReactToThread"),
+        TaggedInNote("TaggedInNote"),
     }
-}
 
-@Serializable
-data class UserAction(
-    val userId: String,
-    val objectId: String,
-    val type: Type
-) {
-    enum class Type {
-        CreateNote,
-        CreateThread,
-        CreateChannel,
-        CreateGraph,
-        CommentOnNote,
-        CommentOnThread,
-        SubscribeToNote,
-        SubscribeToThread,
-        SubscribeToChannel,
-        SubscribeToGraph,
-        SubscribeToUser,
-        PinNote,
-        PinThread,
-        PinChannel,
-        PinGraph,
-        StarChannel,
-        StarGraph,
-        UpvoteNote,
-        UpvoteThread,
-        ReactToNote,
-        ReactToThread,
-        TaggedInNote
+    @Serializable
+    data class Network(
+        val _id: String,
+        val userId: String,
+        val objectId: String,
+        val type: String
+    ) : UserAction()
+
+    @Serializable
+    sealed class Output : UserAction() {
+        @Serializable
+        data class Populated<out T : Any>(
+            val id: String,
+            val user: User.Output.Unpopulated,
+            val obj: T,
+            val type: Type
+        ) : Output()
+
+        @Serializable
+        data class Unpopulated(
+            val id: String,
+            val userId: String,
+            val objId: String,
+            val type: Type
+        ) : Output()
     }
 }

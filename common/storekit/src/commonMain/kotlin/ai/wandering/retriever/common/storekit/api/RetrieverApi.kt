@@ -1,3 +1,8 @@
 package ai.wandering.retriever.common.storekit.api
 
-interface RetrieverApi : AuthApi, NotificationsApi
+import ai.wandering.retriever.common.storekit.api.auth.AuthApi
+
+interface RetrieverApi :
+    AuthApi,
+    ChannelApi,
+    UserNotificationsApi

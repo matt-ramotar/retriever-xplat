@@ -7,6 +7,6 @@ import org.mobilenativefoundation.store.store5.Fetcher
 
 class NotificationFetcherProvider(private val api: RetrieverApi) {
     fun provide(): Fetcher<String, List<Notification>> = Fetcher.ofFlow { userId ->
-        api.subscribeToNotifications(userId)
+        api.subscribe(userId)
     }
 }

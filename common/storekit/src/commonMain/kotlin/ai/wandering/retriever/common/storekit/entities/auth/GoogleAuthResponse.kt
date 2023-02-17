@@ -1,10 +1,10 @@
 package ai.wandering.retriever.common.storekit.entities.auth
 
-import ai.wandering.retriever.common.storekit.entities.user.network.NetworkUser
+import ai.wandering.retriever.common.storekit.entities.User
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GoogleAuthResponse(
-    val user: NetworkUser,
+    val user: User.Network,
     val token: String
 )
