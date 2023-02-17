@@ -9,6 +9,7 @@ import ai.wandering.retriever.android.common.coroutines.suspendLazy
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.android.common.scoping.ComponentHolder
 import ai.wandering.retriever.android.common.scoping.SingleIn
+import ai.wandering.retriever.common.socket.Socket
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.db.DriverFactory
 import ai.wandering.retriever.common.storekit.db.seed
@@ -33,10 +34,16 @@ class RetrieverApp : Application(), ComponentHolder {
         val application = this
         coroutineScope.launch {
             val database = database.invoke()
-            component = DaggerAppComponent.factory().create(application, database, applicationContext)
+            val socket = Socket(SOCKET_URI, coroutineScope)
+            socket.connect()
+            component = DaggerAppComponent.factory().create(application, database, applicationContext, socket)
             database.seed()
             super.onCreate()
         }
+    }
+
+    companion object {
+        private const val SOCKET_URI = "https://www.api.retriever.wandering.ai"
     }
 }
 

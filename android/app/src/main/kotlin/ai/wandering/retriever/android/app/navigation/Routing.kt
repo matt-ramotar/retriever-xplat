@@ -9,6 +9,7 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
+import ai.wandering.retriever.common.storekit.entities.Notification
 import ai.wandering.retriever.common.storekit.entities.UserAction
 import ai.wandering.retriever.common.storekit.entities.UserNotification
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
@@ -22,6 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -30,8 +34,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 
 @Serializable
@@ -51,28 +55,13 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val userDependencies = userComponent as UserDependencies
     val database = appDependencies.database
     val user = userComponent.user
-    val socket = appDependencies.socket
+    val api = appDependencies.api
+    val notifications = remember { mutableStateOf<List<Notification>>(listOf()) }
 
-
-    socket.getSocket().on("connection") {
-        println("ON CONNECTION $it")
-        it.forEach { message ->
-            println(message.toString())
-        }
+    LaunchedEffect(user.id) {
+        api.subscribeToNotifications(user.id).collectLatest { notifications.value = it }
     }
 
-
-    socket.getSocket().on("notifications") {
-        println("ON NOTIFICATIONS ${it.toString()}")
-        it.forEach { message ->
-            println(message)
-        }
-    }
-
-    socket.getSocket().emit("notifications", user.id)
-
-
-    // val notificationsState = socket.subscribeToNotifications(user.id).collectAsState(listOf())
 
     NavHost(
         navController = navController, startDestination = Screen.Finder.route, modifier = Modifier
@@ -115,19 +104,10 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
         composable(Screen.Notification.route) {
             Column {
                 Text(text = "Notifications")
-                val notifications = database.localUserNotificationQueries
-                    .findByUserId(user.id)
-                    .executeAsList()
-                    .map { row -> UserNotification(row.userId, row.otherUserId, row.objectId, row.type) }
 
-                notifications.forEach {
+                notifications.value.forEach {
                     Text(text = it.type.name)
                 }
-
-
-//                notificationsState.value.forEach {
-//                    Text(text = "Real notification: ${it.type.name}")
-//                }
             }
         }
         composable(Screen.Search.route) {

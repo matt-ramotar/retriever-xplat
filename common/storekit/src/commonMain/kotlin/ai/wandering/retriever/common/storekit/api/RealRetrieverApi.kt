@@ -1,5 +1,8 @@
 package ai.wandering.retriever.common.storekit.api
 
+import ai.wandering.retriever.common.socket.Socket
+import ai.wandering.retriever.common.storekit.entities.Notification
+import ai.wandering.retriever.common.storekit.entities.Notifications
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleAuthResponse
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleUser
 import ai.wandering.retriever.common.storekit.entities.user.network.NetworkUser
@@ -11,7 +14,11 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 
 @Serializable
@@ -20,7 +27,7 @@ data class ValidateTokenInput(
 )
 
 
-class RealRetrieverApi(private val client: HttpClient) : RetrieverApi {
+class RealRetrieverApi(private val client: HttpClient, private val socket: Socket) : RetrieverApi {
     override suspend fun validateToken(token: String): RequestResult<NetworkUser> = try {
         val response = client.post("$ROOT_API_URL/auth/token") {
             setBody(ValidateTokenInput(token))
@@ -48,6 +55,22 @@ class RealRetrieverApi(private val client: HttpClient) : RetrieverApi {
     } catch (error: Throwable) {
         println("ERROR = $error")
         RequestResult.Exception(error)
+    }
+
+    override fun subscribeToNotifications(userId: String): SharedFlow<List<Notification>> = MutableSharedFlow<List<Notification>>().also {
+        socket.on("notifications") { response ->
+            try {
+                val serializer = Json { ignoreUnknownKeys = true }
+
+                val notificationsJson = response.firstOrNull().toString()
+                val notifications = serializer.decodeFromString<Notifications>(notificationsJson)
+                it.emit(notifications.notifications)
+            } catch (error: Exception) {
+                println(error)
+            }
+        }
+
+        socket.emit("notifications", userId)
     }
 
     companion object {

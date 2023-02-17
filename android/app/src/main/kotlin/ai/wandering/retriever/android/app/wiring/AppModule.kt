@@ -1,7 +1,7 @@
 package ai.wandering.retriever.android.app.wiring
 
 import ai.wandering.retriever.android.common.scoping.AppScope
-import ai.wandering.retriever.android.common.socket.RetrieverSocket
+import ai.wandering.retriever.common.socket.Socket
 import ai.wandering.retriever.common.storekit.api.AuthApi
 import ai.wandering.retriever.common.storekit.api.HttpClientProvider
 import ai.wandering.retriever.common.storekit.api.RealRetrieverApi
@@ -19,17 +19,12 @@ object AppModule {
     private val httpClient = HttpClientProvider().provide()
 
     @Provides
-    fun provideRetrieverApi(): RetrieverApi = RealRetrieverApi(httpClient)
+    fun provideRetrieverApi(socket: Socket): RetrieverApi = RealRetrieverApi(httpClient, socket)
 
     @Provides
-    fun provideAuthApi(): AuthApi = RealRetrieverApi(httpClient)
+    fun provideAuthApi(socket: Socket): AuthApi = RealRetrieverApi(httpClient, socket)
 
     @Provides
     fun provideAuthRepository(api: AuthApi): AuthRepository = RealAuthRepository(api)
 
-    @Provides
-    fun provideSocketHandler(): RetrieverSocket = RetrieverSocket.also {
-        it.setSocket()
-        it.establishConnection()
-    }
 }

@@ -20,13 +20,13 @@ kotlin {
     }
 
     cocoapods {
-        summary = "StoreKit"
+        summary = "Socket"
         homepage = "https://github.com/matt-ramotar/retriever-xplat"
         ios.deploymentTarget = "13"
         version = "0.0.1"
 
         framework {
-            baseName = "StoreKit"
+            baseName = "Socket"
         }
     }
 
@@ -47,7 +47,6 @@ kotlin {
                 implementation("io.socket:socket.io-client:2.1.0") {
                     exclude(group = "org.json", module = "json")
                 }
-                implementation(project(":common:socket"))
             }
         }
 
@@ -84,7 +83,7 @@ kotlin {
 }
 
 android {
-    namespace = "ai.wandering.retriever.common.storekit"
+    namespace = "ai.wandering.retriever.common.socket"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {
@@ -95,15 +94,9 @@ android {
 
 addGithubPackagesRepository()
 kmmbridge {
-    frameworkName.set("StoreKit")
+    frameworkName.set("Socket")
     githubReleaseArtifacts()
     githubReleaseVersions()
     versionPrefix.set("0.0")
     spm()
-}
-
-sqldelight {
-    database("RetrieverDatabase") {
-        packageName = "ai.wandering.retriever.common.storekit"
-    }
 }
