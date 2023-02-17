@@ -4,13 +4,13 @@ import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalNoteQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
 import ai.wandering.retriever.common.storekit.LocalUserQueries
-import ai.wandering.retriever.common.storekit.entities.UserAction
-import ai.wandering.retriever.common.storekit.entities.note.Channel
-import ai.wandering.retriever.common.storekit.entities.note.Mention
-import ai.wandering.retriever.common.storekit.entities.`Note.Output.Populated`
-import ai.wandering.retriever.common.storekit.entities.note.Tag
-import ai.wandering.retriever.common.storekit.entities.user.output.Graph
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.UserAction
+import ai.wandering.retriever.common.storekit.entity.note.Channel
+import ai.wandering.retriever.common.storekit.entity.note.Mention
+import ai.wandering.retriever.common.storekit.entity.`Note.Output.Populated`
+import ai.wandering.retriever.common.storekit.entity.note.Tag
+import ai.wandering.retriever.common.storekit.entity.user.output.Graph
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import kotlinx.datetime.Instant
 
 fun LocalTagQueries.getAllAsList() = getAll().executeAsList()

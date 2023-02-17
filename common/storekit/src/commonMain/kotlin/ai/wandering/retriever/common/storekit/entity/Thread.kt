@@ -1,8 +1,7 @@
 @file:Suppress("PropertyName")
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
-import ai.wandering.retriever.common.storekit.entities.user.output.User
 import kotlinx.serialization.Serializable
 
 sealed class Thread {
@@ -21,7 +20,7 @@ sealed class Thread {
             val id: String,
             val title: String?,
             val description: String?,
-            val User: User,
+            val User: User.Output.Unpopulated,
         ) : Output()
 
         @Serializable

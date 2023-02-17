@@ -29,7 +29,7 @@ import ai.wandering.retriever.android.app.auth.model.viewmodel.DemoSignInViewMod
 import ai.wandering.retriever.android.common.sig.R
 import ai.wandering.retriever.android.common.sig.color.Sig
 import ai.wandering.retriever.android.common.sig.color.systemThemeColors
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

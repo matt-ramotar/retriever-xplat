@@ -44,7 +44,6 @@ dependencies {
     implementation(project(":android:common:scoping"))
     implementation(project(":common:storekit"))
     implementation(project(":common:socket"))
-    implementation(project(":common:notifications"))
     implementation(project(":android:feature:account_tab"))
     implementation(project(":android:feature:finder_tab"))
     implementation(project(":android:feature:search_tab"))

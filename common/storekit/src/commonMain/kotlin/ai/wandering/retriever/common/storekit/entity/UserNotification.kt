@@ -1,35 +1,15 @@
 @file:Suppress("PropertyName")
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 
 sealed class UserNotification {
 
     @Serializable
     enum class Type(val value: String) {
-        @JsonNames(
-            "NoteCommentedOn",
-            "ThreadCommentedOn",
-            "NoteSubscribedTo",
-            "ThreadSubscribedTo",
-            "ChannelSubscribedTo",
-            "GraphSubscribedTo",
-            "NotePinned",
-            "ThreadPinned",
-            "GraphPinned",
-            "SubscribedTo",
-            "ChannelStarred",
-            "GraphStarred",
-            "NoteUpvoted",
-            "ThreadUpvoted",
-            "NoteReactedTo",
-            "ThreadReactedTo",
-            "TaggedInNote",
-        )
         NoteCommentedOn("NoteCommentedOn"),
         ThreadCommentedOn("ThreadCommentedOn"),
         NoteSubscribedTo("NoteSubscribedTo"),
@@ -46,7 +26,12 @@ sealed class UserNotification {
         ThreadUpvoted("ThreadUpvoted"),
         NoteReactedTo("NoteReactedTo"),
         ThreadReactedTo("ThreadReactedTo"),
-        TaggedInNote("TaggedInNote"),
+        TaggedInNote("TaggedInNote");
+
+        companion object {
+            private val valueToType = Type.values().associateBy { it.value }
+            fun lookup(value: String): Type = valueToType[value]!!
+        }
     }
 
     @Serializable

@@ -48,7 +48,6 @@ kotlin {
                     exclude(group = "org.json", module = "json")
                 }
                 api(project(":common:socket"))
-                api(project(":common:notifications"))
             }
         }
 

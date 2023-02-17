@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import ai.wandering.retriever.android.app.auth.model.state.DemoSignInState
 import ai.wandering.retriever.android.app.auth.model.state.DemoSignInViewState
 import ai.wandering.retriever.common.storekit.extension.toUser
-import ai.wandering.retriever.common.storekit.repository.AuthRepository
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

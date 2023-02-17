@@ -9,7 +9,7 @@ import ai.wandering.retriever.android.common.scoping.ComponentHolder
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.common.sig.SigTheme
 import ai.wandering.retriever.android.common.sig.color.systemThemeColors
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle

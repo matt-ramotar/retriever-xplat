@@ -1,6 +1,6 @@
-package ai.wandering.retriever.common.storekit.entities.auth
+package ai.wandering.retriever.common.storekit.entity.auth
 
-import ai.wandering.retriever.common.storekit.entities.User
+import ai.wandering.retriever.common.storekit.entity.User
 import kotlinx.serialization.Serializable
 
 @Serializable

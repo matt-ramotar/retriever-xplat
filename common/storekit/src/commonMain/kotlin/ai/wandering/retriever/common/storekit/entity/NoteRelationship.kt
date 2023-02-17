@@ -1,26 +1,24 @@
 @file:Suppress("PropertyName")
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 
 sealed class NoteRelationship {
 
     @Serializable
     enum class Type(val value: String) {
-        @JsonNames(
-            "ChildToParent",
-            "ParentToChild",
-            "UnidirectionalReference",
-            "BidirectionalReference"
-        )
         ChildToParent("ChildToParent"),
         ParentToChild("ParentToChild"),
         UnidirectionalReference("UnidirectionalReference"),
-        BidirectionalReference("BidirectionalReference"),
+        BidirectionalReference("BidirectionalReference");
+
+        companion object {
+            private val valueToType = NoteRelationship.Type.values().associateBy { it.value }
+            fun lookup(value: String): NoteRelationship.Type = valueToType[value]!!
+        }
     }
 
     @Serializable

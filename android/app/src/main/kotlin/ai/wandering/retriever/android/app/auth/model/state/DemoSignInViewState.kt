@@ -1,6 +1,6 @@
 package ai.wandering.retriever.android.app.auth.model.state
 
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 
 sealed class DemoSignInViewState {
     object Initial : DemoSignInViewState()

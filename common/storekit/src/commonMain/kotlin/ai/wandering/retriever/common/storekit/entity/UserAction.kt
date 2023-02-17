@@ -1,40 +1,15 @@
 @file:Suppress("PropertyName")
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonNames
 
 sealed class UserAction {
 
     @Serializable
     enum class Type(val value: String) {
-        @JsonNames(
-            "CreateNote",
-            "CreateThread",
-            "CreateChannel",
-            "CreateGraph",
-            "CommentOnNote",
-            "CommentOnThread",
-            "SubscribeToNote",
-            "SubscribeToThread",
-            "SubscribeToChannel",
-            "SubscribeToGraph",
-            "SubscribeToUser",
-            "PinNote",
-            "PinThread",
-            "PinChannel",
-            "PinGraph",
-            "StarChannel",
-            "StarGraph",
-            "UpvoteNote",
-            "UpvoteThread",
-            "ReactToNote",
-            "ReactToThread",
-            "TaggedInNote"
-        )
         CreateNote("CreateNote"),
         CreateThread("CreateThread"),
         CreateChannel("CreateChannel"),
@@ -56,7 +31,12 @@ sealed class UserAction {
         UpvoteThread("UpvoteThread"),
         ReactToNote("ReactToNote"),
         ReactToThread("ReactToThread"),
-        TaggedInNote("TaggedInNote"),
+        TaggedInNote("TaggedInNote");
+
+        companion object {
+            private val valueToType = UserAction.Type.values().associateBy { it.value }
+            fun lookup(value: String): UserAction.Type = valueToType[value]!!
+        }
     }
 
     @Serializable

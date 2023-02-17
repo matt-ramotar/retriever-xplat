@@ -6,8 +6,6 @@ import ai.wandering.retriever.common.storekit.api.auth.AuthApi
 import ai.wandering.retriever.common.storekit.networking.HttpClientProvider
 import ai.wandering.retriever.common.storekit.api.RealRetrieverApi
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
-import ai.wandering.retriever.common.storekit.repository.AuthRepository
-import ai.wandering.retriever.common.storekit.repository.RealAuthRepository
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides

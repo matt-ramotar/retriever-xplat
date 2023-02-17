@@ -1,6 +1,6 @@
 @file:Suppress("PropertyName")
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
 import kotlinx.serialization.Serializable
 

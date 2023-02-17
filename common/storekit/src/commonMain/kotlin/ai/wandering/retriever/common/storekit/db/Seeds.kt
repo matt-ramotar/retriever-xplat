@@ -16,8 +16,8 @@ import ai.wandering.retriever.common.storekit.UserFollowingUser
 import ai.wandering.retriever.common.storekit.UserPinnedChannel
 import ai.wandering.retriever.common.storekit.UserPinnedGraph
 import ai.wandering.retriever.common.storekit.UserPinnedNote
-import ai.wandering.retriever.common.storekit.entities.UserAction
-import ai.wandering.retriever.common.storekit.entities.UserNotification
+import ai.wandering.retriever.common.storekit.entity.UserAction
+import ai.wandering.retriever.common.storekit.entity.UserNotification
 
 
 internal object Seeds {

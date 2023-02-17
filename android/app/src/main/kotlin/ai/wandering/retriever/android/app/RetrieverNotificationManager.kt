@@ -5,7 +5,7 @@ import ai.wandering.retriever.android.common.scoping.UserScope
 import ai.wandering.retriever.common.notifications.Notification
 import ai.wandering.retriever.common.notifications.NotificationManager
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import com.squareup.anvil.annotations.ContributesBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

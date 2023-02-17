@@ -1,7 +1,7 @@
 package ai.wandering.retriever.common.storekit.api.impl
 
 import ai.wandering.retriever.common.storekit.api.ChannelApi
-import ai.wandering.retriever.common.storekit.entities.Channel
+import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

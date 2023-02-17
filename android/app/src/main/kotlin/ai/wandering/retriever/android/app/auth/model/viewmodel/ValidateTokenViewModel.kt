@@ -10,7 +10,6 @@ import ai.wandering.retriever.android.app.auth.TOKEN_KEY
 import ai.wandering.retriever.android.app.auth.extension.tokenOrNull
 import ai.wandering.retriever.android.app.auth.model.state.LoginState
 import ai.wandering.retriever.android.app.auth.model.state.LoginViewState
-import ai.wandering.retriever.common.storekit.repository.AuthRepository
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

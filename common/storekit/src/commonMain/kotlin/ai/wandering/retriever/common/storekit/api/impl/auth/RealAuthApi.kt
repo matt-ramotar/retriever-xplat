@@ -4,8 +4,8 @@ import ai.wandering.retriever.common.storekit.api.auth.AuthApi
 import ai.wandering.retriever.common.storekit.api.auth.DemoSignInApi
 import ai.wandering.retriever.common.storekit.api.auth.OneTapSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.Endpoints
-import ai.wandering.retriever.common.storekit.entities.User
-import ai.wandering.retriever.common.storekit.entities.auth.ValidateTokenRequest
+import ai.wandering.retriever.common.storekit.entity.User
+import ai.wandering.retriever.common.storekit.entity.auth.ValidateTokenRequest
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

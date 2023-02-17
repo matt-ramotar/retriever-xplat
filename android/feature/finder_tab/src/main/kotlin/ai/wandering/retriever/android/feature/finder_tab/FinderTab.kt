@@ -7,7 +7,7 @@ import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import ai.wandering.retriever.common.storekit.extension.findAndPopulateOtherUsers
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

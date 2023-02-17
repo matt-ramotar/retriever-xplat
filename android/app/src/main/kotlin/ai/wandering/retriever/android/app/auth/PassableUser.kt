@@ -1,6 +1,6 @@
 package ai.wandering.retriever.android.app.auth
 
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 

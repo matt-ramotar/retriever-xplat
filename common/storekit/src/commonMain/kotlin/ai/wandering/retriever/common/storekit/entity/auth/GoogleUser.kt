@@ -1,4 +1,4 @@
-package ai.wandering.retriever.common.storekit.entities.auth
+package ai.wandering.retriever.common.storekit.entity.auth
 
 import kotlinx.serialization.Serializable
 

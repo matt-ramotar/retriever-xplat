@@ -29,10 +29,9 @@ import ai.wandering.retriever.android.app.wiring.AppDependencies
 import ai.wandering.retriever.android.app.wiring.UserComponent
 import ai.wandering.retriever.android.common.sig.SigTheme
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
-import ai.wandering.retriever.common.storekit.entities.auth.GoogleUser
-import ai.wandering.retriever.common.storekit.entities.user.output.User
+import ai.wandering.retriever.common.storekit.entity.auth.GoogleUser
+import ai.wandering.retriever.common.storekit.entity.user.output.User
 import ai.wandering.retriever.common.storekit.extension.toUser
-import ai.wandering.retriever.common.storekit.repository.AuthRepository
 import ai.wandering.retriever.common.storekit.result.RequestResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

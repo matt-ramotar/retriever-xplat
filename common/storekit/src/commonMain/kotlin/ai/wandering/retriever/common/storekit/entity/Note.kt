@@ -1,9 +1,7 @@
 @file:Suppress("PropertyName")
 
-package ai.wandering.retriever.common.storekit.entities
+package ai.wandering.retriever.common.storekit.entity
 
-import ai.wandering.retriever.common.storekit.entities.note.Mention
-import ai.wandering.retriever.common.storekit.entities.user.output.User
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
@@ -33,7 +31,7 @@ sealed class Note {
         @Serializable
         data class Populated(
             val id: String,
-            val user: User,
+            val user: User.Output.Unpopulated,
             val content: String,
             val isRead: Boolean,
             val createdAt: Instant,
@@ -41,7 +39,7 @@ sealed class Note {
 
             // Relationships
             val channels: List<Channel.Output.Populated>,
-            val mentions: List<Mention>,
+            val mentions: List<Mention.Output.Unpopulated>,
             val noteRelationships: List<String>,
             val threadNotes: List<String>,
             val pinners: List<String>,

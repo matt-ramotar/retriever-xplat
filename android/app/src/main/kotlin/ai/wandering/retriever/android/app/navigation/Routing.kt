@@ -9,8 +9,8 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
-import ai.wandering.retriever.common.storekit.entities.UserAction
-import ai.wandering.retriever.common.storekit.entities.UserNotification
+import ai.wandering.retriever.common.storekit.entity.UserAction
+import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
 import ai.wandering.retriever.common.storekit.extension.findAndPopulateByUserId
 import androidx.compose.foundation.clickable
