@@ -1,8 +1,8 @@
 package ai.wandering.retriever.common.storekit.api
 
+import ai.wandering.retriever.common.notifications.Notification
+import ai.wandering.retriever.common.notifications.Notifications
 import ai.wandering.retriever.common.socket.Socket
-import ai.wandering.retriever.common.storekit.entities.Notification
-import ai.wandering.retriever.common.storekit.entities.Notifications
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleAuthResponse
 import ai.wandering.retriever.common.storekit.entities.auth.GoogleUser
 import ai.wandering.retriever.common.storekit.entities.user.network.NetworkUser

@@ -17,19 +17,16 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlinx.serialization.core)
-                implementation(libs.kotlinx.serialization.json)
                 api(libs.kotlinx.coroutines.core)
-                implementation("io.socket:socket.io-client:2.1.0") {
-                    exclude(group = "org.json", module = "json")
-                }
+                api(libs.kotlinx.serialization.core)
+                api(libs.kotlinx.serialization.json)
             }
         }
     }
 }
 
 android {
-    namespace = "ai.wandering.retriever.common.socket"
+    namespace = "ai.wandering.retriever.common.notifications"
     compileSdk = libs.versions.android.compile.sdk.get().toInt()
 
     defaultConfig {

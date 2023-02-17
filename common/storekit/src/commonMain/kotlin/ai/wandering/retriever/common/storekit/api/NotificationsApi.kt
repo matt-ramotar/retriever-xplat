@@ -1,7 +1,6 @@
 package ai.wandering.retriever.common.storekit.api
 
-import ai.wandering.retriever.common.storekit.entities.Notification
-import ai.wandering.retriever.common.storekit.entities.UserNotification
+import ai.wandering.retriever.common.notifications.Notification
 import kotlinx.coroutines.flow.Flow
 
 interface NotificationsApi {

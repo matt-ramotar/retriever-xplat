@@ -23,4 +23,5 @@ dependencies {
     implementation(libs.dagger.dagger)
     kapt(libs.dagger.compiler)
     implementation(project(":common:storekit"))
+    implementation(project(":common:notifications"))
 }

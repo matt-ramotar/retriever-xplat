@@ -141,7 +141,7 @@ private fun EntryPoint(name: String, leadingIcon: Painter, unreadMentions: Int, 
 
         Row() {
             Chip(onClick = { /*TODO*/ }, backgroundColor = Sig.ColorScheme.error, shape = CircleShape) {
-                Text(text = "$unreadMentions", color = Sig.ColorScheme.onBackground, fontWeight = FontWeight.Bold)
+                Text(text = "$unreadMentions", color = Sig.ColorScheme.background, fontWeight = FontWeight.Bold)
             }
         }
 
@@ -155,7 +155,7 @@ fun Chip(onClick: () -> Unit, backgroundColor: Color, shape: Shape = RoundedCorn
     Row(modifier = Modifier
         .clip(shape)
         .background(backgroundColor)
-        .padding(4.dp)
+        .padding(vertical = 2.dp, horizontal = 6.dp)
         .clickable { onClick() }) {
         label()
     }

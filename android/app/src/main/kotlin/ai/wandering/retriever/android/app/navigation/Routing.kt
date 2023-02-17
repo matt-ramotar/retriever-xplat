@@ -9,7 +9,6 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
-import ai.wandering.retriever.common.storekit.entities.Notification
 import ai.wandering.retriever.common.storekit.entities.UserAction
 import ai.wandering.retriever.common.storekit.entities.UserNotification
 import ai.wandering.retriever.common.storekit.extension.findAndPopulate
@@ -23,9 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -34,7 +31,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
 
 
@@ -56,11 +52,8 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val database = appDependencies.database
     val user = userComponent.user
     val api = appDependencies.api
-    val notifications = remember { mutableStateOf<List<Notification>>(listOf()) }
-
-    LaunchedEffect(user.id) {
-        api.subscribeToNotifications(user.id).collectLatest { notifications.value = it }
-    }
+    val notificationManager = userDependencies.notificationManager
+    val notifications = notificationManager.notifications.collectAsState()
 
 
     NavHost(
