@@ -1,0 +1,25 @@
+import kotlin.collections.List;
+
+CREATE TABLE localUserActionPage(
+    key TEXT NOT NULL PRIMARY KEY,
+    nextKey TEXT,
+    prevKey TEXT,
+    itemIds TEXT AS List<String> NOT NULL
+);
+
+findById:
+SELECT *
+FROM localUserActionPage
+WHERE key = ?;
+
+upsert:
+INSERT OR REPLACE INTO localUserActionPage
+VALUES ?;
+
+clearById:
+DELETE
+FROM localUserActionPage
+WHERE key = ?;
+
+clearAll:
+DELETE FROM localUserActionPage;

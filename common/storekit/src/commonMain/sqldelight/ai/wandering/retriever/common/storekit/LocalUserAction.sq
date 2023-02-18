@@ -11,7 +11,7 @@ CREATE TABLE localUserAction(
 getById:
 SELECT *
 FROM localUserAction
-WHERE userId = ?;
+WHERE id = ?;
 
 upsert:
 INSERT OR REPLACE INTO localUserAction
@@ -20,7 +20,7 @@ VALUES ?;
 clearById:
 DELETE
 FROM localUserAction
-WHERE userId = ?;
+WHERE id = ?;
 
 clearAll:
 DELETE FROM localUserAction;
