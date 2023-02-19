@@ -5,7 +5,7 @@ import ai.wandering.retriever.common.storekit.LocalUserNotifications
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.converter.asLocal
-import ai.wandering.retriever.common.storekit.converter.asUnpopulated
+import ai.wandering.retriever.common.storekit.converter.asUnpopulatedOutput
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.entity.UserNotifications
 import ai.wandering.retriever.common.storekit.result.RequestResult
@@ -27,7 +27,7 @@ class UserNotificationsStoreProvider(private val api: UserNotificationsSocketApi
     override fun provideConverter(): Converter<UserNotifications, List<UserNotification.Output.Unpopulated>, List<LocalUserNotification>> =
         Converter.Builder<UserNotifications, List<UserNotification.Output.Unpopulated>, List<LocalUserNotification>>()
             .fromNetworkToOutput { network ->
-                network.notifications.map { it.asUnpopulated() }
+                network.notifications.map { it.asUnpopulatedOutput() }
             }
             .fromOutputToLocal { output ->
                 output.map { unpopulated -> unpopulated.asLocal() }

@@ -5,7 +5,7 @@ import ai.wandering.retriever.common.storekit.LocalChannels
 import ai.wandering.retriever.common.storekit.entity.Channel
 import kotlinx.datetime.Instant
 
-fun Channel.Network.Unpopulated.asUnpopulated() = Channel.Output.Unpopulated(
+fun Channel.Network.Unpopulated.asUnpopulatedOutput() = Channel.Output.Unpopulated(
     id = _id,
     userId = userId,
     graphId = graphId,
@@ -28,7 +28,7 @@ fun Channel.Output.Unpopulated.asLocal() = LocalChannel(
     createdAt = createdAt.toString()
 )
 
-fun LocalChannel.asUnpopulated(noteIds: List<String>, pinnerIds: List<String>) = Channel.Output.Unpopulated(
+fun LocalChannel.asUnpopulatedOutput(noteIds: List<String>, pinnerIds: List<String>) = Channel.Output.Unpopulated(
     id = id,
     userId = userId,
     graphId = graphId,
@@ -38,8 +38,20 @@ fun LocalChannel.asUnpopulated(noteIds: List<String>, pinnerIds: List<String>) =
     createdAt = Instant.parse(createdAt)
 )
 
-fun Channel.Network.asOutput(): Channel.Output = TODO()
+fun Channel.Network.Populated.asUnpopulatedOutput() = Channel.Output.Unpopulated(
+    id = _id,
+    createdAt = createdAt,
+    userId = user._id,
+    graphId = graph._id,
+    tagId = tag._id,
+    noteIds = notes.map { it._id },
+    pinnerIds = pinners.map { it._id }
+)
 
-fun Channel.Output.asLocal(): LocalChannel = TODO()
-
-fun LocalChannel.asOutput(): Channel.Output = TODO()
+fun Channel.Output.Unpopulated.asNodeOutput() = Channel.Output.Node(
+    id = id,
+    userId = userId,
+    graphId = graphId,
+    tagId = tagId,
+    createdAt = createdAt
+)

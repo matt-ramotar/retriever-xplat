@@ -1,0 +1,21 @@
+CREATE TABLE channelBookkeeper(
+    id TEXT NOT NULL PRIMARY KEY,
+    timestamp INTEGER
+);
+
+findById:
+SELECT *
+FROM channelBookkeeper
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO channelBookkeeper
+VALUES ?;
+
+clearById:
+DELETE
+FROM channelBookkeeper
+WHERE id = ?;
+
+clearAll:
+DELETE FROM channelBookkeeper;

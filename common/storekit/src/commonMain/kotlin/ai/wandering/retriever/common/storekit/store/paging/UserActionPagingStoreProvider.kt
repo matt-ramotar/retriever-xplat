@@ -4,7 +4,7 @@ import ai.wandering.retriever.common.storekit.LocalUserActionPage
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.bookkeeper.UserActionPageBookkeeper
-import ai.wandering.retriever.common.storekit.converter.asUnpopulated
+import ai.wandering.retriever.common.storekit.converter.asUnpopulatedOutput
 import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.entity.UserAction
 import ai.wandering.retriever.common.storekit.entity.paging.PagingResponse
@@ -34,7 +34,7 @@ class UserActionPagingStoreProvider(
                 require(networkPage is PagingResponse.Data)
 
                 PagingResponse.Data(
-                    page = PagingResponse.Data.Page(id = networkPage.page.id, objects = networkPage.page.objects?.map { it.asUnpopulated() }),
+                    page = PagingResponse.Data.Page(id = networkPage.page.id, objects = networkPage.page.objects?.map { it.asUnpopulatedOutput() }),
                     metadata = if (networkPage.metadata != null) PagingResponse.Data.Metadata(
                         totalObjects = networkPage.metadata.totalObjects,
                         totalPages = networkPage.metadata.totalPages,
@@ -53,7 +53,7 @@ class UserActionPagingStoreProvider(
                 )
             }
             .fromLocalToOutput { localPage ->
-                val userActions = localPage.objIds?.map { userActionId -> db.localUserActionQueries.findById(userActionId).executeAsOne().asUnpopulated() }
+                val userActions = localPage.objIds?.map { userActionId -> db.localUserActionQueries.findById(userActionId).executeAsOne().asUnpopulatedOutput() }
                 PagingResponse.Data(
                     page = PagingResponse.Data.Page(
                         id = localPage.id,

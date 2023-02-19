@@ -5,7 +5,7 @@ import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelsRestApi
 import ai.wandering.retriever.common.storekit.bookkeeper.ChannelsBookkeeper
 import ai.wandering.retriever.common.storekit.converter.asLocal
-import ai.wandering.retriever.common.storekit.converter.asUnpopulated
+import ai.wandering.retriever.common.storekit.converter.asUnpopulatedOutput
 import ai.wandering.retriever.common.storekit.db.queries.channel.asUnpopulated
 import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.Channels
@@ -25,7 +25,7 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
     MutableStoreProvider<String, Channels, List<Channel.Output.Unpopulated>, List<Channel.Output.Unpopulated>, Boolean> {
     override fun provideConverter(): Converter<Channels, List<Channel.Output.Unpopulated>, List<Channel.Output.Unpopulated>> =
         Converter.Builder<Channels, List<Channel.Output.Unpopulated>, List<Channel.Output.Unpopulated>>()
-            .fromNetworkToOutput { network -> network.channels.map { it.asUnpopulated() } }
+            .fromNetworkToOutput { network -> network.channels.map { it.asUnpopulatedOutput() } }
             .fromOutputToLocal { it }
             .fromLocalToOutput { it }
             .build()

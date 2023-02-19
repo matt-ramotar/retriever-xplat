@@ -1,7 +1,7 @@
 package ai.wandering.retriever.common.storekit.repository.impl
 
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
-import ai.wandering.retriever.common.storekit.converter.asUnpopulated
+import ai.wandering.retriever.common.storekit.converter.asUnpopulatedOutput
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
@@ -27,7 +27,7 @@ class RealUserNotificationsRepository(socket: UserNotificationsSocketApi, user: 
 
                     is RequestResult.Success -> {
                         println("Notifications: ${result.data}")
-                        _notifications.value = result.data.notifications.map { it.asUnpopulated() }
+                        _notifications.value = result.data.notifications.map { it.asUnpopulatedOutput() }
                     }
                 }
             }

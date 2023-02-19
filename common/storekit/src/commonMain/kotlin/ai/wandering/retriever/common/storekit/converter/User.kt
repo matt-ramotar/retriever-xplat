@@ -13,7 +13,7 @@ fun User.Network.asLocal(): LocalUser = LocalUser(
     bio = bio
 )
 
-fun User.Network.asUnpopulated(): User.Output.Unpopulated = User.Output.Unpopulated(
+fun User.Network.asUnpopulatedOutput(): User.Output.Unpopulated = User.Output.Unpopulated(
     id = _id,
     name = name,
     username = username,

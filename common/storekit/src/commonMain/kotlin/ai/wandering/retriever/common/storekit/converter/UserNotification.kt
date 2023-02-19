@@ -3,7 +3,7 @@ package ai.wandering.retriever.common.storekit.converter
 import ai.wandering.retriever.common.storekit.LocalUserNotification
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 
-fun UserNotification.Network.asUnpopulated(): UserNotification.Output.Unpopulated = UserNotification.Output.Unpopulated(
+fun UserNotification.Network.asUnpopulatedOutput(): UserNotification.Output.Unpopulated = UserNotification.Output.Unpopulated(
     id = _id,
     userId = userId,
     actionId = actionId,
@@ -17,7 +17,7 @@ fun UserNotification.Network.asLocal(): LocalUserNotification = LocalUserNotific
     type = UserNotification.Type.lookup(type)
 )
 
-fun LocalUserNotification.asUnpopulated(): UserNotification.Output.Unpopulated = UserNotification.Output.Unpopulated(
+fun LocalUserNotification.asUnpopulatedOutput(): UserNotification.Output.Unpopulated = UserNotification.Output.Unpopulated(
     id = id,
     userId = userId,
     actionId = actionId,
