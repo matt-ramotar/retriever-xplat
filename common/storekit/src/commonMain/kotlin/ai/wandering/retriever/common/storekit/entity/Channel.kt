@@ -2,12 +2,14 @@
 
 package ai.wandering.retriever.common.storekit.entity
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 sealed class Channel {
     @Serializable
     data class Network(
         val _id: String,
+        val createdAt: String,
 
         // Relationships
         val userId: String,
@@ -24,6 +26,7 @@ sealed class Channel {
         @Serializable
         data class Populated(
             val id: String,
+            val createdAt: Instant,
 
             // Relationships
             val user: User.Output.Node,
@@ -38,6 +41,7 @@ sealed class Channel {
         @Serializable
         data class Unpopulated(
             val id: String,
+            val createdAt: Instant,
 
             // Relationships
             val userId: String,
@@ -51,7 +55,8 @@ sealed class Channel {
 
         @Serializable
         data class Node(
-            val id: String
+            val id: String,
+            val createdAt: Instant
         ) : Output()
     }
 

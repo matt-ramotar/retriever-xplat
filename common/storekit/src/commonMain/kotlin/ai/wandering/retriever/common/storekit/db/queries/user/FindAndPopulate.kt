@@ -84,7 +84,7 @@ fun LocalUserQueries.findAndPopulate(userId: String): User.Output.Populated {
         .map { row -> Graph.Output.Node(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }
         .distinct()
     val pinnedChannels = userResponse.filter { row -> row.pinnedChannelId != null }
-        .map { row -> Channel.Output.Node(row.pinnedChannelId!!) }
+        .map { row -> Channel.Output.Node(row.pinnedChannelId!!, Instant.parse(row.pinnedChannelCreatedAt!!)) }
         .distinct()
 
     return User.Output.Populated(

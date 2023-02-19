@@ -1,5 +1,6 @@
 package ai.wandering.retriever.common.storekit.wiring
 
+import ai.wandering.retriever.common.storekit.LocalChannels
 import ai.wandering.retriever.common.storekit.LocalNoteRelationship
 import ai.wandering.retriever.common.storekit.LocalUserAction
 import ai.wandering.retriever.common.storekit.LocalUserActionPage
@@ -19,6 +20,7 @@ class RetrieverDatabaseProvider {
             localUserActionAdapter = LocalUserAction.Adapter(typeAdapter = EnumColumnAdapter()),
             localUserNotificationAdapter = LocalUserNotification.Adapter(typeAdapter = EnumColumnAdapter()),
             localUserNotificationsAdapter = LocalUserNotifications.Adapter(notificationIdsAdapter = ListOfStringsColumnAdapter()),
-            localUserActionPageAdapter = LocalUserActionPage.Adapter(objIdsAdapter = ListOfStringsColumnAdapter())
+            localUserActionPageAdapter = LocalUserActionPage.Adapter(objIdsAdapter = ListOfStringsColumnAdapter()),
+            localChannelsAdapter = LocalChannels.Adapter(channelIdsAdapter = ListOfStringsColumnAdapter())
         )
 }

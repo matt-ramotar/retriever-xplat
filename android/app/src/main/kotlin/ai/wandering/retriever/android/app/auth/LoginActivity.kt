@@ -13,6 +13,7 @@ import ai.wandering.retriever.android.app.wiring.AppDependencies
 import ai.wandering.retriever.android.common.sig.R
 import ai.wandering.retriever.android.common.sig.SigTheme
 import ai.wandering.retriever.android.common.sig.color.Sig
+import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.repository.auth.AuthRepository
@@ -58,6 +59,7 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val colors = systemThemeColors()
             val demoSignInState = demoSignInViewModel.value.state.collectAsState()
 
             SigTheme {
@@ -93,6 +95,14 @@ class LoginActivity : ComponentActivity() {
                             val value = serializer.encodeToString(User.Output.Unpopulated.serializer(), viewState.user)
                             userDataStore.edit { it[key] = value }
                             startMainActivity(viewState.user)
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(colors.standard.background)
+                        ) {
+
                         }
 
                     }

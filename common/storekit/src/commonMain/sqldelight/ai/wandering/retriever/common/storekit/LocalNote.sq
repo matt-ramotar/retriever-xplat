@@ -77,7 +77,7 @@ localChannel.id AS "channelId",
 localChannel.graphId AS "channelGraphId",
 localChannel.tagId AS "channelTagId",
 localChannel.userId AS "channelUserId",
-localChannel.created AS "channelCreated",
+localChannel.createdAt AS "channelCreatedAt",
 
 -- Tag
 localTag.name AS "tagName",

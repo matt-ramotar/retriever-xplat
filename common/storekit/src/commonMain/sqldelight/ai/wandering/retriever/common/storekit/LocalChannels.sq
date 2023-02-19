@@ -1,0 +1,23 @@
+import kotlin.collections.List;
+
+CREATE TABLE localChannels(
+    userId TEXT NOT NULL PRIMARY KEY,
+    channelIds TEXT AS List<String> NOT NULL
+);
+
+findById:
+SELECT *
+FROM localChannels
+WHERE userId = ?;
+
+upsert:
+INSERT OR REPLACE INTO localChannels
+VALUES ?;
+
+clearById:
+DELETE
+FROM localChannels
+WHERE userId = ?;
+
+clearAll:
+DELETE FROM localChannels;

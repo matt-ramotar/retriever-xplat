@@ -6,9 +6,9 @@ import ai.wandering.retriever.android.common.sig.color.Sig
 import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.common.storekit.LocalMentionQueries
-import ai.wandering.retriever.common.storekit.LocalTagQueries
 import ai.wandering.retriever.common.storekit.db.queries.mention.findAndPopulateOtherUsers
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
+import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.User
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FinderTab(
     user: AuthenticatedUser,
-    tags: LocalTagQueries,
+    channels: List<Channel.Output.Unpopulated>?,
     mentions: LocalMentionQueries,
     onNavigateToSearchTab: () -> Unit,
     onNavigateToMentionResults: (otherUserId: String) -> Unit,
@@ -52,6 +52,7 @@ fun FinderTab(
     onNavigateToTagResults: (name: String) -> Unit
 ) {
 
+    println("Channels: $channels")
     val searchState = remember { mutableStateOf(TextFieldValue()) }
 
     Column {
@@ -104,9 +105,11 @@ fun FinderTab(
                 Spacer(modifier = Modifier.size(12.dp))
             }
 
-            items(tags.find().executeAsList()) { tag ->
-                ChannelEntryPoint(name = tag.name, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToTagResults)
-                Spacer(modifier = Modifier.size(12.dp))
+            if (channels != null) {
+                items(channels) { channel ->
+                    ChannelEntryPoint(name = channel.id, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToTagResults)
+                    Spacer(modifier = Modifier.size(12.dp))
+                }
             }
 
         }

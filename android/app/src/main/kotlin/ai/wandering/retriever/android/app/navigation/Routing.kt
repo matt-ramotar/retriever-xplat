@@ -11,6 +11,7 @@ import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
 import ai.wandering.retriever.common.storekit.db.queries.note.findAndPopulate
 import ai.wandering.retriever.common.storekit.db.queries.user.findAndPopulate
+import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.UserAction
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,7 +33,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
+import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
 
 
 @Serializable
@@ -54,7 +61,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val api = appDependencies.api
     val userNotificationsRepository = userDependencies.userNotificationsRepository
     val notifications = userNotificationsRepository.notifications.collectAsState()
-
+    val channelsStore = userDependencies.channelsStore()
 
     NavHost(
         navController = navController, startDestination = Screen.Finder.route, modifier = Modifier
@@ -65,9 +72,45 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             Text("Home")
         }
         composable(Screen.Finder.route) {
+            val channelsStateFlow = MutableSharedFlow<List<Channel.Output.Unpopulated>>()
+            val channels = channelsStateFlow.collectAsState(null)
+
+            LaunchedEffect(user.id) {
+                channelsStore.stream<List<Channel.Output.Unpopulated>>(StoreReadRequest.fresh(user.id)).collectLatest { storeResponse ->
+                    when (storeResponse) {
+                        is StoreReadResponse.Data -> {
+                            // TODO()
+                            println("Data: ${storeResponse.value}")
+                            channelsStateFlow.emit(storeResponse.value)
+                        }
+
+                        is StoreReadResponse.Error.Exception -> {
+                            // TODO()
+                            println("Exception: ${storeResponse.error}")
+                        }
+
+                        is StoreReadResponse.Error.Message -> {
+                            // TODO()
+                            println("Message: ${storeResponse.message}")
+                        }
+
+                        is StoreReadResponse.Loading -> {
+                            // TODO()
+                            println("Loading")
+                        }
+
+                        is StoreReadResponse.NoNewData -> {
+                            // TODO()
+                            println("No new data")
+                        }
+                    }
+                }
+            }
+
+
             FinderTab(
                 user = user,
-                tags = database.localTagQueries,
+                channels = channels.value,
                 mentions = database.localMentionQueries,
                 onNavigateToMentionResults = { navController.navigate("notes/m/$it") },
                 onNavigateToSearchTab = {

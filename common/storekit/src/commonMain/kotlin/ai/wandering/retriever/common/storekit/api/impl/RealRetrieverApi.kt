@@ -4,11 +4,11 @@ import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.api.paging.collection.NotePagingApi
 import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.AuthApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.GraphRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.MentionRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.NoteRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.TagRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.GraphRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.MentionRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.NoteRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.TagRestApi
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 
 class RealRetrieverApi(

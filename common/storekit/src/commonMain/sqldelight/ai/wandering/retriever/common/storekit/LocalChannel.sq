@@ -3,7 +3,7 @@ CREATE TABLE localChannel(
     userId TEXT NOT NULL,
     graphId TEXT NOT NULL,
     tagId TEXT NOT NULL,
-    created TEXT NOT NULL
+    createdAt TEXT NOT NULL
 );
 
 find:
@@ -26,3 +26,12 @@ WHERE id = ?;
 
 clearAll:
 DELETE FROM localChannel;
+
+findByIdAsUnpopulated:
+SELECT localChannel.id, localChannel.userId, localChannel.createdAt, localChannel.graphId, localChannel.tagId, pinner.userId AS "pinnerId", noteChannel.noteId AS "noteId"
+FROM localChannel
+LEFT JOIN userPinnedChannel pinner
+ON pinner.channelId == localChannel.id
+LEFT JOIN noteChannel
+ON noteChannel.channelId == localChannel.id
+WHERE localChannel.id = ?;

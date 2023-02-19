@@ -12,6 +12,7 @@ import ai.wandering.retriever.common.storekit.api.impl.auth.RealOneTapSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.paging.RealNotePagingApi
 import ai.wandering.retriever.common.storekit.api.impl.paging.RealUserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelRestApi
+import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelsRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealGraphRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealMentionRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealNoteRestApi
@@ -22,11 +23,12 @@ import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPa
 import ai.wandering.retriever.common.storekit.api.rest.auth.AuthApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.DemoSignInApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.OneTapSignInApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.GraphRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.MentionRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.NoteRestApi
-import ai.wandering.retriever.common.storekit.api.rest.collection.TagRestApi
+import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelsRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.GraphRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.MentionRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.NoteRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.TagRestApi
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.networking.HttpClientProvider
 import ai.wandering.retriever.common.storekit.repository.auth.AuthRepository
@@ -60,6 +62,9 @@ object AppModule {
 
     @Provides
     fun provideChannelRestApi(): ChannelRestApi = RealChannelRestApi(httpClient)
+
+    @Provides
+    fun provideChannelsRestApi(): ChannelsRestApi = RealChannelsRestApi(httpClient)
 
     @Provides
     fun provideGraphRestApi(): GraphRestApi = RealGraphRestApi(httpClient)

@@ -1,7 +1,7 @@
 CREATE TABLE localThread(
     id TEXT NOT NULL PRIMARY KEY,
     userId TEXT NOT NULL,
-    created TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
