@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(project(":android:common:coroutines"))
     implementation(project(":android:common:sig"))
+    implementation(project(":android:common:channels"))
     implementation(project(":android:common:navigation"))
     implementation(project(":android:common:scoping"))
     implementation(project(":common:storekit"))

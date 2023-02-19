@@ -3,6 +3,7 @@ package ai.wandering.retriever.android.common.scoping
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.ChannelRepository
+import ai.wandering.retriever.common.storekit.repository.ChannelsManager
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import ai.wandering.retriever.common.storekit.store.ChannelStore
 import ai.wandering.retriever.common.storekit.store.ChannelsStore
@@ -23,4 +24,5 @@ interface UserDependencies {
     fun channelStore(): ChannelStore
 
     val channelRepository: ChannelRepository
+    val channelsManager: ChannelsManager
 }

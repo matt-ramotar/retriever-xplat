@@ -1,5 +1,7 @@
 package ai.wandering.retriever.android.app.wiring
 
+import ai.wandering.retriever.common.storekit.repository.ChannelsManager
+import ai.wandering.retriever.android.common.channels.RealChannelsManager
 import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.android.common.scoping.UserScope
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
@@ -19,6 +21,8 @@ import ai.wandering.retriever.common.storekit.store.single.ChannelStoreProvider
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 
 
@@ -54,5 +58,12 @@ object UserModule {
         @Named(Stores.Single.Channel) channelStore: ChannelStore,
         @Named(Stores.Collection.Channel) channelsStore: ChannelsStore,
     ): ChannelRepository = RealChannelRepository(channelStore, channelsStore)
+
+    @SingleIn(UserScope::class)
+    @Provides
+    fun provideChannelsManager(
+        user: AuthenticatedUser,
+        repository: ChannelRepository
+    ): ChannelsManager = RealChannelsManager(user, repository, CoroutineScope(Dispatchers.Default))
 
 }

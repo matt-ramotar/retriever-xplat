@@ -25,6 +25,7 @@ rootProject.name = "retriever"
 
 include(":android:app")
 include(":android:common:coroutines")
+include(":android:common:channels")
 include(":android:common:sig")
 include(":android:common:navigation")
 include(":android:common:scoping")

@@ -31,6 +31,7 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
             .build()
 
     override fun provideFetcher(): Fetcher<String, Channels> = Fetcher.of { userId ->
+        println("Hitting 2")
         when (val result = api.get(userId)) {
             is RequestResult.Exception -> {
                 println("Fetcher exception: ${result.error}")
