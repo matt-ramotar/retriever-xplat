@@ -1,6 +1,7 @@
 package ai.wandering.retriever.android.app.wiring
 
 import ai.wandering.retriever.android.common.scoping.AppScope
+import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.common.socket.Socket
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.api.impl.Endpoints
@@ -44,6 +45,7 @@ object AppModule {
     private val httpClient = HttpClientProvider().provide()
 
 
+    @SingleIn(AppScope::class)
     @Provides
     fun provideSerializer(): Json = Json { ignoreUnknownKeys = true; isLenient = true; }
 
@@ -77,14 +79,21 @@ object AppModule {
     @Provides
     fun provideUserActionPagingApi(): UserActionPagingApi = RealUserActionPagingApi(httpClient)
 
+    @SingleIn(AppScope::class)
     @Provides
-    fun provideUserNotificationsSocketApi(serializer: Json): UserNotificationsSocketApi = RealUserNotificationsSocketApi(
-        serializer = serializer,
-        socket = Socket(
+    fun provideUserNotificationsSocketApi(serializer: Json): UserNotificationsSocketApi {
+        val socket = Socket(
             endpoint = Endpoints.SOCKET,
-            scope = CoroutineScope(Dispatchers.IO)
+            scope = CoroutineScope(Dispatchers.Default)
         )
-    )
+
+        socket.connect()
+
+        return RealUserNotificationsSocketApi(
+            serializer = serializer,
+            socket = socket
+        )
+    }
 
     @Provides
     fun provideRetrieverApi(

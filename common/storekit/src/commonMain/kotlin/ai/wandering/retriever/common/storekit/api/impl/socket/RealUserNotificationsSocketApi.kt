@@ -12,9 +12,16 @@ import kotlinx.serialization.json.Json
 
 class RealUserNotificationsSocketApi(private val serializer: Json, private val socket: Socket) : UserNotificationsSocketApi {
     override fun subscribe(id: String): Flow<RequestResult<UserNotifications>> = MutableSharedFlow<RequestResult<UserNotifications>>().also { sharedFlow ->
+        println("id: $id")
+
+        socket.emit(SocketEvents.NOTIFICATIONS, id)
+        println("Emitted")
+
         socket.on(SocketEvents.NOTIFICATIONS) { response ->
             try {
+                println("Response: $response")
                 val notificationsJson = response.firstOrNull()?.toString()
+                println("Notifications JSON: $notificationsJson")
                 if (notificationsJson != null) {
                     val notifications = serializer.decodeFromString<UserNotifications>(notificationsJson)
                     sharedFlow.emit(RequestResult.Success(notifications))
@@ -25,8 +32,5 @@ class RealUserNotificationsSocketApi(private val serializer: Json, private val s
                 sharedFlow.emit(RequestResult.Exception(error))
             }
         }
-
-        socket.emit(SocketEvents.NOTIFICATIONS, id)
-
     }
 }

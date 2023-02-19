@@ -1,5 +1,6 @@
 package ai.wandering.retriever.android.app.wiring
 
+import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.android.common.scoping.UserScope
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
@@ -13,6 +14,7 @@ import dagger.Provides
 @Module
 @ContributesTo(UserScope::class)
 object UserModule {
+    @SingleIn(UserScope::class)
     @Provides
     fun provideUserNotificationsRepository(
         socket: UserNotificationsSocketApi,

@@ -26,6 +26,7 @@ class RealUserNotificationsRepository(socket: UserNotificationsSocketApi, user: 
                     }
 
                     is RequestResult.Success -> {
+                        println("Notifications: ${result.data}")
                         _notifications.value = result.data.notifications.map { it.asUnpopulated() }
                     }
                 }
