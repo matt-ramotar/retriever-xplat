@@ -34,8 +34,8 @@ sealed class UserAction {
         TaggedInNote("TaggedInNote");
 
         companion object {
-            private val valueToType = UserAction.Type.values().associateBy { it.value }
-            fun lookup(value: String): UserAction.Type = valueToType[value]!!
+            private val valueToType = Type.values().associateBy { it.value }
+            fun lookup(value: String): Type = valueToType[value]!!
         }
     }
 

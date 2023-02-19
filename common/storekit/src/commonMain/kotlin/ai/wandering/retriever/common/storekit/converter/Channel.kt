@@ -5,7 +5,7 @@ import ai.wandering.retriever.common.storekit.LocalChannels
 import ai.wandering.retriever.common.storekit.entity.Channel
 import kotlinx.datetime.Instant
 
-fun Channel.Network.asUnpopulated() = Channel.Output.Unpopulated(
+fun Channel.Network.Unpopulated.asUnpopulated() = Channel.Output.Unpopulated(
     id = _id,
     userId = userId,
     graphId = graphId,
@@ -37,3 +37,9 @@ fun LocalChannel.asUnpopulated(noteIds: List<String>, pinnerIds: List<String>) =
     pinnerIds = pinnerIds,
     createdAt = Instant.parse(createdAt)
 )
+
+fun Channel.Network.asOutput(): Channel.Output = TODO()
+
+fun Channel.Output.asLocal(): LocalChannel = TODO()
+
+fun LocalChannel.asOutput(): Channel.Output = TODO()

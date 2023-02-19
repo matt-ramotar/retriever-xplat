@@ -5,7 +5,19 @@ import org.mobilenativefoundation.store.store5.MutableStore
 
 
 object Stores {
-    const val Channels = "ChannelsStore"
+    object Single {
+        const val Channel = "ChannelStore"
+    }
+
+    object Collection {
+        const val Channel = "ChannelsStore"
+    }
+
+    object Socket {}
+
+    object Paging {}
+
 }
 
 typealias ChannelsStore = MutableStore<String, List<Channel.Output.Unpopulated>>
+typealias ChannelStore = MutableStore<String, Channel.Output>

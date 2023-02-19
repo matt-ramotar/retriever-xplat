@@ -7,19 +7,42 @@ import kotlinx.serialization.Serializable
 
 sealed class Channel {
     @Serializable
-    data class Network(
-        val _id: String,
-        val createdAt: String,
+    sealed class Network : Channel() {
+        @Serializable
+        data class Unpopulated(
+            val _id: String,
+            val createdAt: String,
+            val userId: String,
+            val graphId: String,
+            val tagId: String,
 
-        // Relationships
-        val userId: String,
-        val graphId: String,
-        val tagId: String,
+            // Relationships
+            val noteIds: List<String>,
+            val pinnerIds: List<String>
+        ) : Network()
 
-        // M-M
-        val noteIds: List<String>,
-        val pinnerIds: List<String>
-    ) : Channel()
+        @Serializable
+        data class Populated(
+            val _id: String,
+            val createdAt: Instant,
+            val user: User.Network,
+            val graph: Graph.Network,
+            val tag: Tag.Network,
+
+            // Relationships
+            val notes: List<Note.Network>,
+            val pinners: List<User.Network>
+        ) : Output()
+
+        @Serializable
+        data class Node(
+            val _id: String,
+            val userId: String,
+            val graphId: String,
+            val tagId: String,
+            val createdAt: Instant
+        )
+    }
 
     @Serializable
     sealed class Output : Channel() {
@@ -27,14 +50,12 @@ sealed class Channel {
         data class Populated(
             val id: String,
             val createdAt: Instant,
+            val user: User.Output.Node,
+            val graph: Graph.Output.Node,
+            val tag: Tag.Output.Node,
 
             // Relationships
-            val user: User.Output.Node,
-            val graph: Graph.Output.Populated,
-            val tag: Tag.Output.Populated,
-
-            // M-M
-            val notes: List<Note.Output.Unpopulated>,
+            val notes: List<Note.Output.Node>,
             val pinners: List<User.Output.Node>
         ) : Output()
 
@@ -42,13 +63,11 @@ sealed class Channel {
         data class Unpopulated(
             val id: String,
             val createdAt: Instant,
-
-            // Relationships
             val userId: String,
             val graphId: String,
             val tagId: String,
 
-            // M-M
+            // Relationships
             val noteIds: List<String>,
             val pinnerIds: List<String>
         ) : Output()
@@ -56,6 +75,9 @@ sealed class Channel {
         @Serializable
         data class Node(
             val id: String,
+            val userId: String,
+            val graphId: String,
+            val tagId: String,
             val createdAt: Instant
         ) : Output()
     }

@@ -35,3 +35,74 @@ ON pinner.channelId == localChannel.id
 LEFT JOIN noteChannel
 ON noteChannel.channelId == localChannel.id
 WHERE localChannel.id = ?;
+
+findByIdAsPopulated:
+SELECT
+
+-- Channel
+localChannel.id,
+localChannel.userId,
+localChannel.createdAt,
+localChannel.graphId,
+localChannel.tagId,
+
+-- User
+user.id AS "userId",
+user.name AS "userName",
+user.username AS "userUsername",
+user.email AS "userEmail",
+user.bio AS "userBio",
+user.avatarUrl AS "userAvatarUrl",
+user.coverImageUrl AS "userCoverImageUrl",
+
+-- Graph
+graph.id AS "graphId",
+graph.name AS "graphName",
+graph.ownerId AS "graphOwnerId",
+graph.createdAt AS "graphCreatedAt",
+
+-- Tag
+tag.id AS "tagId",
+tag.name AS "tagName",
+
+-- Pinner
+pinner.id AS "pinnerId",
+pinner.name AS "pinnerName",
+pinner.username AS "pinnerUsername",
+pinner.email AS "pinnerEmail",
+pinner.bio AS "pinnerBio",
+pinner.avatarUrl AS "pinnerAvatarUrl",
+pinner.coverImageUrl AS "pinnerCoverImageUrl",
+
+-- Note
+note.id AS "noteId",
+note.userId AS "noteUserId",
+note.content AS "noteContent",
+note.createdAt AS "noteCreatedAt",
+note.updatedAt AS "noteUpdatedAt",
+note.is_read AS "noteIsRead"
+
+FROM localChannel
+
+LEFT JOIN localUser user
+ON user.id == localChannel.userId
+
+LEFT JOIN localGraph graph
+ON graph.id == localChannel.graphId
+
+LEFT JOIN localTag tag
+ON tag.id == localChannel.tagId
+
+LEFT JOIN userPinnedChannel
+ON userPinnedChannel.channelId == localChannel.id
+
+LEFT JOIN localUser pinner
+ON pinner.id == userPinnedChannel.userId
+
+LEFT JOIN noteChannel
+ON noteChannel.channelId == localChannel.id
+
+LEFT JOIN localNote note
+ON note.id == noteChannel.noteId
+
+WHERE localChannel.id = ?;

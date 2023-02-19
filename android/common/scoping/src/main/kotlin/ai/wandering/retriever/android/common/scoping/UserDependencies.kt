@@ -14,6 +14,6 @@ interface UserDependencies {
     val api: RetrieverApi
     val userNotificationsRepository: UserNotificationsRepository
 
-    @Named(Stores.Channels)
+    @Named(Stores.Collection.Channel)
     fun channelsStore(): ChannelsStore
 }

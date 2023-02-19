@@ -104,6 +104,7 @@ object AppModule {
     fun provideRetrieverApi(
         authApi: AuthApi,
         channelRestApi: ChannelRestApi,
+        channelsRestApi: ChannelsRestApi,
         graphRestApi: GraphRestApi,
         mentionRestApi: MentionRestApi,
         noteRestApi: NoteRestApi,
@@ -114,6 +115,7 @@ object AppModule {
     ): RetrieverApi = RealRetrieverApi(
         auth = authApi,
         channel = channelRestApi,
+        channels = channelsRestApi,
         graph = graphRestApi,
         mention = mentionRestApi,
         note = noteRestApi,

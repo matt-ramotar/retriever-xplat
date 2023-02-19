@@ -1,5 +1,6 @@
 package ai.wandering.retriever.common.storekit.api.impl.rest
 
+import ai.wandering.retriever.common.storekit.api.impl.Collection
 import ai.wandering.retriever.common.storekit.api.impl.Endpoints
 import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
 import ai.wandering.retriever.common.storekit.entity.Channel
@@ -10,13 +11,13 @@ import io.ktor.client.request.get
 
 class RealChannelRestApi(private val client: HttpClient) : ChannelRestApi {
     override suspend fun get(id: String): RequestResult<Channel.Network> = try {
-        val response = client.get("${Endpoints.CHANNEL}/$id")
+        val response = client.get(Endpoints.single(id = id, collection = Collection.Channel, populate = true))
         RequestResult.Success(response.body())
     } catch (error: Throwable) {
         RequestResult.Exception(error)
     }
 
-    override suspend fun upsert(input: Channel.Output.Unpopulated): RequestResult<Boolean> {
+    override suspend fun upsert(input: Channel.Output): RequestResult<Boolean> {
         TODO("Not yet implemented")
     }
 

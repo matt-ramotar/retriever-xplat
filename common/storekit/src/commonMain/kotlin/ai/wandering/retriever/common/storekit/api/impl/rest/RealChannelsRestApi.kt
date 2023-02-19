@@ -11,7 +11,7 @@ import io.ktor.client.request.get
 
 class RealChannelsRestApi(private val client: HttpClient) : ChannelsRestApi {
     override suspend fun get(userId: String): RequestResult<Channels> = try {
-        val endpoint = Endpoints.generate(userId, Collection.Channel)
+        val endpoint = Endpoints.collection(userId, Collection.Channel)
         val response = client.get(endpoint)
         RequestResult.Success(response.body())
     } catch (error: Throwable) {

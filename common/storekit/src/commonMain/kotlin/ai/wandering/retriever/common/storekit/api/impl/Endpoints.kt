@@ -13,5 +13,6 @@ object Endpoints {
     const val PAGING_USER_ACTION = "$ROOT/paging/user_action"
     const val VALIDATE_TOKEN = "$ROOT/auth/token"
 
-    fun generate(userId: String, collection: Collection) = "$USER/$userId/${collection.value}"
+    fun single(id: String, collection: Collection, populate: Boolean = false) = "$ROOT/${collection.value}/$id?populate=$populate"
+    fun collection(userId: String, collection: Collection, populate: Boolean = false) = "$USER/$userId/${collection.value}?populate=$populate"
 }

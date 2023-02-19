@@ -14,8 +14,8 @@ sealed class NoteRelationship {
         BidirectionalReference("BidirectionalReference");
 
         companion object {
-            private val valueToType = NoteRelationship.Type.values().associateBy { it.value }
-            fun lookup(value: String): NoteRelationship.Type = valueToType[value]!!
+            private val valueToType = Type.values().associateBy { it.value }
+            fun lookup(value: String): Type = valueToType[value]!!
         }
     }
 
