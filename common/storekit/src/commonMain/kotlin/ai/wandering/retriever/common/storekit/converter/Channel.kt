@@ -55,3 +55,29 @@ fun Channel.Output.Unpopulated.asNodeOutput() = Channel.Output.Node(
     tagId = tagId,
     createdAt = createdAt
 )
+
+fun Channel.Network.Populated.asPopulatedOutput() = Channel.Output.Populated(
+    id = _id,
+    createdAt = createdAt,
+    user = user.asNodeOutput(),
+    graph = graph.asNodeOutput(),
+    tag = tag.asNodeOutput(),
+    notes = notes.map { it.asNodeOutput() },
+    pinners = pinners.map { it.asNodeOutput() }
+)
+
+fun Channel.Output.Populated.asLocal() = LocalChannel(
+    id = id,
+    userId = user.id,
+    graphId = graph.id,
+    tagId = tag.id,
+    createdAt = createdAt.toString()
+)
+
+fun Channel.Output.Populated.asNodeOutput() = Channel.Output.Node(
+    id = id,
+    userId = user.id,
+    graphId = graph.id,
+    tagId = tag.id,
+    createdAt = createdAt
+)

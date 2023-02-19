@@ -32,3 +32,13 @@ fun User.Network.asUnpopulatedOutput(): User.Output.Unpopulated = User.Output.Un
     pinnedNoteIds = pinnedNoteIds,
     actionIds = actionIds
 )
+
+fun User.Network.asNodeOutput(): User.Output.Node = User.Output.Node(
+    id = _id,
+    name = name,
+    username = username,
+    email = email,
+    avatarUrl = avatarUrl,
+    coverImageUrl = coverImageUrl,
+    bio = bio,
+)

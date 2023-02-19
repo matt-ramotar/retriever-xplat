@@ -7,7 +7,9 @@ import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelsRestAp
 import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
+import ai.wandering.retriever.common.storekit.repository.ChannelRepository
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
+import ai.wandering.retriever.common.storekit.repository.impl.RealChannelRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealUserNotificationsRepository
 import ai.wandering.retriever.common.storekit.store.ChannelStore
 import ai.wandering.retriever.common.storekit.store.ChannelsStore
@@ -45,4 +47,12 @@ object UserModule {
         api: ChannelRestApi,
         db: RetrieverDatabase
     ): ChannelStore = ChannelStoreProvider(api, db).provideMutableStore()
+
+    @SingleIn(UserScope::class)
+    @Provides
+    fun provideChannelRepository(
+        @Named(Stores.Single.Channel) channelStore: ChannelStore,
+        @Named(Stores.Collection.Channel) channelsStore: ChannelsStore,
+    ): ChannelRepository = RealChannelRepository(channelStore, channelsStore)
+
 }
