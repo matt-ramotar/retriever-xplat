@@ -6,11 +6,11 @@ CREATE TABLE localChannel(
     created TEXT NOT NULL
 );
 
-getAll:
+find:
 SELECT *
 FROM localChannel;
 
-getById:
+findById:
 SELECT *
 FROM localChannel
 WHERE id = ?;

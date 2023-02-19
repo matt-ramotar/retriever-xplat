@@ -2,7 +2,7 @@ package ai.wandering.retriever.common.storekit.repository.impl
 
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.converter.asUnpopulated
-import ai.wandering.retriever.common.storekit.entity.User
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import ai.wandering.retriever.common.storekit.result.RequestResult
@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class RealUserNotificationsRepository(api: UserNotificationsSocketApi, user: User.Output.Unpopulated) : UserNotificationsRepository {
+class RealUserNotificationsRepository(socket: UserNotificationsSocketApi, user: AuthenticatedUser) : UserNotificationsRepository {
     private val _notifications = MutableStateFlow<List<UserNotification.Output.Unpopulated>>(listOf())
     override val notifications: StateFlow<List<UserNotification.Output.Unpopulated>> = _notifications
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
-            api.subscribe(user.id).collectLatest { result ->
+            socket.subscribe(user.id).collectLatest { result ->
                 when (result) {
                     is RequestResult.Exception -> {
                         println("Error: ${result.error}")

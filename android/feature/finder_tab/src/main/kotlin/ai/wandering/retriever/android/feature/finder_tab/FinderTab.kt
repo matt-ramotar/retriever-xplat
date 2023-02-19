@@ -7,8 +7,9 @@ import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.common.storekit.LocalMentionQueries
 import ai.wandering.retriever.common.storekit.LocalTagQueries
-import ai.wandering.retriever.common.storekit.entity.user.output.User
-import ai.wandering.retriever.common.storekit.extension.findAndPopulateOtherUsers
+import ai.wandering.retriever.common.storekit.db.queries.mention.findAndPopulateOtherUsers
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
+import ai.wandering.retriever.common.storekit.entity.User
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +43,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun FinderTab(
-    user: User,
+    user: AuthenticatedUser,
     tags: LocalTagQueries,
     mentions: LocalMentionQueries,
     onNavigateToSearchTab: () -> Unit,
@@ -103,7 +104,7 @@ fun FinderTab(
                 Spacer(modifier = Modifier.size(12.dp))
             }
 
-            items(tags.getAll().executeAsList()) { tag ->
+            items(tags.find().executeAsList()) { tag ->
                 ChannelEntryPoint(name = tag.name, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = onNavigateToTagResults)
                 Spacer(modifier = Modifier.size(12.dp))
             }
@@ -120,7 +121,7 @@ private fun ChannelEntryPoint(name: String, unreadMentions: Int, unreadMessages:
 }
 
 @Composable
-private fun MentionEntryPoint(user: User, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (otherUserId: String) -> Unit) {
+private fun MentionEntryPoint(user: User.Output.Populated, unreadMentions: Int, unreadMessages: Int, onNavigateToNotesTab: (otherUserId: String) -> Unit) {
     val painter = painterResource(id = R.drawable.mention)
     EntryPoint(user.username, painter, unreadMentions, unreadMessages) { onNavigateToNotesTab(user.id) }
 }

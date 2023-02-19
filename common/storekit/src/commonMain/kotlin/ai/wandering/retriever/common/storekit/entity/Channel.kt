@@ -26,13 +26,13 @@ sealed class Channel {
             val id: String,
 
             // Relationships
-            val user: User.Output.Unpopulated,
+            val user: User.Output.Node,
             val graph: Graph.Output.Populated,
             val tag: Tag.Output.Populated,
 
             // M-M
             val notes: List<Note.Output.Unpopulated>,
-            val pinners: List<User.Output.Unpopulated>
+            val pinners: List<User.Output.Node>
         ) : Output()
 
         @Serializable
@@ -47,6 +47,11 @@ sealed class Channel {
             // M-M
             val noteIds: List<String>,
             val pinnerIds: List<String>
+        ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String
         ) : Output()
     }
 

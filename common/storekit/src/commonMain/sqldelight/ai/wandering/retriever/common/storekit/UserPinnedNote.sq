@@ -6,11 +6,11 @@ CREATE TABLE userPinnedNote(
     PRIMARY KEY (userId, noteId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userPinnedNote;
 
-getById:
+findById:
 SELECT *
 FROM userPinnedNote
 WHERE userId = ? AND noteId = ?;

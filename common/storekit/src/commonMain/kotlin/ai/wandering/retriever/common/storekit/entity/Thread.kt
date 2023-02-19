@@ -20,7 +20,7 @@ sealed class Thread {
             val id: String,
             val title: String?,
             val description: String?,
-            val User: User.Output.Unpopulated,
+            val User: User.Output.Node,
         ) : Output()
 
         @Serializable

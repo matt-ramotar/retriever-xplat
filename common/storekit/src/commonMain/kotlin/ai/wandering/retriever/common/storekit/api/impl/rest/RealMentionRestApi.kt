@@ -3,8 +3,9 @@ package ai.wandering.retriever.common.storekit.api.impl.rest
 import ai.wandering.retriever.common.storekit.api.rest.collection.MentionRestApi
 import ai.wandering.retriever.common.storekit.entity.Mention
 import ai.wandering.retriever.common.storekit.result.RequestResult
+import io.ktor.client.HttpClient
 
-class RealMentionRestApi : MentionRestApi {
+class RealMentionRestApi(private val client: HttpClient) : MentionRestApi {
     override suspend fun delete(id: String): RequestResult<Boolean> {
         TODO("Not yet implemented")
     }

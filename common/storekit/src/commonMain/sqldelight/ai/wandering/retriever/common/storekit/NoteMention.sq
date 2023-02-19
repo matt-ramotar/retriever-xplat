@@ -9,7 +9,7 @@ CREATE TABLE noteMention(
     PRIMARY KEY (noteId, userId, otherUserId)
 );
 
-getById:
+findById:
 SELECT *
 FROM noteMention
 WHERE noteId = ? AND userId = ? AND otherUserId = ?;

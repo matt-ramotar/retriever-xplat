@@ -1,27 +1,27 @@
-import ai.wandering.retriever.common.storekit.entities.note.Relationship;
+import ai.wandering.retriever.common.storekit.entity.NoteRelationship.Type;
 
-CREATE TABLE noteRelationship(
+CREATE TABLE localNoteRelationship(
     noteId TEXT NOT NULL,
     otherNoteId TEXT NOT NULL,
-    type TEXT AS Relationship.Type NOT NULL,
+    type TEXT AS Type NOT NULL,
     FOREIGN KEY (noteId) REFERENCES localNote (id),
     FOREIGN KEY (otherNoteId) REFERENCES localNote (id),
     PRIMARY KEY (noteId, otherNoteId, type)
 );
 
-getById:
+findById:
 SELECT *
-FROM noteRelationship
+FROM localNoteRelationship
 WHERE noteId = ? AND otherNoteId = ? AND type = ?;
 
 upsert:
-INSERT OR REPLACE INTO noteRelationship
+INSERT OR REPLACE INTO localNoteRelationship
 VALUES ?;
 
 clearById:
 DELETE
-FROM noteRelationship
+FROM localNoteRelationship
 WHERE noteId = ? AND otherNoteId = ? AND type = ?;
 
 clearAll:
-DELETE FROM noteRelationship;
+DELETE FROM localNoteRelationship;

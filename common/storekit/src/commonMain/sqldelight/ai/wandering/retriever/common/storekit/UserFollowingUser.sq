@@ -6,11 +6,11 @@ CREATE TABLE userFollowingUser(
     PRIMARY KEY (userId, otherUserId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userFollowingUser;
 
-getById:
+findById:
 SELECT *
 FROM userFollowingUser
 WHERE userId = ? AND otherUserId = ?;

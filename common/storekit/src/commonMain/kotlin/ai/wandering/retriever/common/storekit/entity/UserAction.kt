@@ -52,13 +52,21 @@ sealed class UserAction {
         @Serializable
         data class Populated<out T : Any>(
             val id: String,
-            val user: User.Output.Unpopulated,
+            val user: User.Output.Node,
             val obj: T,
             val type: Type
         ) : Output()
 
         @Serializable
         data class Unpopulated(
+            val id: String,
+            val userId: String,
+            val objId: String,
+            val type: Type
+        ) : Output()
+
+        @Serializable
+        data class Node(
             val id: String,
             val userId: String,
             val objId: String,

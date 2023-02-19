@@ -6,11 +6,11 @@ CREATE TABLE userPinnedChannel(
     PRIMARY KEY (userId, channelId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userPinnedChannel;
 
-getById:
+findById:
 SELECT *
 FROM userPinnedChannel
 WHERE userId = ? AND channelId = ?;

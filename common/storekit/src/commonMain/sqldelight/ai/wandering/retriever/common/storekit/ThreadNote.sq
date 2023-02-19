@@ -8,7 +8,7 @@ CREATE TABLE threadNote(
     PRIMARY KEY (threadId, noteId, parentNoteId)
 );
 
-getById:
+findById:
 SELECT *
 FROM threadNote
 WHERE threadId = ? AND noteId = ? AND parentNoteId = ?;

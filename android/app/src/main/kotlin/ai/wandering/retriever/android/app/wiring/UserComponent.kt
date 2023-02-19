@@ -1,11 +1,11 @@
 package ai.wandering.retriever.android.app.wiring
 
-import com.squareup.anvil.annotations.ContributesSubcomponent
-import com.squareup.anvil.annotations.ContributesTo
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.android.common.scoping.UserScope
-import ai.wandering.retriever.common.storekit.entity.user.output.User
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
+import com.squareup.anvil.annotations.ContributesSubcomponent
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.BindsInstance
 
 @SingleIn(UserScope::class)
@@ -14,7 +14,7 @@ interface UserComponent {
     @ContributesSubcomponent.Factory
     interface Factory {
         fun create(
-            @BindsInstance user: User
+            @BindsInstance user: AuthenticatedUser
         ): UserComponent
     }
 

@@ -32,8 +32,8 @@ sealed class Mention {
         @Serializable
         data class Populated(
             val id: String,
-            val user: User.Output.Unpopulated,
-            val otherUser: User.Output.Unpopulated,
+            val user: User.Output.Node,
+            val otherUser: User.Output.Node,
 
             // Relationships
             val notes: List<Note.Output.Unpopulated>,
@@ -47,6 +47,13 @@ sealed class Mention {
 
             // Relationships
             val noteIds: List<String>,
+        ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val userId: String,
+            val otherUserId: String
         ) : Output()
     }
 }

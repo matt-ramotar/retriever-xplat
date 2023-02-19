@@ -37,8 +37,8 @@ sealed class Graph {
             val name: String,
 
             // Relationships
-            val followers: List<User.Output.Unpopulated>,
-            val pinners: List<User.Output.Unpopulated>
+            val followers: List<User.Output.Node>,
+            val pinners: List<User.Output.Node>
         ) : Output()
 
         @Serializable
@@ -50,6 +50,13 @@ sealed class Graph {
             // Relationships
             val followerIds: List<String>,
             val pinnerIds: List<String>
+        ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val userId: String,
+            val name: String
         ) : Output()
     }
 }

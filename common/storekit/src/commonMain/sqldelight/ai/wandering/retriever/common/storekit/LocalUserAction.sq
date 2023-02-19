@@ -8,7 +8,7 @@ CREATE TABLE localUserAction(
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
-getById:
+findById:
 SELECT *
 FROM localUserAction
 WHERE id = ?;

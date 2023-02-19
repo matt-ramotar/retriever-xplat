@@ -6,11 +6,11 @@ CREATE TABLE userPinnedGraph(
     PRIMARY KEY (userId, graphId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userPinnedGraph;
 
-getById:
+findById:
 SELECT *
 FROM userPinnedGraph
 WHERE userId = ? AND graphId = ?;

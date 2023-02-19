@@ -47,7 +47,7 @@ sealed class UserNotification {
         @Serializable
         data class Populated<out T : Any>(
             val id: String,
-            val user: User.Output.Unpopulated,
+            val user: User.Output.Node,
             val action: UserAction.Output.Populated<T>,
             val type: Type
         ) : Output()

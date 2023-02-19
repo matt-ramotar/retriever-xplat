@@ -7,7 +7,7 @@ import ai.wandering.retriever.android.common.sig.color.systemThemeColors
 import ai.wandering.retriever.android.common.sig.component.Avatar
 import ai.wandering.retriever.android.common.sig.component.OpacityButton
 import ai.wandering.retriever.android.common.sig.component.PrimaryButton
-import ai.wandering.retriever.common.storekit.entity.user.output.User
+import ai.wandering.retriever.common.storekit.entity.User
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -35,7 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AccountTab(user: User, onNavigateToProfile: () -> Unit) {
+fun AccountTab(user: User.Output.Populated, onNavigateToProfile: () -> Unit) {
 
     val colors = systemThemeColors()
 

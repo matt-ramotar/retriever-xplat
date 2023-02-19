@@ -1,9 +1,7 @@
 @file:Suppress("PropertyName")
-@file:OptIn(ExperimentalSerializationApi::class)
 
 package ai.wandering.retriever.common.storekit.entity
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
 sealed class NoteRelationship {

@@ -3,7 +3,8 @@ CREATE TABLE localNote(
     userId TEXT NOT NULL,
     content TEXT,
     is_read INTEGER AS Boolean NOT NULL,
-    created TEXT NOT NULL,
+    createdAt TEXT NOT NULL,
+    updatedAt TEXT NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
@@ -11,7 +12,7 @@ getAll:
 SELECT *
 FROM localNote;
 
-getById:
+findById:
 SELECT *
 FROM localNote
 WHERE id = ?;
@@ -28,7 +29,7 @@ WHERE id = ?;
 clearAll:
 DELETE FROM localNote;
 
-getByTagName:
+findByTagName:
 SELECT *
 FROM localNote
 LEFT JOIN noteChannel
@@ -39,20 +40,21 @@ LEFT JOIN localTag
 ON localChannel.tagId == localTag.id
 WHERE localTag.name = ?;
 
-getByMention:
+findByMention:
 SELECT *
 FROM localNote
 LEFT JOIN noteMention
 ON localNote.id == noteMention.noteId
 WHERE noteMention.userId = ? AND noteMention.otherUserId = ?;
 
-getByIdAndPopulateAll:
+findByIdAndPopulateAll:
 SELECT
 -- Note
 localNote.id,
 localNote.content,
 localNote.is_read,
-localNote.created,
+localNote.createdAt,
+localNote.updatedAt,
 
 -- User
 author.id AS "userId",
@@ -60,6 +62,8 @@ author.name AS "userName",
 author.username AS "userUsername",
 author.email AS "userEmail",
 author.avatarUrl AS "userAvatarUrl",
+author.coverImageUrl AS "userCoverImageUrl",
+author.bio AS "userBio",
 
 -- Other User
 otherUser.id AS "otherUserId",

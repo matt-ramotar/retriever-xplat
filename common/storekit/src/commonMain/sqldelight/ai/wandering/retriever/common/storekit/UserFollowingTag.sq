@@ -6,11 +6,11 @@ CREATE TABLE userFollowingTag(
     PRIMARY KEY (userId, tagId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userFollowingTag;
 
-getById:
+findById:
 SELECT *
 FROM userFollowingTag
 WHERE userId = ? AND tagId = ?;

@@ -12,3 +12,23 @@ fun User.Network.asLocal(): LocalUser = LocalUser(
     coverImageUrl = coverImageUrl,
     bio = bio
 )
+
+fun User.Network.asUnpopulated(): User.Output.Unpopulated = User.Output.Unpopulated(
+    id = _id,
+    name = name,
+    username = username,
+    email = email,
+    avatarUrl = avatarUrl,
+    coverImageUrl = coverImageUrl,
+    bio = bio,
+    noteIds = noteIds,
+    graphIds = graphIds,
+    followedGraphIds = followedGraphIds,
+    followedTagIds = followedTagIds,
+    followedUserIds = followedUserIds,
+    followerIds = followerIds,
+    pinnedChannelIds = pinnedChannelIds,
+    pinnedGraphIds = pinnedGraphIds,
+    pinnedNoteIds = pinnedNoteIds,
+    actionIds = actionIds
+)

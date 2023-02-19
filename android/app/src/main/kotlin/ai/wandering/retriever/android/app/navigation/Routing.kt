@@ -9,10 +9,10 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
+import ai.wandering.retriever.common.storekit.db.queries.note.findAndPopulate
+import ai.wandering.retriever.common.storekit.db.queries.user.findAndPopulate
 import ai.wandering.retriever.common.storekit.entity.UserAction
 import ai.wandering.retriever.common.storekit.entity.UserNotification
-import ai.wandering.retriever.common.storekit.extension.findAndPopulate
-import ai.wandering.retriever.common.storekit.extension.findAndPopulateByUserId
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,7 +36,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotificationsResponse(
-    val notifications: List<UserNotification>
+    val notifications: List<UserNotification.Output.Unpopulated>
 )
 
 @Composable
@@ -52,8 +52,8 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
     val database = appDependencies.database
     val user = userComponent.user
     val api = appDependencies.api
-    val notificationManager = userDependencies.notificationManager
-    val notifications = notificationManager.notifications.collectAsState()
+    val userNotificationsRepository = userDependencies.userNotificationsRepository
+    val notifications = userNotificationsRepository.notifications.collectAsState()
 
 
     NavHost(
@@ -80,10 +80,8 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             )
         }
         composable(Screen.Activity.route) {
-            val user = database.localUserQueries.findAndPopulateByUserId(user.id)
-            val followedIds = user.followed.map { it.id }
-            val userActionsResponse = database.localUserQueries.getUserActionsByUserId(followedIds).executeAsList()
-            val userActions = userActionsResponse.map { UserAction(it.userId, it.objectId, it.type) }.distinct()
+            val userActionsQuery = database.localUserQueries.findUserActionsByUserId(user.followedUserIds).executeAsList()
+            val userActions = userActionsQuery.map { UserAction.Output.Unpopulated(id = it.id, it.userId, it.objectId, it.type) }.distinct()
 
             Column {
 
@@ -107,25 +105,24 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
             SearchTab()
         }
         composable(Screen.Account.route) {
-            AccountTab(userComponent.user) {
+            // TODO(mramotar)
+            val populatedUser = database.localUserQueries.findAndPopulate(user.id)
+            AccountTab(populatedUser) {
                 navController.navigate("users/${user.id}")
             }
         }
 
         composable("users/{userId}", arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
             val userId = requireNotNull(it.arguments?.getString("userId"))
-            val otherUser = database.localUserQueries.findAndPopulateByUserId(userId)
-            ProfileScreen(user = otherUser)
+            // TODO(mramotar)
+            val populatedOtherUser = database.localUserQueries.findAndPopulate(userId)
+            ProfileScreen(user = populatedOtherUser)
         }
 
         composable("notes/m/{otherUserId}", arguments = listOf(navArgument("otherUserId") { type = NavType.StringType })) {
-
             val otherUserId = requireNotNull(it.arguments?.getString("otherUserId"))
-            println(user.id)
-
-            println(otherUserId)
-            val otherUser = database.localUserQueries.getById(otherUserId).executeAsOne()
-            val notes = database.localNoteQueries.getByMention(user.id, otherUserId).executeAsList()
+            val otherUser = database.localUserQueries.findById(otherUserId).executeAsOne()
+            val notes = database.localNoteQueries.findByMention(user.id, otherUserId).executeAsList()
 
             Column {
                 Text(otherUser.name, modifier = Modifier.clickable { navController.navigate("users/$otherUserId") })
@@ -147,7 +144,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                 Text(tag ?: "Screen")
                 Spacer(modifier = Modifier.size(32.dp))
 
-                database.localNoteQueries.getByTagName(tag).executeAsList().forEach { row ->
+                database.localNoteQueries.findByTagName(tag).executeAsList().forEach { row ->
                     Row(modifier = Modifier.clickable { navController.navigate("notes/${row.noteId}") }) {
                         Text(text = row.content ?: "")
                     }
@@ -166,7 +163,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                     Row {
                         Text(text = "#")
                         Spacer(modifier = Modifier.size(12.dp))
-                        Text(text = channel.tag.name)
+                        Text(text = channel.id)
                     }
                 }
 
@@ -174,7 +171,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                     Row {
                         Text(text = "@")
                         Spacer(modifier = Modifier.size(12.dp))
-                        Text(text = mention.otherUser.name)
+                        Text(text = mention.otherUserId)
                     }
                 }
             }

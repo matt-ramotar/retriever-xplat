@@ -8,11 +8,11 @@ CREATE TABLE localUser (
     bio TEXT
 );
 
-getAll:
+find:
 SELECT *
 FROM localUser;
 
-getById:
+findById:
 SELECT *
 FROM localUser
 WHERE id = ?;
@@ -29,7 +29,7 @@ WHERE id = ?;
 clearAll:
 DELETE FROM localUser;
 
-findAndPopulate:
+findByIdAndPopulateAll:
 SELECT user.id, user.username, user.name, user.email, user.avatarUrl, user.coverImageUrl, user.bio,
        -- Followed
        followed.id AS "followedUserId",
@@ -78,7 +78,15 @@ SELECT user.id, user.username, user.name, user.email, user.avatarUrl, user.cover
        pinnedNote.userId AS "pinnedNoteUserId",
        pinnedNote.content AS "pinnedNoteContent",
        pinnedNote.is_read AS "pinnedNoteIsRead",
-       pinnedNote.created AS "pinnedNoteCreated"
+       pinnedNote.createdAt AS "pinnedNoteCreatedAt",
+       pinnedNote.updatedAt AS "pinnedNoteUpdatedAt",
+       -- Notes
+       localNote.id AS "noteId",
+       localNote.content AS "noteContent",
+       localNote.is_read AS "noteIsRead",
+       localNote.createdAt AS "noteCreatedAt",
+       localNote.updatedAt AS "noteUpdatedAt"
+
 FROM localUser user
 
 -- Following
@@ -92,6 +100,10 @@ LEFT JOIN userFollowingUser followers
 ON user.id == followers.otherUserId
 LEFT JOIN localUser follower
 ON follower.id == followers.userId
+
+-- Notes
+LEFT JOIN localNote
+ON localNote.userId == user.id
 
 -- Graphs
 LEFT JOIN localGraph
@@ -134,7 +146,7 @@ ON pinnedNote.id == userPinnedNote.noteId
 WHERE user.id = ?;
 
 
-getNotesByUserId:
+findNotesByUserId:
 SELECT *
 FROM localUser user
 INNER JOIN localNote note
@@ -143,14 +155,14 @@ INNER JOIN noteChannel
 ON note.id == noteChannel.noteId
 INNER JOIN noteMention
 ON note.id == noteMention.noteId
-INNER JOIN noteRelationship
-ON note.id == noteRelationship.noteId
+INNER JOIN localNoteRelationship
+ON note.id == localNoteRelationship.noteId
 WHERE user.id = ?
 GROUP BY note.id, user.id;
 
 
-getUserActionsByUserId:
-SELECT userAction.userId, userAction.objectId, userAction.type
+findUserActionsByUserId:
+SELECT userAction.id, userAction.userId, userAction.objectId, userAction.type
 FROM localUser user
 INNER JOIN localUserAction userAction
 ON userAction.userId == user.id

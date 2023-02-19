@@ -5,11 +5,11 @@ CREATE TABLE localGraph(
     created TEXT NOT NULL
 );
 
-getAll:
+find:
 SELECT *
 FROM localGraph;
 
-getById:
+findById:
 SELECT *
 FROM localGraph
 WHERE id = ?;

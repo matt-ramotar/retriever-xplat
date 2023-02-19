@@ -18,7 +18,7 @@ sealed class Tag {
         data class Populated(
             val id: String,
             val name: String,
-            val followers: List<String>,
+            val followers: List<User.Output.Node>,
         ) : Output()
 
         @Serializable
@@ -26,6 +26,12 @@ sealed class Tag {
             val id: String,
             val name: String,
             val followerIds: List<String>,
+        ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val name: String
         ) : Output()
     }
 }

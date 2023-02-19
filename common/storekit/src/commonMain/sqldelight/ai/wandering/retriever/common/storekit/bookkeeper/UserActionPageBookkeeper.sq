@@ -1,0 +1,21 @@
+CREATE TABLE userActionPageBookkeeper(
+    id INTEGER AS Int NOT NULL PRIMARY KEY,
+    timestamp INTEGER
+);
+
+findById:
+SELECT *
+FROM userActionPageBookkeeper
+WHERE id = ?;
+
+upsert:
+INSERT OR REPLACE INTO userActionPageBookkeeper
+VALUES ?;
+
+clearById:
+DELETE
+FROM userActionPageBookkeeper
+WHERE id = ?;
+
+clearAll:
+DELETE FROM userActionPageBookkeeper;

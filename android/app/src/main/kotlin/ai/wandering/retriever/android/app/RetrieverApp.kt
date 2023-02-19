@@ -9,10 +9,8 @@ import ai.wandering.retriever.android.common.coroutines.suspendLazy
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.android.common.scoping.ComponentHolder
 import ai.wandering.retriever.android.common.scoping.SingleIn
-import ai.wandering.retriever.common.socket.Socket
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.db.DriverFactory
-import ai.wandering.retriever.common.storekit.db.seed
 import ai.wandering.retriever.common.storekit.wiring.RetrieverDatabaseProvider
 import android.app.Activity
 import android.app.Application
@@ -34,19 +32,13 @@ class RetrieverApp : Application(), ComponentHolder {
         val application = this
         coroutineScope.launch {
             val database = database.invoke()
-            val socket = Socket(SOCKET_URI, coroutineScope)
-            socket.connect()
-            component = DaggerAppComponent.factory().create(application, database, applicationContext, socket)
-            database.seed()
+            component = DaggerAppComponent.factory().create(application, database, applicationContext)
             super.onCreate()
         }
-    }
-
-    companion object {
-        private const val SOCKET_URI = "https://www.api.retriever.wandering.ai"
     }
 }
 
 internal fun AppComponent.userComponentFactory() = (this as UserComponent.ParentBindings).userComponentFactory()
 internal fun AppComponent.appDependencies() = this as AppDependencies
 fun Activity.notesApp(): RetrieverApp = application as RetrieverApp
+

@@ -6,11 +6,11 @@ CREATE TABLE userFollowingGraph(
     PRIMARY KEY (userId, graphId)
 );
 
-getAll:
+find:
 SELECT *
 FROM userFollowingGraph;
 
-getById:
+findById:
 SELECT *
 FROM userFollowingGraph
 WHERE userId = ? AND graphId = ?;

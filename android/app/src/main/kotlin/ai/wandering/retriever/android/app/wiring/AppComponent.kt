@@ -19,7 +19,6 @@ interface AppComponent {
             @BindsInstance application: RetrieverApp,
             @BindsInstance database: RetrieverDatabase,
             @BindsInstance applicationContext: Context,
-            @BindsInstance socket: Socket
         ): AppComponent
     }
 }

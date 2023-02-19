@@ -1,12 +1,13 @@
 package ai.wandering.retriever.android.common.scoping
 
-import ai.wandering.retriever.common.notifications.NotificationManager
-import ai.wandering.retriever.common.storekit.entity.user.output.User
+import ai.wandering.retriever.common.storekit.api.RetrieverApi
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
+import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import com.squareup.anvil.annotations.ContributesTo
 
 @ContributesTo(UserScope::class)
 interface UserDependencies {
-    val user: User
+    val user: AuthenticatedUser
     val api: RetrieverApi
-    val notificationManager: NotificationManager
+    val userNotificationsRepository: UserNotificationsRepository
 }

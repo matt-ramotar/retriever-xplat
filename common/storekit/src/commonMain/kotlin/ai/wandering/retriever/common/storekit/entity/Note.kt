@@ -31,18 +31,18 @@ sealed class Note {
         @Serializable
         data class Populated(
             val id: String,
-            val user: User.Output.Unpopulated,
+            val user: User.Output.Node,
             val content: String,
             val isRead: Boolean,
             val createdAt: Instant,
             val updatedAt: Instant,
 
             // Relationships
-            val channels: List<Channel.Output.Populated>,
-            val mentions: List<Mention.Output.Unpopulated>,
-            val noteRelationships: List<String>,
-            val threadNotes: List<String>,
-            val pinners: List<String>,
+            val channels: List<Channel.Output.Node>,
+            val mentions: List<Mention.Output.Node>,
+            val noteRelationships: List<NoteRelationship.Output.Unpopulated>,
+            val threadNotes: List<ThreadNote.Output.Unpopulated>,
+            val pinners: List<User.Output.Node>,
         ) : Output()
 
         @Serializable
@@ -60,6 +60,17 @@ sealed class Note {
             val noteRelationshipIds: List<String>,
             val threadNoteIds: List<String>,
             val pinnerIds: List<String>,
+        ) : Output()
+
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val userId: String,
+            val content: String,
+            val isRead: Boolean,
+            val createdAt: Instant,
+            val updatedAt: Instant,
         ) : Output()
 
     }

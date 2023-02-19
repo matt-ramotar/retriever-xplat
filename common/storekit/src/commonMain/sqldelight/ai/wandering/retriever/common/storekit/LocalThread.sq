@@ -5,11 +5,11 @@ CREATE TABLE localThread(
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
 
-getAll:
+find:
 SELECT *
 FROM localThread;
 
-getById:
+findById:
 SELECT *
 FROM localThread
 WHERE id = ?;

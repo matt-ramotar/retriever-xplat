@@ -3,11 +3,11 @@ CREATE TABLE localTag(
     name TEXT UNIQUE NOT NULL
 );
 
-getAll:
+find:
 SELECT *
 FROM localTag;
 
-getById:
+findById:
 SELECT *
 FROM localTag
 WHERE id = ?;

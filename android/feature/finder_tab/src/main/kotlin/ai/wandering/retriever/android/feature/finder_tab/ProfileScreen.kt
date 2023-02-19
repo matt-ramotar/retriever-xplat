@@ -1,7 +1,7 @@
 package ai.wandering.retriever.android.feature.finder_tab
 
 import ai.wandering.retriever.android.common.sig.component.Avatar
-import ai.wandering.retriever.common.storekit.entity.user.output.User
+import ai.wandering.retriever.common.storekit.entity.User
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
-fun ProfileScreen(user: User) {
+fun ProfileScreen(user: User.Output.Populated) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -54,15 +54,15 @@ fun ProfileScreen(user: User) {
         }
 
         user.pinnedChannels.forEach {
-            Text("Pinned Channel: ${it.tag.name}")
+            Text("Pinned Channel: ${it.id}")
         }
 
-        user.followed.forEach {
+        user.followedUsers.forEach {
             Text("Following: ${it.name}")
         }
-        if (user.actions.isNotEmpty()) {
+        if (user.userActions.isNotEmpty()) {
             Text(text = "Activity")
-            user.actions.forEach { action -> Text(text = action.type.name) }
+            user.userActions.forEach { action -> Text(text = action.type.name) }
         }
 
 
