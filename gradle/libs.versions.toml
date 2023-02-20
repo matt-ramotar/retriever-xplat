@@ -12,6 +12,7 @@ compose-compiler = "1.3.0"
 compose-jetbrains = "1.3.0-beta04-dev873"
 compose-material3 = "1.1.0-alpha02"
 compose-navigation = "2.5.2"
+compose-richtext = "0.16.0"
 coroutines = "1.6.4"
 dagger = "2.44"
 gradle = "7.3.1"
@@ -22,7 +23,7 @@ ktor = "2.1.3"
 molecule = "0.6.1"
 native-coroutines = "0.13.0"
 store4 = "4.0.7"
-store5 = "5.0.0-alpha02"
+store5 = "5.0.0-alpha03"
 store-snapshot = "5.0.0-SNAPSHOT"
 sqldelight = "1.5.3"
 okio = "3.2.0"
@@ -49,6 +50,9 @@ compose-material3 = { group = "androidx.compose.material3", name = "material3", 
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose-androidx" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 
+compose-richtext-commonmark = {group = "com.halilibo.compose-richtext", name = "richtext-commonmark", version.ref="compose-richtext" }
+compose-richtext-material3 = {group = "com.halilibo.compose-richtext", name = "richtext-ui-material3", version.ref="compose-richtext" }
+
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 
 dagger-dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
@@ -70,10 +74,13 @@ ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
+mongo-kbson = { group = "org.mongodb.kbson", name = "kbson", version = "0.2.0" }
+
 socket-io = { group = "io.socket", name = "socket.io-client", version = "2.1.0" }
 
 okio-core = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 okHttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttp" }
+
 
 store4 = { group = "org.mobilenativefoundation.store", name = "store4", version.ref = "store4" }
 store5 = { group = "org.mobilenativefoundation.store", name = "store5", version.ref = "store5" }

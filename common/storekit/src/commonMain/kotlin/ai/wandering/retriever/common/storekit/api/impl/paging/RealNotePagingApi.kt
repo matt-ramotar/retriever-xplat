@@ -19,7 +19,7 @@ class RealNotePagingApi(private val client: HttpClient) : NotePagingApi {
     override val limit: Int = 20
     override val prefetchDistance: Int = limit
     override val maxSize: Int = Int.MAX_VALUE
-    override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, Note.Network>> = try {
+    override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, Note.Network.Populated>> = try {
         client.post(Endpoints.PAGING_NOTE) {
             setBody(PagingRequest(key, limit, type, query))
             contentType(ContentType.Application.Json)

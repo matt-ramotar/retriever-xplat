@@ -32,13 +32,21 @@ sealed class NoteRelationship {
         @Serializable
         data class Populated(
             val id: String,
-            val note: Note.Output.Populated,
-            val otherNote: Note.Output.Populated,
+            val note: Note.Output.Populated.Created,
+            val otherNote: Note.Output.Populated.Created,
             val type: Type
         ) : Output()
 
         @Serializable
         data class Unpopulated(
+            val id: String,
+            val noteId: String,
+            val otherNoteId: String,
+            val type: Type
+        ) : Output()
+
+        @Serializable
+        data class Node(
             val id: String,
             val noteId: String,
             val otherNoteId: String,

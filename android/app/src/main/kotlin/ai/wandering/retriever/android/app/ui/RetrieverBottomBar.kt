@@ -70,7 +70,9 @@ fun RetrieverBottomBar(navController: NavHostController, notifications: Int) {
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}, shape = CircleShape, containerColor = Sig.ColorScheme.onBackground, contentColor = BottomAppBarDefaults.containerColor) {
+            FloatingActionButton(onClick = {
+                navController.navigate("create/note")
+            }, shape = CircleShape, containerColor = Sig.ColorScheme.onBackground, contentColor = BottomAppBarDefaults.containerColor) {
                 Icon(painterResource(id = R.drawable.edit), null, modifier = Modifier.size(28.dp))
             }
         }

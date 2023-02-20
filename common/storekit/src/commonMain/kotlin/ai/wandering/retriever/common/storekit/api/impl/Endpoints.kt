@@ -14,5 +14,6 @@ object Endpoints {
     const val VALIDATE_TOKEN = "$ROOT/auth/token"
 
     fun single(id: String, collection: Collection, populate: Boolean = false) = "$ROOT/${collection.value}/$id?populate=$populate"
+    fun upsert(collection: Collection) = "$ROOT/${collection.value}"
     fun collection(userId: String, collection: Collection, populate: Boolean = false) = "$USER/$userId/${collection.value}?populate=$populate"
 }

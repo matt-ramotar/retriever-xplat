@@ -55,12 +55,14 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.sqldelight.android.driver)
+                api(libs.mongo.kbson)
             }
         }
 
         val desktopMain by getting {
             dependencies {
                 implementation(libs.sqldelight.sqlite.driver)
+                api(libs.mongo.kbson)
             }
         }
         val iosX64Main by getting
@@ -73,6 +75,7 @@ kotlin {
 
             dependencies {
                 implementation(libs.sqldelight.native.driver)
+                api(libs.mongo.kbson)
             }
         }
 

@@ -30,5 +30,13 @@ sealed class ThreadNote {
             val noteId: String,
             val parentNoteId: String,
         ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val threadId: String,
+            val noteId: String,
+            val parentNoteId: String,
+        ) : Output()
     }
 }

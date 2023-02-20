@@ -39,7 +39,7 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note.Output.Populated {
         .map { row -> Mention.Output.Node(row.id, row.userId!!, row.otherUserId!!) }
         .distinct()
 
-    return Note.Output.Populated(
+    return Note.Output.Populated.Created(
         id = common.id,
         user = user,
         content = common.content ?: "",
