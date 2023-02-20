@@ -7,6 +7,7 @@ import ai.wandering.retriever.android.common.navigation.Screen
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.create_note.CreateNoteScreen
+import ai.wandering.retriever.android.feature.create_note.NoteCreationViewModel
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -46,7 +48,8 @@ data class NotificationsResponse(
 )
 
 @Composable
-fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
+fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteCreationViewModel: NoteCreationViewModel = viewModel()) {
+
 
     val app = LocalContext.current.applicationContext as RetrieverApp
     val mainActivity = LocalContext.current as MainActivity
@@ -218,7 +221,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
         }
 
         composable("create/note") {
-            CreateNoteScreen()
+            CreateNoteScreen(noteCreationViewModel = noteCreationViewModel)
         }
     }
 }

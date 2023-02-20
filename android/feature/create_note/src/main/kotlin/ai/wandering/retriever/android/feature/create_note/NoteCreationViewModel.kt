@@ -25,6 +25,18 @@ class NoteCreationViewModel(user: AuthenticatedUser, private val noteRepository:
         stateFlow.value = state
     }
 
+    fun updateContent(nextContent: String) {
+
+        val nextNote = when (val note = stateFlow.value.note) {
+            is MutableNote.Created -> note.copy(content = nextContent)
+            is MutableNote.Draft -> note.copy(content = nextContent)
+        }
+
+        val nextState = stateFlow.value.copy(note = nextNote)
+
+        setState(nextState)
+    }
+
 }
 
 

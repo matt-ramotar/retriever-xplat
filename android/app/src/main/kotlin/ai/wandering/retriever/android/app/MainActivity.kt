@@ -9,6 +9,7 @@ import ai.wandering.retriever.android.app.wiring.UserComponent
 import ai.wandering.retriever.android.common.scoping.ComponentHolder
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.common.sig.SigTheme
+import ai.wandering.retriever.android.feature.create_note.NoteCreationViewModel
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import android.content.Context
@@ -16,8 +17,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.ViewModelInitializer
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity(), ComponentHolder {
@@ -25,6 +29,14 @@ class MainActivity : ComponentActivity(), ComponentHolder {
         private const val USER_ID = "USER_ID"
         fun getLaunchIntent(context: Context, userId: String) =
             Intent(context, MainActivity::class.java).putExtra(USER_ID, userId)
+    }
+
+    private val noteCreationViewModel = viewModels<NoteCreationViewModel> {
+        ViewModelProvider.Factory.from(
+            ViewModelInitializer(NoteCreationViewModel::class.java) {
+                NoteCreationViewModel(user, userDependencies.noteRepository)
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +53,7 @@ class MainActivity : ComponentActivity(), ComponentHolder {
             val notifications = userNotificationsRepository.notifications.collectAsState()
 
             SigTheme {
-                RetrieverScaffold(notifications.value.size)
+                RetrieverScaffold(notifications.value.size, noteCreationViewModel = noteCreationViewModel.value)
             }
         }
     }
