@@ -106,7 +106,11 @@ fun FinderTab(
 
             if (channels != null) {
                 items(channels) { channel ->
-                    ChannelEntryPoint(name = channel.tag.name, unreadMentions = 2, unreadMessages = 4, onNavigateToNotesTab = { onNavigateToTagResults(channel.id) })
+                    ChannelEntryPoint(
+                        name = channel.tag.name,
+                        unreadMentions = channel.notes.filter { !it.isRead }.size,
+                        unreadMessages = 4,
+                        onNavigateToNotesTab = { onNavigateToTagResults(channel.id) })
                     Spacer(modifier = Modifier.size(12.dp))
                 }
             }
