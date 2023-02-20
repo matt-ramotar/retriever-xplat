@@ -6,18 +6,23 @@ import ai.wandering.retriever.android.common.scoping.UserScope
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelsRestApi
 import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
+import ai.wandering.retriever.common.storekit.api.rest.single.NoteRestApi
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.ChannelRepository
 import ai.wandering.retriever.common.storekit.repository.ChannelsManager
+import ai.wandering.retriever.common.storekit.repository.NoteRepository
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealChannelRepository
+import ai.wandering.retriever.common.storekit.repository.impl.RealNoteRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealUserNotificationsRepository
 import ai.wandering.retriever.common.storekit.store.ChannelStore
 import ai.wandering.retriever.common.storekit.store.ChannelsStore
+import ai.wandering.retriever.common.storekit.store.NoteStore
 import ai.wandering.retriever.common.storekit.store.Stores
 import ai.wandering.retriever.common.storekit.store.collection.ChannelsStoreProvider
 import ai.wandering.retriever.common.storekit.store.single.channel.PopulatedChannelStoreProvider
+import ai.wandering.retriever.common.storekit.store.single.note.NoteStoreProvider
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -66,4 +71,16 @@ object UserModule {
         repository: ChannelRepository
     ): ChannelsManager = RealChannelsManager(user, repository, CoroutineScope(Dispatchers.Default))
 
+    @SingleIn(UserScope::class)
+    @Provides
+    @Named(Stores.Single.Note)
+    fun provideNoteStore(
+        api: NoteRestApi,
+        db: RetrieverDatabase
+    ): NoteStore = NoteStoreProvider(api, db).provideMutableStore()
+
+    @Provides
+    fun provideNoteRepository(
+        @Named(Stores.Single.Note) noteStore: NoteStore,
+    ): NoteRepository = RealNoteRepository(noteStore)
 }
