@@ -5,6 +5,7 @@ import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.repository.ChannelRepository
 import ai.wandering.retriever.common.storekit.repository.ChannelsManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -16,8 +17,8 @@ class RealChannelsManager(
     private val scope: CoroutineScope
 ) : ChannelsManager {
 
-    private val mutableStateFlow: MutableStateFlow<List<Channel.Output.Unpopulated>?> = MutableStateFlow(null)
-    override val channels: StateFlow<List<Channel.Output.Unpopulated>?> = mutableStateFlow
+    private val mutableStateFlow: MutableStateFlow<List<Channel.Output.Populated>?> = MutableStateFlow(null)
+    override val channels: StateFlow<List<Channel.Output.Populated>?> = mutableStateFlow
 
     init {
         loadChannels(user.id)
@@ -25,19 +26,16 @@ class RealChannelsManager(
 
     override fun loadChannels(userId: String) {
         scope.launch {
-            println("Hitting")
-            repository.stream(userId).collectLatest { channels ->
+            repository.streamAll(userId).collectLatest { channels ->
                 mutableStateFlow.value = channels
-                println("Set channels: $channels")
-                channels?.forEach { channel ->
-                    loadChannel(channel.id)
-                    println("Loaded channel: ${channel.id}")
-                }
             }
         }
     }
 
+    override fun streamChannel(channelId: String): Flow<Channel.Output.Populated?> = repository.stream(channelId)
+
     private suspend fun loadChannel(channelId: String) {
-        repository.get(channelId)
+        val channel = repository.get(channelId)
+
     }
 }

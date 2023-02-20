@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FinderTab(
     user: AuthenticatedUser,
-    channels: List<Channel.Output.Unpopulated>?,
+    channels: List<Channel.Output.Populated>?,
     mentions: LocalMentionQueries,
     onNavigateToSearchTab: () -> Unit,
     onNavigateToMentionResults: (otherUserId: String) -> Unit,
@@ -52,7 +52,6 @@ fun FinderTab(
     onNavigateToTagResults: (name: String) -> Unit
 ) {
 
-    println("Channels: $channels")
     val searchState = remember { mutableStateOf(TextFieldValue()) }
 
     Column {

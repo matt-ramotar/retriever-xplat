@@ -1,4 +1,4 @@
-package ai.wandering.retriever.common.storekit.store.single
+package ai.wandering.retriever.common.storekit.store.single.channel
 
 import ai.wandering.retriever.common.storekit.LocalChannel
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
@@ -21,19 +21,40 @@ import org.mobilenativefoundation.store.store5.StoreBuilder
 import org.mobilenativefoundation.store.store5.Updater
 import org.mobilenativefoundation.store.store5.UpdaterResult
 
-class ChannelStoreProvider(private val api: ChannelRestApi, private val db: RetrieverDatabase) :
+class NodeChannelStoreProvider(private val api: ChannelRestApi, private val db: RetrieverDatabase) :
     MutableStoreProvider<String, Channel.Network.Populated, Channel.Output.Populated, LocalChannel, Boolean> {
     override fun provideConverter(): Converter<Channel.Network.Populated, Channel.Output.Populated, LocalChannel> =
         Converter.Builder<Channel.Network.Populated, Channel.Output.Populated, LocalChannel>()
-            .fromNetworkToOutput { network -> network.asPopulatedOutput() }
-            .fromOutputToLocal { output -> output.asLocal() }
-            .fromLocalToOutput { local -> db.localChannelQueries.asPopulated(local.id) }
+            .fromNetworkToOutput { network ->
+                val output = network.asPopulatedOutput()
+
+                output
+            }
+            .fromOutputToLocal { output ->
+                val local = output.asLocal()
+
+                local
+            }
+            .fromLocalToOutput { local ->
+                try {
+                    val output = db.localChannelQueries.asPopulated(local.id)
+
+
+                    output
+                } catch (error: Throwable) {
+
+                    TODO()
+                }
+            }
             .build()
 
     override fun provideFetcher(): Fetcher<String, Channel.Network.Populated> = Fetcher.of { channelId ->
         when (val result = api.get(channelId)) {
             is RequestResult.Exception -> TODO()
-            is RequestResult.Success -> result.data
+            is RequestResult.Success -> {
+
+                result.data
+            }
         }
     }
 
@@ -72,7 +93,7 @@ class ChannelStoreProvider(private val api: ChannelRestApi, private val db: Retr
                 try {
                     send(db.localChannelQueries.findById(channelId).executeAsOneOrNull())
                 } catch (error: Throwable) {
-                    println("Error reading from Channel SOT: $error")
+
                 }
             }
         },

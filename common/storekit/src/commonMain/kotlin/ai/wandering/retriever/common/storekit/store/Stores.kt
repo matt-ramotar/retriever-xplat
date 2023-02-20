@@ -19,5 +19,5 @@ object Stores {
 
 }
 
-typealias ChannelsStore = MutableStore<String, List<Channel.Output.Unpopulated>>
+typealias ChannelsStore = MutableStore<String, List<Channel.Output.Populated>>
 typealias ChannelStore = MutableStore<String, Channel.Output.Populated>

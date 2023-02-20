@@ -24,7 +24,15 @@ fun LocalNoteQueries.findAndPopulate(id: String): Note.Output.Populated {
 
     val channels = response
         .filter { row -> row.channelId != null && row.channelTagId != null && row.channelGraphId != null && row.channelUserId != null }
-        .map { row -> Channel.Output.Node(row.channelId!!, Instant.parse(row.channelCreatedAt!!)) }
+        .map { row ->
+            Channel.Output.Node(
+                id = row.channelId!!,
+                userId = row.channelUserId!!,
+                graphId = row.channelGraphId!!,
+                tagId = row.channelTagId!!,
+                createdAt = Instant.parse(row.channelCreatedAt!!)
+            )
+        }
 
     val mentions = response
         .filter { row -> row.userId != null && row.otherUserId != null && row.otherUserName != null && row.otherUserEmail != null && row.otherUserAvatarUrl != null }

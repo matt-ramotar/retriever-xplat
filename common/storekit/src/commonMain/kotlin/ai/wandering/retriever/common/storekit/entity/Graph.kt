@@ -2,6 +2,7 @@
 
 package ai.wandering.retriever.common.storekit.entity
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 sealed class Graph {
@@ -22,6 +23,7 @@ sealed class Graph {
         val _id: String,
         val userId: String,
         val name: String,
+        val createdAt: String,
 
         // Relationships
         val followerIds: List<String>,
@@ -35,6 +37,7 @@ sealed class Graph {
             val id: String,
             val userId: String,
             val name: String,
+            val createdAt: Instant,
 
             // Relationships
             val followers: List<User.Output.Node>,
@@ -46,6 +49,7 @@ sealed class Graph {
             val id: String,
             val userId: String,
             val name: String,
+            val createdAt: Instant,
 
             // Relationships
             val followerIds: List<String>,
@@ -56,7 +60,8 @@ sealed class Graph {
         data class Node(
             val id: String,
             val userId: String,
-            val name: String
+            val name: String,
+            val createdAt: Instant
         ) : Output()
     }
 }

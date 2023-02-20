@@ -9,7 +9,7 @@ sealed class Tag {
     data class Network(
         val _id: String,
         val name: String,
-        val followerIds: String,
+        val followerIds: List<String>,
     ) : Tag()
 
     @Serializable

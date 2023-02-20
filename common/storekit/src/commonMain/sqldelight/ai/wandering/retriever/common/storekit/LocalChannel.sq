@@ -41,10 +41,7 @@ SELECT
 
 -- Channel
 localChannel.id,
-localChannel.userId,
 localChannel.createdAt,
-localChannel.graphId,
-localChannel.tagId,
 
 -- User
 user.id AS "userId",
@@ -106,3 +103,10 @@ LEFT JOIN localNote note
 ON note.id == noteChannel.noteId
 
 WHERE localChannel.id = ?;
+
+
+
+findUser:
+SELECT *
+FROM localUser
+WHERE localUser.id = ?;

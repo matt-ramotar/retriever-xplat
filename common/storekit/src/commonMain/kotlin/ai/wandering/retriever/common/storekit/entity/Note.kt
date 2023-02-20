@@ -13,7 +13,7 @@ sealed class Note {
         val _id: String,
         val userId: String,
         val content: String,
-        val isRead: Boolean,
+        val is_read: Boolean,
         val createdAt: String,
         val updatedAt: String,
 

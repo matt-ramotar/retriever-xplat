@@ -8,13 +8,17 @@ import ai.wandering.retriever.common.storekit.result.RequestResult
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 
 class RealChannelsRestApi(private val client: HttpClient) : ChannelsRestApi {
     override suspend fun get(userId: String): RequestResult<Channels> = try {
-        val endpoint = Endpoints.collection(userId, Collection.Channel)
+        val endpoint = Endpoints.collection(userId, Collection.Channel, populate = true)
+        println("Making request to endpoint: $endpoint")
         val response = client.get(endpoint)
+        println(response.bodyAsText())
         RequestResult.Success(response.body())
     } catch (error: Throwable) {
+        println(error.toString())
         RequestResult.Exception(error)
     }
 }

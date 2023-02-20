@@ -69,7 +69,7 @@ fun LocalUserQueries.findAndPopulate(userId: String): User.Output.Populated {
 
     val graphs = userResponse
         .filter { row -> row.graphId != null }
-        .map { row -> Graph.Output.Node(row.graphId!!, row.graphName!!, row.graphOwnerId!!) }
+        .map { row -> Graph.Output.Node(row.graphId!!, row.graphName!!, row.graphOwnerId!!, Instant.parse(row.graphCreatedAt!!)) }
         .distinct()
     val followedTags = userResponse
         .filter { row -> row.followedTagId != null }
@@ -77,14 +77,22 @@ fun LocalUserQueries.findAndPopulate(userId: String): User.Output.Populated {
         .distinct()
     val followedGraphs = userResponse
         .filter { row -> row.followedGraphId != null }
-        .map { row -> Graph.Output.Node(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!) }
+        .map { row -> Graph.Output.Node(row.followedGraphId!!, row.followedGraphName!!, row.followedGraphOwnerId!!, Instant.parse(row.graphCreatedAt!!)) }
         .distinct()
     val pinnedGraphs = userResponse
         .filter { row -> row.pinnedGraphId != null }
-        .map { row -> Graph.Output.Node(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!) }
+        .map { row -> Graph.Output.Node(row.pinnedGraphId!!, row.pinnedGraphName!!, row.pinnedGraphOwnerId!!, Instant.parse(row.graphCreatedAt!!)) }
         .distinct()
     val pinnedChannels = userResponse.filter { row -> row.pinnedChannelId != null }
-        .map { row -> Channel.Output.Node(row.pinnedChannelId!!, Instant.parse(row.pinnedChannelCreatedAt!!)) }
+        .map { row ->
+            Channel.Output.Node(
+                id = row.pinnedChannelId!!,
+                userId = row.pinnedChannelUserId!!,
+                graphId = row.pinnedChannelGraphId!!,
+                tagId = row.pinnedChannelTagId!!,
+                createdAt = Instant.parse(row.pinnedChannelCreatedAt!!)
+            )
+        }
         .distinct()
 
     return User.Output.Populated(

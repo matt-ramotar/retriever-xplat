@@ -22,11 +22,10 @@ class RealUserNotificationsRepository(socket: UserNotificationsSocketApi, user: 
             socket.subscribe(user.id).collectLatest { result ->
                 when (result) {
                     is RequestResult.Exception -> {
-                        println("Error: ${result.error}")
+                        println(result.error.toString())
                     }
 
                     is RequestResult.Success -> {
-                        println("Notifications: ${result.data}")
                         _notifications.value = result.data.notifications.map { it.asUnpopulatedOutput() }
                     }
                 }

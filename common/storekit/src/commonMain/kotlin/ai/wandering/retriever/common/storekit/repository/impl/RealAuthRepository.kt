@@ -9,7 +9,6 @@ import ai.wandering.retriever.common.storekit.result.RequestResult
 class RealAuthRepository(private val authApi: AuthApi) : AuthRepository {
     override suspend fun signIn(): AuthenticatedUser {
         val network = authApi.signIn()
-        println("Network: $network")
         require(network is RequestResult.Success)
         return network.data.asUnpopulatedOutput()
     }

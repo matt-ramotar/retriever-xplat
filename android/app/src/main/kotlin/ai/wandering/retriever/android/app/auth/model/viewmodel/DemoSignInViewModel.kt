@@ -3,6 +3,7 @@ package ai.wandering.retriever.android.app.auth.model.viewmodel
 import ai.wandering.retriever.android.app.auth.model.state.DemoSignInState
 import ai.wandering.retriever.android.app.auth.model.state.DemoSignInViewState
 import ai.wandering.retriever.common.storekit.repository.auth.AuthRepository
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +20,9 @@ class DemoSignInViewModel(private val authRepository: AuthRepository) : ViewMode
         viewModelScope.launch {
             try {
                 val user = authRepository.signIn()
-                println("User: $user")
+                Log.d("User", user.toString())
                 setState(DemoSignInState(DemoSignInViewState.Success(user)))
             } catch (error: Throwable) {
-                println("Error: $error")
                 setState(DemoSignInState(DemoSignInViewState.Failure))
             }
         }

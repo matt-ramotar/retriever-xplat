@@ -11,6 +11,7 @@ import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
 import ai.wandering.retriever.common.storekit.db.queries.note.findAndPopulate
 import ai.wandering.retriever.common.storekit.db.queries.user.findAndPopulate
+import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.UserAction
 import ai.wandering.retriever.common.storekit.entity.UserNotification
 import androidx.compose.foundation.clickable
@@ -22,7 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
 
 
@@ -78,7 +83,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                 onNavigateToProfile = {
                     navController.navigate("users/${user.id}")
                 },
-                onNavigateToTagResults = { navController.navigate("notes/t/$it") }
+                onNavigateToTagResults = { navController.navigate("channels/$it") }
             )
         }
         composable(Screen.Activity.route) {
@@ -133,6 +138,38 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                 notes.forEach { row ->
                     Row(modifier = Modifier.clickable { navController.navigate("notes/${row.id}") }) {
                         Text(text = row.content ?: "")
+                    }
+                }
+            }
+        }
+
+        composable("channels/{channelId}", arguments = listOf(navArgument("channelId") { type = NavType.StringType })) {
+            val channelId = requireNotNull(it.arguments?.getString("channelId"))
+
+            val channelStateFlow = remember { MutableStateFlow<Channel.Output.Populated?>(null) }
+
+            LaunchedEffect(channelId) {
+                channelsManager.streamChannel(channelId).collectLatest { channel ->
+                    println("In Routing: $channel")
+                    channelStateFlow.value = channel
+
+                }
+            }
+
+            when (val channel = channelStateFlow.collectAsState().value) {
+                null -> {
+                    Column {
+                        Text(text = "Loading...")
+                    }
+                }
+
+                else -> {
+                    Column {
+                        Text(text = channel.tag.name)
+
+                        channel.notes.forEach { note ->
+                            Text(text = note.content)
+                        }
                     }
                 }
             }

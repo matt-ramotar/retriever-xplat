@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Channels(
-    val channels: List<Channel.Network.Unpopulated>
+    val channels: List<Channel.Network.Populated>
 )

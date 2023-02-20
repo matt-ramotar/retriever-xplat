@@ -37,7 +37,6 @@ fun RetrieverBottomBar(navController: NavHostController, notifications: Int) {
     val colors = systemThemeColors()
 
     fun isSelected(tab: Screen) = currentDestination?.hierarchy?.any { it.route == tab.route } == true
-    println("notifications = $notifications")
     BottomAppBar(
         actions = {
             BottomTabs.forEach { tab ->
