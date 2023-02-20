@@ -66,6 +66,7 @@ import kotlin.reflect.KClass
 //
 //}
 
+// For populated Need to remember to write all children!
 
 interface Stream<Base : Any> {
     fun <Output : Base> stream(objectId: String, classType: KClass<Output>): Flow<StoreReadResponse<Output>>
