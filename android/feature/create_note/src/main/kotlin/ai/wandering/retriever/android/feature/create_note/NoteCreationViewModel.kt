@@ -11,8 +11,10 @@ import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.helper.ObjectId
 import ai.wandering.retriever.common.storekit.repository.NoteRepository
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -35,6 +37,45 @@ class NoteCreationViewModel(user: AuthenticatedUser, private val noteRepository:
         val nextState = stateFlow.value.copy(note = nextNote)
 
         setState(nextState)
+        recordLocalWrite()
+        stateFlow.value.setIsSynced(false)
+    }
+
+    private fun recordLocalWrite(value: Instant = Clock.System.now()) {
+        stateFlow.value.setLastWriteLocal(value)
+    }
+
+    private fun recordNetworkWrite(value: Instant = Clock.System.now()) {
+        stateFlow.value.setLastWriteNetwork(value)
+    }
+
+    private fun recordSyncing(value: Boolean) {
+        stateFlow.value.setSyncing(value)
+    }
+
+    fun create() {
+        viewModelScope.launch {
+            recordSyncing(true)
+            val note = stateFlow.value.note
+            when (noteRepository.create(note.asPopulatedOutput())) {
+                true -> {
+                    recordNetworkWrite()
+                    recordSyncing(false)
+                    if (stateFlow.value.note.content == note.content) {
+                        stateFlow.value.setIsSynced(true)
+                    } else {
+                        stateFlow.value.setIsSynced(false)
+                    }
+                }
+
+                false -> {
+                    println("FALSE")
+                    recordSyncing(false)
+                    stateFlow.value.setIsSynced(false)
+
+                }
+            }
+        }
     }
 
 }
@@ -46,12 +87,12 @@ data class NoteCreationState(
     private val _lastWriteNetwork = MutableStateFlow<Instant?>(null)
     private val _lastWriteLocal = MutableStateFlow<Instant?>(null)
     private val _syncing = MutableStateFlow(false)
+    private val _isSynced = MutableStateFlow(true)
 
     val lastWriteNetwork: StateFlow<Instant?> = _lastWriteNetwork
     val lastWriteLocal: StateFlow<Instant?> = _lastWriteLocal
     val syncing: StateFlow<Boolean> = _syncing
-
-    fun isSynced() = lastWriteLocal.value == lastWriteNetwork.value
+    val isSynced: StateFlow<Boolean> = _isSynced
 
     fun setLastWriteNetwork(value: Instant) {
         _lastWriteNetwork.value = value
@@ -63,6 +104,10 @@ data class NoteCreationState(
 
     fun setSyncing(value: Boolean) {
         _syncing.value = value
+    }
+
+    fun setIsSynced(value: Boolean) {
+        _isSynced.value = value
     }
 }
 
@@ -133,3 +178,7 @@ fun MutableNote.Created.asPopulatedCreatedOutput() = Note.Output.Populated.Creat
     pinners = pinners,
 )
 
+fun MutableNote.asPopulatedOutput() = when (this) {
+    is MutableNote.Created -> asPopulatedCreatedOutput()
+    is MutableNote.Draft -> asPopulatedDraftOutput()
+}
