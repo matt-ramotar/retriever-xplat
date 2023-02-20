@@ -53,3 +53,13 @@ fun User.Output.Node.asLocal(): LocalUser = LocalUser(
     bio = bio,
 )
 
+
+fun User.Output.Unpopulated.asNodeOutput(): User.Output.Node = User.Output.Node(
+    id = id,
+    name = name,
+    username = username,
+    email = email,
+    avatarUrl = avatarUrl,
+    coverImageUrl = coverImageUrl,
+    bio = bio,
+)

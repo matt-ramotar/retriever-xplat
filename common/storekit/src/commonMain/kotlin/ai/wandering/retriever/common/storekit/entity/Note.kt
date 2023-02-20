@@ -59,22 +59,55 @@ sealed class Note {
 
     @Serializable
     sealed class Output : Note() {
+
         @Serializable
-        data class Populated(
-            val id: String,
-            val user: User.Output.Node,
-            val content: String,
-            val isRead: Boolean,
-            val createdAt: Instant,
-            val updatedAt: Instant,
+        sealed class Populated {
+
+            abstract val id: String
+            abstract val user: User.Output.Node
+            abstract val content: String
+            abstract val isRead: Boolean
+            abstract val createdAt: Instant
+            abstract val updatedAt: Instant
 
             // Relationships
-            val channels: List<Channel.Output.Node>,
-            val mentions: List<Mention.Output.Node>,
-            val noteRelationships: List<NoteRelationship.Output.Node>,
-            val threadNotes: List<ThreadNote.Output.Node>,
-            val pinners: List<User.Output.Node>,
-        ) : Output()
+            abstract val channels: List<Channel.Output.Node>
+            abstract val mentions: List<Mention.Output.Node>
+            abstract val noteRelationships: List<NoteRelationship.Output.Node>
+            abstract val threadNotes: List<ThreadNote.Output.Node>
+            abstract val pinners: List<User.Output.Node>
+
+            @Serializable
+            data class Draft(
+                override val id: String,
+                override val user: User.Output.Node,
+                override val content: String,
+                override val isRead: Boolean,
+                override val createdAt: Instant,
+                override val updatedAt: Instant,
+                override val channels: List<Channel.Output.Node>,
+                override val mentions: List<Mention.Output.Node>,
+                override val noteRelationships: List<NoteRelationship.Output.Node>,
+                override val threadNotes: List<ThreadNote.Output.Node>,
+                override val pinners: List<User.Output.Node>
+
+            ) : Populated()
+
+            @Serializable
+            data class Created(
+                override val id: String,
+                override val user: User.Output.Node,
+                override val content: String,
+                override val isRead: Boolean,
+                override val createdAt: Instant,
+                override val updatedAt: Instant,
+                override val channels: List<Channel.Output.Node>,
+                override val mentions: List<Mention.Output.Node>,
+                override val noteRelationships: List<NoteRelationship.Output.Node>,
+                override val threadNotes: List<ThreadNote.Output.Node>,
+                override val pinners: List<User.Output.Node>
+            ) : Populated()
+        }
 
         @Serializable
         data class Unpopulated(

@@ -82,5 +82,5 @@ object UserModule {
     @Provides
     fun provideNoteRepository(
         @Named(Stores.Single.Note) noteStore: NoteStore,
-    ): NoteRepository = RealNoteRepository(noteStore)
+    ): NoteRepository = RealNoteRepository(noteStore, CoroutineScope(Dispatchers.Default))
 }

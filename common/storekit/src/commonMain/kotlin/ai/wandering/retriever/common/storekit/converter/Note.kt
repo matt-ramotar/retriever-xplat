@@ -32,7 +32,7 @@ fun Note.Network.Node.asNodeOutput() = Note.Output.Node(
 )
 
 
-fun Note.Network.Populated.asPopulatedOutput() = Note.Output.Populated(
+fun Note.Network.Populated.asPopulatedOutput() = Note.Output.Populated.Created(
     id = _id,
     user = user.asNodeOutput(),
     content = content,
@@ -46,7 +46,7 @@ fun Note.Network.Populated.asPopulatedOutput() = Note.Output.Populated(
     pinners = pinners.map { it.asNodeOutput() }
 )
 
-fun Note.Output.Populated.asLocal() = LocalNote(
+fun Note.Output.Populated.Created.asLocal() = LocalNote(
     id = id,
     userId = user.id,
     content = content,
@@ -65,7 +65,7 @@ fun Note.Output.Node.asLocal() = LocalNote(
     updatedAt = updatedAt.toString()
 )
 
-fun Note.Output.Populated.asNodeOutput() = Note.Output.Node(
+fun Note.Output.Populated.Created.asNodeOutput() = Note.Output.Node(
     id = id,
     userId = user.id,
     content = content,
@@ -74,7 +74,7 @@ fun Note.Output.Populated.asNodeOutput() = Note.Output.Node(
     updatedAt = updatedAt
 )
 
-fun Note.Output.Populated.asUnpopulatedOutput() = Note.Output.Unpopulated(
+fun Note.Output.Populated.Created.asUnpopulatedOutput() = Note.Output.Unpopulated(
     id = id,
     userId = user.id,
     content = content,
@@ -87,4 +87,37 @@ fun Note.Output.Populated.asUnpopulatedOutput() = Note.Output.Unpopulated(
     threadNoteIds = threadNotes.map { it.id },
     pinnerIds = pinners.map { it.id }
 
+)
+
+fun Note.Output.Populated.asLocal() = when (this) {
+    is Note.Output.Populated.Created -> asLocal()
+    is Note.Output.Populated.Draft -> asLocal()
+}
+
+fun Note.Output.Populated.Draft.asLocal() = LocalNote(
+    id = id,
+    userId = user.id,
+    content = content,
+    is_read = isRead,
+    createdAt = createdAt.toString(),
+    updatedAt = updatedAt.toString()
+)
+
+fun Note.Output.Populated.asUnpopulatedOutput() = when (this) {
+    is Note.Output.Populated.Created -> asUnpopulatedOutput()
+    is Note.Output.Populated.Draft -> asUnpopulatedOutput()
+}
+
+fun Note.Output.Populated.Draft.asUnpopulatedOutput() = Note.Output.Unpopulated(
+    id = id,
+    userId = user.id,
+    content = content,
+    isRead = isRead,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    channelIds = channels.map { it.id },
+    mentionIds = mentions.map { it.id },
+    noteRelationshipIds = noteRelationships.map { it.id },
+    threadNoteIds = threadNotes.map { it.id },
+    pinnerIds = pinners.map { it.id }
 )

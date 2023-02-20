@@ -7,4 +7,5 @@ interface NoteRepository {
     fun streamAll(userId: String): Flow<List<Note.Output.Populated>?>
     fun stream(noteId: String): Flow<Note.Output.Populated?>
     suspend fun get(noteId: String): Note.Output.Populated?
+    suspend fun create(input: Note.Output.Populated): Boolean
 }
