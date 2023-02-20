@@ -30,7 +30,7 @@ sealed class Channel {
             val tag: Tag.Network,
 
             // Relationships
-            val notes: List<Note.Network>,
+            val notes: List<Note.Network.Node>,
             val pinners: List<User.Network>
         ) : Output()
 

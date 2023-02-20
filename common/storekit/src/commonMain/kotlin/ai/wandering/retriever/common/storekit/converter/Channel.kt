@@ -66,6 +66,15 @@ fun Channel.Network.Populated.asPopulatedOutput() = Channel.Output.Populated(
     pinners = pinners.map { it.asNodeOutput() }
 )
 
+fun Channel.Network.Node.asNodeOutput() = Channel.Output.Node(
+    id = _id,
+    userId = userId,
+    graphId = graphId,
+    tagId = tagId,
+    createdAt = createdAt
+)
+
+
 fun Channel.Output.Populated.asLocal() = LocalChannel(
     id = id,
     userId = user.id,

@@ -6,6 +6,7 @@ import ai.wandering.retriever.android.app.wiring.AppDependencies
 import ai.wandering.retriever.android.common.navigation.Screen
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.feature.account_tab.AccountTab
+import ai.wandering.retriever.android.feature.create_note.CreateNoteScreen
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
@@ -214,6 +215,10 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues) {
                     }
                 }
             }
+        }
+
+        composable("create/note") {
+            CreateNoteScreen()
         }
     }
 }

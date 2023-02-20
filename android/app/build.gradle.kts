@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":android:feature:account_tab"))
     implementation(project(":android:feature:finder_tab"))
     implementation(project(":android:feature:search_tab"))
+    implementation(project(":android:feature:create_note"))
 
     implementation("com.google.android.gms:play-services-auth:20.4.1")
 

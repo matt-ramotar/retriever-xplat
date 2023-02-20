@@ -10,7 +10,7 @@ class RealNoteRestApi(private val client: HttpClient) : NoteRestApi {
         TODO("Not yet implemented")
     }
 
-    override suspend fun get(id: String): RequestResult<Note.Network> {
+    override suspend fun get(id: String): RequestResult<Note.Network.Populated> {
         TODO("Not yet implemented")
     }
 

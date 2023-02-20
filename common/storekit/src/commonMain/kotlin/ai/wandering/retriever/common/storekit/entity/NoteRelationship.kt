@@ -44,5 +44,13 @@ sealed class NoteRelationship {
             val otherNoteId: String,
             val type: Type
         ) : Output()
+
+        @Serializable
+        data class Node(
+            val id: String,
+            val noteId: String,
+            val otherNoteId: String,
+            val type: Type
+        ) : Output()
     }
 }
