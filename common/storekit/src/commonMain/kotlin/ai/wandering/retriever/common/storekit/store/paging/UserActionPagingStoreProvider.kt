@@ -6,6 +6,7 @@ import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPa
 import ai.wandering.retriever.common.storekit.bookkeeper.UserActionPageBookkeeper
 import ai.wandering.retriever.common.storekit.converter.asNodeOutput
 import ai.wandering.retriever.common.storekit.db.queries.user_action.findAndPopulateUserAction
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.Graph
 import ai.wandering.retriever.common.storekit.entity.Note
@@ -39,7 +40,7 @@ inline fun <reified T : Any> UserAction.Network.Populated.asPopulatedOutput(seri
 
 
 class UserActionPagingStoreProvider(
-    private val user: User.Output.Node,
+    private val user: AuthenticatedUser,
     private val api: UserActionPagingApi,
     private val db: RetrieverDatabase,
     private val serializer: Json,
