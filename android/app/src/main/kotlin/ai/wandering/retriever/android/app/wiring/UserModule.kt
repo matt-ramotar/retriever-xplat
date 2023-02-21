@@ -14,9 +14,11 @@ import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.ChannelRepository
 import ai.wandering.retriever.common.storekit.repository.ChannelsManager
 import ai.wandering.retriever.common.storekit.repository.NoteRepository
+import ai.wandering.retriever.common.storekit.repository.UserActionPagingRepository
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealChannelRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealNoteRepository
+import ai.wandering.retriever.common.storekit.repository.impl.RealUserActionPagingRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealUserNotificationsRepository
 import ai.wandering.retriever.common.storekit.store.ChannelStore
 import ai.wandering.retriever.common.storekit.store.ChannelsStore
@@ -106,4 +108,9 @@ object UserModule {
         serializer: Json
     ): UserActionPagingStore = UserActionPagingStoreProvider(user, api, db, serializer).provideMutableStore()
 
+    @SingleIn(UserScope::class)
+    @Provides
+    fun provideUserActionPagingRepository(
+        @Named(Stores.Paging.UserAction) userActionPagingStore: UserActionPagingStore
+    ): UserActionPagingRepository = RealUserActionPagingRepository(userActionPagingStore)
 }

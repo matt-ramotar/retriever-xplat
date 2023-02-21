@@ -34,6 +34,7 @@ import ai.wandering.retriever.common.storekit.repository.impl.RealAuthRepository
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
@@ -42,42 +43,43 @@ import kotlinx.serialization.json.Json
 @ContributesTo(AppScope::class)
 object AppModule {
 
-    private val httpClient = HttpClientProvider().provide()
-
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideHttpClient(): HttpClient = HttpClientProvider().provide()
 
     @SingleIn(AppScope::class)
     @Provides
     fun provideSerializer(): Json = Json { ignoreUnknownKeys = true; isLenient = true; }
 
     @Provides
-    fun provideOneTapSignInApi(): OneTapSignInApi = RealOneTapSignInApi(httpClient)
+    fun provideOneTapSignInApi(httpClient: HttpClient): OneTapSignInApi = RealOneTapSignInApi(httpClient)
 
     @Provides
-    fun provideDemoSignInApi(serializer: Json): DemoSignInApi = RealDemoSignInApi(serializer, httpClient)
+    fun provideDemoSignInApi(httpClient: HttpClient, serializer: Json): DemoSignInApi = RealDemoSignInApi(serializer, httpClient)
 
     @Provides
-    fun provideAuthApi(oneTapSignInApi: OneTapSignInApi, demoSignInApi: DemoSignInApi): AuthApi = RealAuthApi(httpClient, oneTapSignInApi, demoSignInApi)
+    fun provideAuthApi(httpClient: HttpClient, oneTapSignInApi: OneTapSignInApi, demoSignInApi: DemoSignInApi): AuthApi = RealAuthApi(httpClient, oneTapSignInApi, demoSignInApi)
 
     @Provides
-    fun provideChannelRestApi(): ChannelRestApi = RealChannelRestApi(httpClient)
+    fun provideChannelRestApi(httpClient: HttpClient): ChannelRestApi = RealChannelRestApi(httpClient)
 
     @Provides
-    fun provideChannelsRestApi(): ChannelsRestApi = RealChannelsRestApi(httpClient)
+    fun provideChannelsRestApi(httpClient: HttpClient): ChannelsRestApi = RealChannelsRestApi(httpClient)
 
     @Provides
-    fun provideGraphRestApi(): GraphRestApi = RealGraphRestApi(httpClient)
+    fun provideGraphRestApi(httpClient: HttpClient): GraphRestApi = RealGraphRestApi(httpClient)
 
     @Provides
-    fun provideMentionRestApi(): MentionRestApi = RealMentionRestApi(httpClient)
+    fun provideMentionRestApi(httpClient: HttpClient): MentionRestApi = RealMentionRestApi(httpClient)
 
     @Provides
-    fun provideNoteRestApi(): NoteRestApi = RealNoteRestApi(httpClient)
+    fun provideNoteRestApi(httpClient: HttpClient): NoteRestApi = RealNoteRestApi(httpClient)
 
     @Provides
-    fun provideNotePagingApi(): NotePagingApi = RealNotePagingApi(httpClient)
+    fun provideNotePagingApi(httpClient: HttpClient): NotePagingApi = RealNotePagingApi(httpClient)
 
     @Provides
-    fun provideTagRestApi(): TagRestApi = RealTagRestApi(httpClient)
+    fun provideTagRestApi(httpClient: HttpClient): TagRestApi = RealTagRestApi(httpClient)
 
     @SingleIn(AppScope::class)
     @Provides
