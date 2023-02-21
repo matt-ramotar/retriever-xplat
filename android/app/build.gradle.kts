@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":common:storekit"))
     implementation(project(":common:socket"))
     implementation(project(":android:feature:account_tab"))
+    implementation(project(":android:feature:feed_tab"))
     implementation(project(":android:feature:finder_tab"))
     implementation(project(":android:feature:search_tab"))
     implementation(project(":android:feature:create_note"))
