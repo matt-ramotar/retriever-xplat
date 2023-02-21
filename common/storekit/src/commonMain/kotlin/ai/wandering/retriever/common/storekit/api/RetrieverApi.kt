@@ -26,7 +26,5 @@ interface RetrieverApi {
 
     val tag: TagRestApi
 
-    val userActionPaging: UserActionPagingApi
-
     val userNotificationsSocket: UserNotificationsSocketApi
 }

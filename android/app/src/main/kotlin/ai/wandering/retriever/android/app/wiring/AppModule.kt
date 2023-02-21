@@ -10,7 +10,6 @@ import ai.wandering.retriever.common.storekit.api.impl.auth.RealAuthApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealDemoSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealOneTapSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.paging.RealNotePagingApi
-import ai.wandering.retriever.common.storekit.api.impl.paging.RealUserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelsRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealGraphRestApi
@@ -19,7 +18,6 @@ import ai.wandering.retriever.common.storekit.api.impl.rest.RealNoteRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealTagRestApi
 import ai.wandering.retriever.common.storekit.api.impl.socket.RealUserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.api.paging.collection.NotePagingApi
-import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.AuthApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.DemoSignInApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.OneTapSignInApi
@@ -81,9 +79,6 @@ object AppModule {
     @Provides
     fun provideTagRestApi(): TagRestApi = RealTagRestApi(httpClient)
 
-    @Provides
-    fun provideUserActionPagingApi(): UserActionPagingApi = RealUserActionPagingApi(httpClient)
-
     @SingleIn(AppScope::class)
     @Provides
     fun provideUserNotificationsSocketApi(serializer: Json): UserNotificationsSocketApi {
@@ -110,7 +105,6 @@ object AppModule {
         noteRestApi: NoteRestApi,
         notePagingApi: NotePagingApi,
         tagRestApi: TagRestApi,
-        userActionPagingApi: UserActionPagingApi,
         userNotificationsSocketApi: UserNotificationsSocketApi
     ): RetrieverApi = RealRetrieverApi(
         auth = authApi,
@@ -121,7 +115,6 @@ object AppModule {
         note = noteRestApi,
         notePaging = notePagingApi,
         tag = tagRestApi,
-        userActionPaging = userActionPagingApi,
         userNotificationsSocket = userNotificationsSocketApi
     )
 

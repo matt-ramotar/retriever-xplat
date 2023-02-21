@@ -92,7 +92,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteC
         }
         composable(Screen.Activity.route) {
             val userActionsQuery = database.localUserQueries.findUserActionsByUserId(user.followedUserIds).executeAsList()
-            val userActions = userActionsQuery.map { UserAction.Output.Unpopulated(id = it.id, it.userId, it.objectId, it.type) }.distinct()
+            val userActions = userActionsQuery.map { UserAction.Output.Unpopulated(id = it.id, it.userId, it.objectId, it.model, it.type) }.distinct()
 
             Column {
 

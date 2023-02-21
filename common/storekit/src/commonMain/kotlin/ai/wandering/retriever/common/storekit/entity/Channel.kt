@@ -26,7 +26,7 @@ sealed class Channel {
             val _id: String,
             val createdAt: Instant,
             val user: User.Network,
-            val graph: Graph.Network,
+            val graph: Graph.Network.Node,
             val tag: Tag.Network,
 
             // Relationships

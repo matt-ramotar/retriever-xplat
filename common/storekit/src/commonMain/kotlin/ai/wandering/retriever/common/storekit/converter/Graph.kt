@@ -28,3 +28,10 @@ fun Graph.Output.Node.asLocal() = LocalGraph(
     ownerId = userId,
     createdAt = createdAt.toString()
 )
+
+fun Graph.Network.Node.asNodeOutput() = Graph.Output.Node(
+    id = _id,
+    userId = userId,
+    name = name,
+    createdAt = Instant.parse(createdAt)
+)

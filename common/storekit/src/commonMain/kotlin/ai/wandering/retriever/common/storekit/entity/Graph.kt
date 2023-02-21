@@ -23,6 +23,14 @@ sealed class Graph {
         ) : Network()
 
         @Serializable
+        data class Node(
+            val _id: String,
+            val userId: String,
+            val name: String,
+            val createdAt: String,
+        ) : Network()
+
+        @Serializable
         data class Populated(
             val _id: String,
             val user: User.Network,

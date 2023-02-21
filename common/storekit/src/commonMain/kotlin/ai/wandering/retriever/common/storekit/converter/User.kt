@@ -31,7 +31,6 @@ fun User.Network.asUnpopulatedOutput(): User.Output.Unpopulated = User.Output.Un
     pinnedGraphIds = pinnedGraphIds,
     pinnedNoteIds = pinnedNoteIds,
     actionIds = actionIds,
-    followedActionIds = followedActionIds
 )
 
 fun User.Network.asNodeOutput(): User.Output.Node = User.Output.Node(

@@ -162,7 +162,7 @@ GROUP BY note.id, user.id;
 
 
 findUserActionsByUserId:
-SELECT userAction.id, userAction.userId, userAction.objectId, userAction.type
+SELECT userAction.id, userAction.userId, userAction.objectId, userAction.type, userAction.model
 FROM localUser user
 INNER JOIN localUserAction userAction
 ON userAction.userId == user.id

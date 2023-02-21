@@ -29,7 +29,6 @@ sealed class User {
         val pinnedGraphIds: List<String>,
         val pinnedNoteIds: List<String>,
         val actionIds: List<String>,
-        val followedActionIds: List<String>
     ) : User()
 
     @Serializable
@@ -55,7 +54,6 @@ sealed class User {
             val pinnedGraphs: List<Graph.Output.Node>,
             val pinnedNotes: List<Note.Output.Node>,
             val userActions: List<UserAction.Output.Node>,
-            val followedActions: List<UserAction.Output.Node>
         ) : Output()
 
         @Serializable
@@ -79,7 +77,6 @@ sealed class User {
             val pinnedGraphIds: List<String>,
             val pinnedNoteIds: List<String>,
             val actionIds: List<String>,
-            val followedActionIds: List<String>
         ) : Output()
 
         @Serializable

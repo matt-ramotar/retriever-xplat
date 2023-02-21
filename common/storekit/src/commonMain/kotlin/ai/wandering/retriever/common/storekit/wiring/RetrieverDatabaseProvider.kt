@@ -17,10 +17,10 @@ class RetrieverDatabaseProvider {
         RetrieverDatabase(
             driver = driverFactory.createDriver(),
             localNoteRelationshipAdapter = LocalNoteRelationship.Adapter(EnumColumnAdapter()),
-            localUserActionAdapter = LocalUserAction.Adapter(typeAdapter = EnumColumnAdapter()),
+            localUserActionAdapter = LocalUserAction.Adapter(typeAdapter = EnumColumnAdapter(), modelAdapter = EnumColumnAdapter()),
             localUserNotificationAdapter = LocalUserNotification.Adapter(typeAdapter = EnumColumnAdapter()),
             localUserNotificationsAdapter = LocalUserNotifications.Adapter(notificationIdsAdapter = ListOfStringsColumnAdapter()),
-            localUserActionPageAdapter = LocalUserActionPage.Adapter(objIdsAdapter = ListOfStringsColumnAdapter()),
+            localUserActionPageAdapter = LocalUserActionPage.Adapter(userActionIdsAdapter = ListOfStringsColumnAdapter()),
             localChannelsAdapter = LocalChannels.Adapter(channelIdsAdapter = ListOfStringsColumnAdapter())
         )
 }
