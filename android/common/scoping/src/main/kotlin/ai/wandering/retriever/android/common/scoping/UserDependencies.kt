@@ -15,5 +15,5 @@ interface UserDependencies {
     val userNotificationsRepository: UserNotificationsRepository
     val channelsManager: ChannelsManager
     val noteRepository: NoteRepository
-    fun userActionPagingRepository(): UserActionPagingRepository
+    val userActionPagingRepository: UserActionPagingRepository
 }
