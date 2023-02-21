@@ -4,6 +4,7 @@ CREATE TABLE localUserAction(
     id TEXT NOT NULL PRIMARY KEY,
     userId TEXT NOT NULL,
     objectId TEXT NOT NULL,
+    model TEXT AS UserAction.Model NOT NULL,
     type TEXT AS UserAction.Type NOT NULL,
     FOREIGN KEY (userId) REFERENCES localUser (id)
 );
@@ -24,3 +25,27 @@ WHERE id = ?;
 
 clearAll:
 DELETE FROM localUserAction;
+
+findByIdAndPopulateUser:
+SELECT
+-- Action
+userAction.id AS "userActionId",
+userAction.type AS "userActionType",
+userAction.model AS "userActionModel",
+userAction.objectId AS "userActionObjectId",
+
+-- User
+user.id AS "userId",
+user.username AS "userUsername",
+user.name AS "userName",
+user.email AS "userEmail",
+user.bio AS "userBio",
+user.avatarUrl AS "userAvatarUrl",
+user.coverImageUrl AS "userCoverImageUrl"
+
+FROM localUserAction userAction
+
+LEFT JOIN localUser user
+ON userAction.userId == user.id
+
+WHERE userAction.id = ?;

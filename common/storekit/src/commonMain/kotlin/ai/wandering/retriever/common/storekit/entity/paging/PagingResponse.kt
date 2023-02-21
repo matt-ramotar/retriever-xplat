@@ -4,26 +4,19 @@ import kotlinx.serialization.Serializable
 
 
 sealed class PagingResponse<out Key : Any, out Network : Any> {
+    /**
+     * @param offset Int ID of first object in page
+     */
     @Serializable
-    data class Data<Key : Any, Network : Any>(
-        val page: Page<Key, Network>,
-        val metadata: Metadata? = null
-    ) : PagingResponse<Key, Network>() {
-        @Serializable
-        data class Page<Key : Any, Network : Any>(
-            val id: Key,
-            val objects: List<Network>? = null,
-            val prevId: Key? = null,
-            val nextId: Key? = null,
-        )
-
-        @Serializable
-        data class Metadata(
-            val totalObjects: Int,
-            val totalPages: Int,
-            val offset: Int,
-        )
-    }
+    data class Data<out Key : Any, out Network : Any>(
+        val pageId: Int,
+        val objects: List<Network>,
+        val prevPageId: Int?,
+        val nextPageId: Int?,
+        val totalObjects: Int,
+        val totalPages: Int,
+        val offset: Int
+    ) : PagingResponse<Key, Network>()
 
     object Error : PagingResponse<Nothing, Nothing>()
 }

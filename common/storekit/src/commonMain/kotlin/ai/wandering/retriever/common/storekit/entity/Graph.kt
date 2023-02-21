@@ -7,35 +7,40 @@ import kotlinx.serialization.Serializable
 
 sealed class Graph {
 
-    sealed class Request {
-        data class Create(
-            val userId: String,
-            val name: String,
-        ) : Request()
-
-        data class Update(
-            val graph: Output.Unpopulated
-        ) : Request()
-    }
 
     @Serializable
-    data class Network(
-        val _id: String,
-        val userId: String,
-        val name: String,
-        val createdAt: String,
+    sealed class Network : Graph() {
+        @Serializable
+        data class Unpopulated(
+            val _id: String,
+            val userId: String,
+            val name: String,
+            val createdAt: String,
 
-        // Relationships
-        val followerIds: List<String>,
-        val pinnerIds: List<String>
-    ) : Graph()
+            // Relationships
+            val followerIds: List<String>,
+            val pinnerIds: List<String>
+        ) : Network()
+
+        @Serializable
+        data class Populated(
+            val _id: String,
+            val user: User.Network,
+            val name: String,
+            val createdAt: String,
+
+            // Relationships
+            val followers: List<User.Network>,
+            val pinners: List<User.Network>
+        ) : Network()
+    }
 
     @Serializable
     sealed class Output : Graph() {
         @Serializable
         data class Populated(
             val id: String,
-            val userId: String,
+            val user: User.Output.Node,
             val name: String,
             val createdAt: Instant,
 

@@ -25,3 +25,57 @@ WHERE id = ?;
 
 clearAll:
 DELETE FROM localGraph;
+
+findByIdAndPopulate:
+SELECT
+-- Graph
+graph.id AS "graphId",
+graph.name AS "graphName",
+graph.createdAt AS "graphCreatedAt",
+
+-- User
+user.id AS "userId",
+user.username AS "userUsername",
+user.name AS "userName",
+user.email AS "userEmail",
+user.bio AS "userBio",
+user.avatarUrl AS "userAvatarUrl",
+user.coverImageUrl AS "userCoverImageUrl",
+
+-- Follower
+follower.id AS "followerId",
+follower.username AS "followerUsername",
+follower.name AS "followerName",
+follower.email AS "followerEmail",
+follower.bio AS "followerBio",
+follower.avatarUrl AS "followerAvatarUrl",
+follower.coverImageUrl AS "followerCoverImageUrl",
+
+-- Pinner
+pinner.id AS "pinnerId",
+pinner.username AS "pinnerUsername",
+pinner.name AS "pinnerName",
+pinner.email AS "pinnerEmail",
+pinner.bio AS "pinnerBio",
+pinner.avatarUrl AS "pinnerAvatarUrl",
+pinner.coverImageUrl AS "pinnerCoverImageUrl"
+
+
+FROM localGraph graph
+
+LEFT JOIN localUser user
+ON user.id == graph.ownerId
+
+LEFT JOIN userFollowingGraph
+ON userFollowingGraph.graphId == graph.id
+
+LEFT JOIN localUser follower
+ON follower.id == userFollowingGraph.userId
+
+LEFT JOIN userPinnedGraph
+ON userPinnedGraph.graphId == graph.id
+
+LEFT JOIN localUser pinner
+ON pinner.id == userPinnedGraph.userId
+
+WHERE graph.id = ?;

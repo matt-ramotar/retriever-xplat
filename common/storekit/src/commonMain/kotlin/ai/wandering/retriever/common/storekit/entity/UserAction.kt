@@ -3,10 +3,26 @@
 
 package ai.wandering.retriever.common.storekit.entity
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 sealed class UserAction {
+
+    @Serializable
+    enum class Model(val value: String) {
+        Note("Note"),
+        Thread("Thread"),
+        Channel("Channel"),
+        Graph("Graph"),
+        User("User");
+
+        companion object {
+            private val valueToModel = Model.values().associateBy { it.value }
+            fun lookup(value: String): Model = valueToModel[value]!!
+        }
+    }
 
     @Serializable
     enum class Type(val value: String) {
@@ -40,12 +56,26 @@ sealed class UserAction {
     }
 
     @Serializable
-    data class Network(
-        val _id: String,
-        val userId: String,
-        val objectId: String,
-        val type: String
-    ) : UserAction()
+    sealed class Network : UserAction() {
+
+        @Serializable
+        data class Populated(
+            val _id: String,
+            val user: User.Network,
+            val obj: String,
+            val model: String,
+            val type: String
+        ) : Network()
+
+        @Serializable
+        data class Unpopulated(
+            val _id: String,
+            val userId: String,
+            val objectId: String,
+            val model: String,
+            val type: String
+        ) : Network()
+    }
 
     @Serializable
     sealed class Output : UserAction() {
@@ -54,6 +84,7 @@ sealed class UserAction {
             val id: String,
             val user: User.Output.Node,
             val obj: T,
+            val model: Model,
             val type: Type
         ) : Output()
 
@@ -62,6 +93,7 @@ sealed class UserAction {
             val id: String,
             val userId: String,
             val objId: String,
+            val model: Model,
             val type: Type
         ) : Output()
 
@@ -70,6 +102,7 @@ sealed class UserAction {
             val id: String,
             val userId: String,
             val objId: String,
+            val model: Model,
             val type: Type
         ) : Output()
     }
