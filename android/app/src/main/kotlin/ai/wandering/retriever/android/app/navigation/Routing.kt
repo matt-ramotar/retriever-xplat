@@ -9,6 +9,7 @@ import ai.wandering.retriever.android.feature.account_tab.AccountTab
 import ai.wandering.retriever.android.feature.create_note.CreateNoteScreen
 import ai.wandering.retriever.android.feature.create_note.NoteCreationViewModel
 import ai.wandering.retriever.android.feature.feed_tab.FeedTab
+import ai.wandering.retriever.android.feature.feed_tab.FeedViewModel
 import ai.wandering.retriever.android.feature.finder_tab.FinderTab
 import ai.wandering.retriever.android.feature.finder_tab.ProfileScreen
 import ai.wandering.retriever.android.feature.search_tab.SearchTab
@@ -48,7 +49,7 @@ data class NotificationsResponse(
 )
 
 @Composable
-fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteCreationViewModel: NoteCreationViewModel = viewModel()) {
+fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteCreationViewModel: NoteCreationViewModel = viewModel(), feedViewModel: FeedViewModel = viewModel()) {
 
 
     val app = LocalContext.current.applicationContext as RetrieverApp
@@ -91,7 +92,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteC
             )
         }
         composable(Screen.Activity.route) {
-            FeedTab()
+            FeedTab(feedViewModel = feedViewModel)
         }
         composable(Screen.Notification.route) {
             Column {
@@ -144,7 +145,6 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteC
 
             LaunchedEffect(channelId) {
                 channelsManager.streamChannel(channelId).collectLatest { channel ->
-                    println("In Routing: $channel")
                     channelStateFlow.value = channel
 
                 }

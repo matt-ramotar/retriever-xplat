@@ -43,7 +43,6 @@ fun CreateNoteScreen(noteCreationViewModel: NoteCreationViewModel = viewModel())
                 value = state.value.note.content,
                 onValueChange = {
                     noteCreationViewModel.updateContent(it)
-                    println(it.trimIndent())
                 },
             )
 

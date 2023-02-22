@@ -33,16 +33,12 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
             .build()
 
     override fun provideFetcher(): Fetcher<String, Channels> = Fetcher.of { userId ->
-        println("Fetcher")
         when (val result = api.get(userId)) {
             is RequestResult.Exception -> {
-                println("Error in fetcher: ${result.error.cause}")
-                println("!")
                 TODO()
             }
 
             is RequestResult.Success -> {
-                println("Result in fetcher: ${result.data}")
                 result.data
             }
         }
@@ -85,9 +81,7 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
                 try {
                     val channels = db.localChannelsQueries.asPopulated(userId, db.localChannelQueries)
                     send(channels)
-                    println("Sent channels")
                 } catch (error: Throwable) {
-                    println("Error reading from SOT: ${error.cause}")
                 }
             }
         },
@@ -98,10 +92,8 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
                 val channelIds = listOfPopulated.map { it.id }
                 if (userId != null) {
                     val channels = LocalChannels(userId, channelIds)
-                    println("Writing to SOT 1: $channels")
                     db.localChannelsQueries.upsert(channels)
 
-                    println("Writing to SOT 2")
                     listOfPopulated.forEachIndexed { index, populated ->
 
 
@@ -134,10 +126,8 @@ class ChannelsStoreProvider(private val api: ChannelsRestApi, private val db: Re
                         // Channel
                         db.localChannelQueries.upsert(populated.asLocal())
                     }
-                    println("Wrote to SOT")
                 }
             } catch (error: Throwable) {
-                println("Error writing to SOT: ${error.cause}}")
             }
 
         },

@@ -19,9 +19,10 @@ class RealUserActionPagingRepository(private val userActionPagingStore: UserActi
 
     override suspend fun load() {
 
+        println("Repository")
         if (nextPageId.value != null) {
             val request: StoreReadRequest<Int> = StoreReadRequest.fresh(nextPageId.value!!)
-            when (val storeResponse = userActionPagingStore.stream<Boolean>(request).first()) {
+            when (val storeResponse = userActionPagingStore.stream<Boolean>(request).first { it.dataOrNull() != null }) {
                 is StoreReadResponse.Data -> {
 
                     val pagingResponse = storeResponse.value
@@ -41,6 +42,7 @@ class RealUserActionPagingRepository(private val userActionPagingStore: UserActi
                 }
 
                 else -> {
+                    println(storeResponse.toString())
                     // TODO(mramotar)
                 }
             }

@@ -10,6 +10,7 @@ import ai.wandering.retriever.android.common.scoping.ComponentHolder
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.common.sig.SigTheme
 import ai.wandering.retriever.android.feature.create_note.NoteCreationViewModel
+import ai.wandering.retriever.android.feature.feed_tab.FeedViewModel
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import android.content.Context
@@ -39,6 +40,14 @@ class MainActivity : ComponentActivity(), ComponentHolder {
         )
     }
 
+    private val feedViewModel = viewModels<FeedViewModel> {
+        ViewModelProvider.Factory.from(
+            ViewModelInitializer(FeedViewModel::class.java) {
+                FeedViewModel(userDependencies.userActionPagingRepository)
+            }
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,7 +62,7 @@ class MainActivity : ComponentActivity(), ComponentHolder {
             val notifications = userNotificationsRepository.notifications.collectAsState()
 
             SigTheme {
-                RetrieverScaffold(notifications.value.size, noteCreationViewModel = noteCreationViewModel.value)
+                RetrieverScaffold(notifications.value.size, noteCreationViewModel = noteCreationViewModel.value, feedViewModel = feedViewModel.value)
             }
         }
     }

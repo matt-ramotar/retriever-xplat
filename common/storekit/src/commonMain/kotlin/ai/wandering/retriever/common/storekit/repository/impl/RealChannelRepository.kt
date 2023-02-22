@@ -16,12 +16,9 @@ class RealChannelRepository(
     private val channelsStore: ChannelsStore
 ) : ChannelRepository {
     override fun streamAll(userId: String): Flow<List<Channel.Output.Populated>?> = channelFlow {
-
-        println("Repository")
         val request = StoreReadRequest.fresh(userId)
 
         channelsStore.stream<List<Channel.Output.Populated>>(request).collectLatest {
-            println(it)
             send(it.dataOrNull())
         }
     }

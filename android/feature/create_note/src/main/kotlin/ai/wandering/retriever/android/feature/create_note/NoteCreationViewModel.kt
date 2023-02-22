@@ -69,7 +69,6 @@ class NoteCreationViewModel(user: AuthenticatedUser, private val noteRepository:
                 }
 
                 false -> {
-                    println("FALSE")
                     recordSyncing(false)
                     stateFlow.value.setIsSynced(false)
 

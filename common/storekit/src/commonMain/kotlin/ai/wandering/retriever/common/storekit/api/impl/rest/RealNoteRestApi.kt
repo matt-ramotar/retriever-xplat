@@ -27,12 +27,9 @@ class RealNoteRestApi(private val client: HttpClient) : NoteRestApi {
             setBody(input)
             contentType(ContentType.Application.Json)
         }
-        println("Response: ${response.bodyAsText()}")
         val updated: Note.Network.Unpopulated = response.body()
-        println("Updated: $updated")
         RequestResult.Success(true)
     } catch (error: Throwable) {
-        println("Error: ${error.cause}")
         RequestResult.Exception(error)
     }
 }

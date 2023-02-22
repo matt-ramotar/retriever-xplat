@@ -13,6 +13,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.Json
@@ -22,11 +23,27 @@ class RealUserActionPagingApi(private val user: AuthenticatedUser, private val c
     override val prefetchDistance: Int = limit
     override val maxSize: Int = Int.MAX_VALUE
     override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, UserAction.Network.Populated>> = try {
-        client.post(Endpoints.paging(user.id, Collection.UserAction)) {
-            setBody(PagingRequest(pageId = key, limit = limit, type = type, query = query))
+
+        val endpoint = Endpoints.paging(user.id, Collection.UserAction)
+        println("Endpoint: $endpoint")
+
+        val pagingRequest = PagingRequest(pageId = key, limit = limit, type = type)
+        println("Paging request: $pagingRequest")
+
+        val response = client.post(endpoint) {
+            setBody(pagingRequest)
             contentType(ContentType.Application.Json)
-        }.body()
+        }
+
+        println("RESPONSE = ${response.bodyAsText()}")
+
+        val pagingResponse = response.body<PagingResponse.Data<Int, UserAction.Network.Populated>>()
+
+        println("Paging Response: $pagingResponse")
+        RequestResult.Success(pagingResponse)
     } catch (error: Throwable) {
+        println("Error: ${error.message}")
+        println("Error: ${error.cause}")
         RequestResult.Exception(error)
     }
 

@@ -30,13 +30,17 @@ import org.mobilenativefoundation.store.store5.Updater
 import org.mobilenativefoundation.store.store5.UpdaterResult
 
 
-inline fun <reified T : Any> UserAction.Network.Populated.asPopulatedOutput(serializer: Json) = UserAction.Output.Populated<T>(
-    id = _id,
-    user = user.asNodeOutput(),
-    obj = serializer.decodeFromString(obj),
-    model = UserAction.Model.lookup(model),
-    type = UserAction.Type.lookup(type)
-)
+inline fun <reified T : Any> UserAction.Network.Populated.asPopulatedOutput(serializer: Json): UserAction.Output.Populated<T> {
+    println("Hitting $this")
+
+    return UserAction.Output.Populated<T>(
+        id = _id,
+        user = user.asNodeOutput(),
+        obj = serializer.decodeFromString(obj),
+        model = UserAction.Model.lookup(model),
+        type = UserAction.Type.lookup(type)
+    )
+}
 
 
 class UserActionPagingStoreProvider(
@@ -52,11 +56,11 @@ class UserActionPagingStoreProvider(
 
                 val userActions = pagingResponse.objects.map { userAction ->
                     when (val model = UserAction.Model.lookup(userAction.model)) {
-                        UserAction.Model.Note -> userAction.asPopulatedOutput<Note.Output.Populated>(serializer)
-                        UserAction.Model.Thread -> userAction.asPopulatedOutput<Thread.Output.Populated>(serializer)
-                        UserAction.Model.Channel -> userAction.asPopulatedOutput<Channel.Output.Populated>(serializer)
-                        UserAction.Model.Graph -> userAction.asPopulatedOutput<Graph.Output.Populated>(serializer)
-                        UserAction.Model.User -> userAction.asPopulatedOutput<User.Output.Populated>(serializer)
+                        UserAction.Model.Note -> userAction.asPopulatedOutput<Note.Network.Populated>(serializer)
+                        UserAction.Model.Thread -> userAction.asPopulatedOutput<Thread.Network>(serializer)
+                        UserAction.Model.Channel -> userAction.asPopulatedOutput<Channel.Network.Populated>(serializer)
+                        UserAction.Model.Graph -> userAction.asPopulatedOutput<Graph.Network.Populated>(serializer)
+                        UserAction.Model.User -> userAction.asPopulatedOutput<User.Network>(serializer)
                     }
 
                 }
@@ -104,6 +108,7 @@ class UserActionPagingStoreProvider(
     override fun provideFetcher(): Fetcher<Int, PagingResponse<Int, UserAction.Network.Populated>> = Fetcher.of { pageId ->
         val userId = user.id
         val query = Json { "userId" to userId }
+        println("Fetcher")
 
         when (val result = api.get(pageId, PagingType.Append, query)) {
             is RequestResult.Exception -> PagingResponse.Error
