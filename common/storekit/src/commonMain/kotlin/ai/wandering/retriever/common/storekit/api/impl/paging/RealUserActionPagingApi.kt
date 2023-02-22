@@ -1,7 +1,9 @@
 package ai.wandering.retriever.common.storekit.api.impl.paging
 
+import ai.wandering.retriever.common.storekit.api.impl.Collection
 import ai.wandering.retriever.common.storekit.api.impl.Endpoints
 import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
+import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.UserAction
 import ai.wandering.retriever.common.storekit.entity.paging.PagingRequest
 import ai.wandering.retriever.common.storekit.entity.paging.PagingResponse
@@ -11,20 +13,37 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.Json
 
-class RealUserActionPagingApi(private val client: HttpClient) : UserActionPagingApi {
+class RealUserActionPagingApi(private val user: AuthenticatedUser, private val client: HttpClient) : UserActionPagingApi {
     override val limit: Int = 20
     override val prefetchDistance: Int = limit
     override val maxSize: Int = Int.MAX_VALUE
-    override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, UserAction.Network>> = try {
-        client.post(Endpoints.PAGING_USER_ACTION) {
-            setBody(PagingRequest(key, limit, type, query))
+    override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, UserAction.Network.Populated>> = try {
+
+        val endpoint = Endpoints.paging(user.id, Collection.UserAction)
+        println("Endpoint: $endpoint")
+
+        val pagingRequest = PagingRequest(pageId = key, limit = limit, type = type)
+        println("Paging request: $pagingRequest")
+
+        val response = client.post(endpoint) {
+            setBody(pagingRequest)
             contentType(ContentType.Application.Json)
-        }.body()
+        }
+
+        println("RESPONSE = ${response.bodyAsText()}")
+
+        val pagingResponse = response.body<PagingResponse.Data<Int, UserAction.Network.Populated>>()
+
+        println("Paging Response: $pagingResponse")
+        RequestResult.Success(pagingResponse)
     } catch (error: Throwable) {
+        println("Error: ${error.message}")
+        println("Error: ${error.cause}")
         RequestResult.Exception(error)
     }
 

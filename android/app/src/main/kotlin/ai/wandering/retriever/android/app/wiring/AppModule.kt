@@ -10,7 +10,6 @@ import ai.wandering.retriever.common.storekit.api.impl.auth.RealAuthApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealDemoSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealOneTapSignInApi
 import ai.wandering.retriever.common.storekit.api.impl.paging.RealNotePagingApi
-import ai.wandering.retriever.common.storekit.api.impl.paging.RealUserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealChannelsRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealGraphRestApi
@@ -19,7 +18,6 @@ import ai.wandering.retriever.common.storekit.api.impl.rest.RealNoteRestApi
 import ai.wandering.retriever.common.storekit.api.impl.rest.RealTagRestApi
 import ai.wandering.retriever.common.storekit.api.impl.socket.RealUserNotificationsSocketApi
 import ai.wandering.retriever.common.storekit.api.paging.collection.NotePagingApi
-import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.AuthApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.DemoSignInApi
 import ai.wandering.retriever.common.storekit.api.rest.auth.OneTapSignInApi
@@ -36,6 +34,7 @@ import ai.wandering.retriever.common.storekit.repository.impl.RealAuthRepository
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
@@ -44,45 +43,43 @@ import kotlinx.serialization.json.Json
 @ContributesTo(AppScope::class)
 object AppModule {
 
-    private val httpClient = HttpClientProvider().provide()
-
+    @SingleIn(AppScope::class)
+    @Provides
+    fun provideHttpClient(): HttpClient = HttpClientProvider().provide()
 
     @SingleIn(AppScope::class)
     @Provides
     fun provideSerializer(): Json = Json { ignoreUnknownKeys = true; isLenient = true; }
 
     @Provides
-    fun provideOneTapSignInApi(): OneTapSignInApi = RealOneTapSignInApi(httpClient)
+    fun provideOneTapSignInApi(httpClient: HttpClient): OneTapSignInApi = RealOneTapSignInApi(httpClient)
 
     @Provides
-    fun provideDemoSignInApi(serializer: Json): DemoSignInApi = RealDemoSignInApi(serializer, httpClient)
+    fun provideDemoSignInApi(httpClient: HttpClient, serializer: Json): DemoSignInApi = RealDemoSignInApi(serializer, httpClient)
 
     @Provides
-    fun provideAuthApi(oneTapSignInApi: OneTapSignInApi, demoSignInApi: DemoSignInApi): AuthApi = RealAuthApi(httpClient, oneTapSignInApi, demoSignInApi)
+    fun provideAuthApi(httpClient: HttpClient, oneTapSignInApi: OneTapSignInApi, demoSignInApi: DemoSignInApi): AuthApi = RealAuthApi(httpClient, oneTapSignInApi, demoSignInApi)
 
     @Provides
-    fun provideChannelRestApi(): ChannelRestApi = RealChannelRestApi(httpClient)
+    fun provideChannelRestApi(httpClient: HttpClient): ChannelRestApi = RealChannelRestApi(httpClient)
 
     @Provides
-    fun provideChannelsRestApi(): ChannelsRestApi = RealChannelsRestApi(httpClient)
+    fun provideChannelsRestApi(httpClient: HttpClient): ChannelsRestApi = RealChannelsRestApi(httpClient)
 
     @Provides
-    fun provideGraphRestApi(): GraphRestApi = RealGraphRestApi(httpClient)
+    fun provideGraphRestApi(httpClient: HttpClient): GraphRestApi = RealGraphRestApi(httpClient)
 
     @Provides
-    fun provideMentionRestApi(): MentionRestApi = RealMentionRestApi(httpClient)
+    fun provideMentionRestApi(httpClient: HttpClient): MentionRestApi = RealMentionRestApi(httpClient)
 
     @Provides
-    fun provideNoteRestApi(): NoteRestApi = RealNoteRestApi(httpClient)
+    fun provideNoteRestApi(httpClient: HttpClient): NoteRestApi = RealNoteRestApi(httpClient)
 
     @Provides
-    fun provideNotePagingApi(): NotePagingApi = RealNotePagingApi(httpClient)
+    fun provideNotePagingApi(httpClient: HttpClient): NotePagingApi = RealNotePagingApi(httpClient)
 
     @Provides
-    fun provideTagRestApi(): TagRestApi = RealTagRestApi(httpClient)
-
-    @Provides
-    fun provideUserActionPagingApi(): UserActionPagingApi = RealUserActionPagingApi(httpClient)
+    fun provideTagRestApi(httpClient: HttpClient): TagRestApi = RealTagRestApi(httpClient)
 
     @SingleIn(AppScope::class)
     @Provides
@@ -110,7 +107,6 @@ object AppModule {
         noteRestApi: NoteRestApi,
         notePagingApi: NotePagingApi,
         tagRestApi: TagRestApi,
-        userActionPagingApi: UserActionPagingApi,
         userNotificationsSocketApi: UserNotificationsSocketApi
     ): RetrieverApi = RealRetrieverApi(
         auth = authApi,
@@ -121,7 +117,6 @@ object AppModule {
         note = noteRestApi,
         notePaging = notePagingApi,
         tag = tagRestApi,
-        userActionPaging = userActionPagingApi,
         userNotificationsSocket = userNotificationsSocketApi
     )
 

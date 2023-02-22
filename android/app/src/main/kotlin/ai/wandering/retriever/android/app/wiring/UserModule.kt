@@ -4,6 +4,8 @@ import ai.wandering.retriever.android.common.channels.RealChannelsManager
 import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.android.common.scoping.UserScope
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
+import ai.wandering.retriever.common.storekit.api.impl.paging.RealUserActionPagingApi
+import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.api.rest.collection.ChannelsRestApi
 import ai.wandering.retriever.common.storekit.api.rest.single.ChannelRestApi
 import ai.wandering.retriever.common.storekit.api.rest.single.NoteRestApi
@@ -12,22 +14,28 @@ import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.repository.ChannelRepository
 import ai.wandering.retriever.common.storekit.repository.ChannelsManager
 import ai.wandering.retriever.common.storekit.repository.NoteRepository
+import ai.wandering.retriever.common.storekit.repository.UserActionPagingRepository
 import ai.wandering.retriever.common.storekit.repository.UserNotificationsRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealChannelRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealNoteRepository
+import ai.wandering.retriever.common.storekit.repository.impl.RealUserActionPagingRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealUserNotificationsRepository
 import ai.wandering.retriever.common.storekit.store.ChannelStore
 import ai.wandering.retriever.common.storekit.store.ChannelsStore
 import ai.wandering.retriever.common.storekit.store.NoteStore
 import ai.wandering.retriever.common.storekit.store.Stores
+import ai.wandering.retriever.common.storekit.store.UserActionPagingStore
 import ai.wandering.retriever.common.storekit.store.collection.ChannelsStoreProvider
+import ai.wandering.retriever.common.storekit.store.paging.UserActionPagingStoreProvider
 import ai.wandering.retriever.common.storekit.store.single.channel.PopulatedChannelStoreProvider
 import ai.wandering.retriever.common.storekit.store.single.note.NoteStoreProvider
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import javax.inject.Named
 
 
@@ -83,4 +91,26 @@ object UserModule {
     fun provideNoteRepository(
         @Named(Stores.Single.Note) noteStore: NoteStore,
     ): NoteRepository = RealNoteRepository(noteStore, CoroutineScope(Dispatchers.Default))
+
+    @Provides
+    fun provideUserActionPagingApi(
+        user: AuthenticatedUser,
+        client: HttpClient
+    ): UserActionPagingApi = RealUserActionPagingApi(user, client)
+
+    @SingleIn(UserScope::class)
+    @Provides
+    @Named(Stores.Paging.UserAction)
+    fun provideUserActionPagingStore(
+        user: AuthenticatedUser,
+        api: UserActionPagingApi,
+        db: RetrieverDatabase,
+        serializer: Json
+    ): UserActionPagingStore = UserActionPagingStoreProvider(user, api, db, serializer).provideMutableStore()
+
+    @SingleIn(UserScope::class)
+    @Provides
+    fun provideUserActionPagingRepository(
+        @Named(Stores.Paging.UserAction) userActionPagingStore: UserActionPagingStore
+    ): UserActionPagingRepository = RealUserActionPagingRepository(userActionPagingStore)
 }

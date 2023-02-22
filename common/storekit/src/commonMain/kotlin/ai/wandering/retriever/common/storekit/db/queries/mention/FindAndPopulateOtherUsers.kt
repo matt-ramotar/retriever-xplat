@@ -25,7 +25,7 @@ fun LocalMentionQueries.findAndPopulateOtherUsers(userId: String): List<User.Out
                 pinnedGraphs = listOf(),
                 notes = listOf(),
                 userActions = listOf(),
-                graphs = listOf()
+                graphs = listOf(),
             )
         }
 }

@@ -22,7 +22,6 @@ class RealUserNotificationsRepository(socket: UserNotificationsSocketApi, user: 
             socket.subscribe(user.id).collectLatest { result ->
                 when (result) {
                     is RequestResult.Exception -> {
-                        println(result.error.toString())
                     }
 
                     is RequestResult.Success -> {

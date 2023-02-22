@@ -1,0 +1,49 @@
+CREATE TABLE userFollowedAction(
+    userId TEXT NOT NULL,
+    userActionId TEXT NOT NULL,
+    FOREIGN KEY (userId) REFERENCES localUser (id),
+    FOREIGN KEY (userActionId) REFERENCES localUserAction (id),
+    PRIMARY KEY (userId, userActionId)
+);
+
+find:
+SELECT *
+FROM userFollowedAction;
+
+findById:
+SELECT *
+FROM userFollowedAction
+WHERE userId = ? AND userActionId = ?;
+
+upsert:
+INSERT OR REPLACE INTO userFollowedAction
+VALUES ?;
+
+clearById:
+DELETE
+FROM userFollowedAction
+WHERE userId = ? AND userActionId = ?;
+
+clearAll:
+DELETE FROM userFollowedAction;
+
+findByUserId:
+SELECT
+-- Action
+action.id AS "actionId",
+action.objectId AS "actionObjectId",
+action.type AS "actionType",
+action.model AS "actionModel",
+action.userId AS "actionUserId",
+-- User
+user.id AS "userId",
+user.name AS "userName",
+user.username AS "userUsername",
+user.avatarUrl AS "userAvatarUrl"
+
+FROM userFollowedAction
+LEFT JOIN localUserAction action
+ON action.id == userFollowedAction.userActionId
+LEFT JOIN localUser user
+ON user.id == action.userId
+WHERE userFollowedAction.userId = ?;

@@ -7,17 +7,17 @@ import kotlinx.serialization.Serializable
 sealed class Thread {
     @Serializable
     data class Network(
-        val _id: String,
+        override val _id: String,
         val title: String?,
         val description: String?,
         val userId: String,
-    ) : Thread()
+    ) : Thread(), Identifiable.Network
 
     @Serializable
-    sealed class Output : Thread() {
+    sealed class Output : Thread(), Identifiable.Output {
         @Serializable
         data class Populated(
-            val id: String,
+            override val id: String,
             val title: String?,
             val description: String?,
             val User: User.Output.Node,
@@ -25,7 +25,7 @@ sealed class Thread {
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val title: String?,
             val description: String?,
             val userId: String,

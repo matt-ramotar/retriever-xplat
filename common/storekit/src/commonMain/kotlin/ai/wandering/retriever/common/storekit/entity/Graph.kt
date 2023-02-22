@@ -7,35 +7,48 @@ import kotlinx.serialization.Serializable
 
 sealed class Graph {
 
-    sealed class Request {
-        data class Create(
+
+    @Serializable
+    sealed class Network : Graph(), Identifiable.Network {
+        @Serializable
+        data class Unpopulated(
+            override val _id: String,
             val userId: String,
             val name: String,
-        ) : Request()
+            val createdAt: String,
 
-        data class Update(
-            val graph: Output.Unpopulated
-        ) : Request()
+            // Relationships
+            val followerIds: List<String>,
+            val pinnerIds: List<String>
+        ) : Network()
+
+        @Serializable
+        data class Node(
+            override val _id: String,
+            val userId: String,
+            val name: String,
+            val createdAt: String,
+        ) : Network()
+
+        @Serializable
+        data class Populated(
+            override val _id: String,
+            val user: User.Network,
+            val name: String,
+            val createdAt: String,
+
+            // Relationships
+            val followers: List<User.Network>,
+            val pinners: List<User.Network>
+        ) : Network()
     }
 
     @Serializable
-    data class Network(
-        val _id: String,
-        val userId: String,
-        val name: String,
-        val createdAt: String,
-
-        // Relationships
-        val followerIds: List<String>,
-        val pinnerIds: List<String>
-    ) : Graph()
-
-    @Serializable
-    sealed class Output : Graph() {
+    sealed class Output : Graph(), Identifiable.Output {
         @Serializable
         data class Populated(
-            val id: String,
-            val userId: String,
+            override val id: String,
+            val user: User.Output.Node,
             val name: String,
             val createdAt: Instant,
 
@@ -46,7 +59,7 @@ sealed class Graph {
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val userId: String,
             val name: String,
             val createdAt: Instant,
@@ -58,7 +71,7 @@ sealed class Graph {
 
         @Serializable
         data class Node(
-            val id: String,
+            override val id: String,
             val userId: String,
             val name: String,
             val createdAt: Instant

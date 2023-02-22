@@ -31,7 +31,7 @@ class NoteStoreProvider(private val api: NoteRestApi, private val db: RetrieverD
                 try {
                     db.localNoteQueries.findAndPopulate(local.id)
                 } catch (error: Throwable) {
-                    println("Error converting from local to output: ${error.cause}")
+
                     TODO()
                 }
             }
@@ -81,7 +81,7 @@ class NoteStoreProvider(private val api: NoteRestApi, private val db: RetrieverD
                 try {
                     send(db.localNoteQueries.findById(channelId).executeAsOneOrNull())
                 } catch (error: Throwable) {
-                    println("Error reading from SOT: ${error.cause}")
+
                 }
             }
         },

@@ -10,7 +10,7 @@ typealias AuthenticatedUser = User.Output.Unpopulated
 sealed class User {
     @Serializable
     data class Network(
-        val _id: String,
+        override val _id: String,
         val name: String,
         val username: String,
         val email: String,
@@ -29,13 +29,13 @@ sealed class User {
         val pinnedGraphIds: List<String>,
         val pinnedNoteIds: List<String>,
         val actionIds: List<String>,
-    ) : User()
+    ) : User(), Identifiable.Network
 
     @Serializable
-    sealed class Output : User() {
+    sealed class Output : User(), Identifiable.Output {
         @Serializable
         data class Populated(
-            val id: String,
+            override val id: String,
             val name: String,
             val username: String,
             val email: String,
@@ -53,12 +53,12 @@ sealed class User {
             val pinnedChannels: List<Channel.Output.Node>,
             val pinnedGraphs: List<Graph.Output.Node>,
             val pinnedNotes: List<Note.Output.Node>,
-            val userActions: List<UserAction.Output.Node>
+            val userActions: List<UserAction.Output.Node>,
         ) : Output()
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val name: String,
             val username: String,
             val email: String,
@@ -81,7 +81,7 @@ sealed class User {
 
         @Serializable
         data class Node(
-            val id: String,
+            override val id: String,
             val name: String,
             val username: String,
             val email: String,

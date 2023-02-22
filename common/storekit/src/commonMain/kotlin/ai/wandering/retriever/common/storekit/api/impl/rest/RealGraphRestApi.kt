@@ -6,7 +6,7 @@ import ai.wandering.retriever.common.storekit.result.RequestResult
 import io.ktor.client.HttpClient
 
 class RealGraphRestApi(private val client: HttpClient) : GraphRestApi {
-    override suspend fun get(id: String): RequestResult<Graph.Network> {
+    override suspend fun get(id: String): RequestResult<Graph.Network.Populated> {
         TODO("Not yet implemented")
     }
 

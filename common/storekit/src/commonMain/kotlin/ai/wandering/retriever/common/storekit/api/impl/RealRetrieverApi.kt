@@ -21,6 +21,5 @@ class RealRetrieverApi(
     override val note: NoteRestApi,
     override val notePaging: NotePagingApi,
     override val tag: TagRestApi,
-    override val userActionPaging: UserActionPagingApi,
     override val userNotificationsSocket: UserNotificationsSocketApi
 ) : RetrieverApi

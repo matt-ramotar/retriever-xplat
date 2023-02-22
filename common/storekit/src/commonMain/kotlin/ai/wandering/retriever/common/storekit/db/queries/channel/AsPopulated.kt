@@ -12,25 +12,25 @@ import kotlinx.datetime.Instant
 
 fun LocalChannelsQueries.asPopulated(userId: String, channelQueries: LocalChannelQueries): List<Channel.Output.Populated> = try {
 
-    println("userId: $userId")
-    println("63e5a4bfe9bbc74b66f03de7")
+
+
     val channels = findById(userId).executeAsOneOrNull()
-    println("Channels = $channels")
+
 
     val populated = channels?.channelIds?.mapNotNull { channelId ->
         try {
             val populated = channelQueries.asPopulated(channelId)
-            println("Populated: $populated")
+
             populated
         } catch (error: Throwable) {
-            println("Error populating: ${error.cause}")
+
             null
         }
     }
-    println("Populated = $populated")
+
     populated ?: listOf()
 } catch (error: Throwable) {
-    println(error.cause)
+
     TODO()
 }
 
@@ -38,7 +38,7 @@ fun LocalChannelsQueries.asPopulated(userId: String, channelQueries: LocalChanne
 fun LocalChannelQueries.asPopulated(id: String): Channel.Output.Populated {
     val response = findByIdAsPopulated(id).executeAsList()
 
-    println("Local Channel Queries: $response")
+
     val node = response.first()
 
     try {

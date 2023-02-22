@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 
 sealed class Channel {
     @Serializable
-    sealed class Network : Channel() {
+    sealed class Network : Channel(), Identifiable.Network {
         @Serializable
         data class Unpopulated(
-            val _id: String,
+            override val _id: String,
             val createdAt: String,
             val userId: String,
             val graphId: String,
@@ -23,32 +23,32 @@ sealed class Channel {
 
         @Serializable
         data class Populated(
-            val _id: String,
+            override val _id: String,
             val createdAt: Instant,
             val user: User.Network,
-            val graph: Graph.Network,
+            val graph: Graph.Network.Node,
             val tag: Tag.Network,
 
             // Relationships
             val notes: List<Note.Network.Node>,
             val pinners: List<User.Network>
-        ) : Output()
+        ) : Network()
 
         @Serializable
         data class Node(
-            val _id: String,
+            override val _id: String,
             val userId: String,
             val graphId: String,
             val tagId: String,
             val createdAt: Instant
-        )
+        ) : Network()
     }
 
     @Serializable
-    sealed class Output : Channel() {
+    sealed class Output : Channel(), Identifiable.Output {
         @Serializable
         data class Populated(
-            val id: String,
+            override val id: String,
             val createdAt: Instant,
             val user: User.Output.Node,
             val graph: Graph.Output.Node,
@@ -61,7 +61,7 @@ sealed class Channel {
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val createdAt: Instant,
             val userId: String,
             val graphId: String,
@@ -74,7 +74,7 @@ sealed class Channel {
 
         @Serializable
         data class Node(
-            val id: String,
+            override val id: String,
             val userId: String,
             val graphId: String,
             val tagId: String,

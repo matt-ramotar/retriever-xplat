@@ -31,7 +31,7 @@ fun LocalUserQueries.findAndPopulate(userId: String): User.Output.Populated {
 
     val userActionsResponse = findUserActionsByUserId(listOf(userId)).executeAsList()
 
-    val userActions = userActionsResponse.map { row -> UserAction.Output.Node(row.userId, row.objectId, row.objectId, row.type) }
+    val userActions = userActionsResponse.map { row -> UserAction.Output.Node(row.userId, row.objectId, row.objectId, row.model, row.type) }
 
     val followers = userResponse
         .filter { row -> row.followerId != null }

@@ -16,4 +16,5 @@ object Endpoints {
     fun single(id: String, collection: Collection, populate: Boolean = false) = "$ROOT/${collection.value}/$id?populate=$populate"
     fun upsert(collection: Collection) = "$ROOT/${collection.value}"
     fun collection(userId: String, collection: Collection, populate: Boolean = false) = "$USER/$userId/${collection.value}?populate=$populate"
+    fun paging(userId: String, collection: Collection) = "$USER/$userId/paging/${collection.value}"
 }
