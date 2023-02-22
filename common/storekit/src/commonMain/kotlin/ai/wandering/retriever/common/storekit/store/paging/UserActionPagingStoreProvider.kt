@@ -7,10 +7,10 @@ import ai.wandering.retriever.common.storekit.bookkeeper.UserActionPageBookkeepe
 import ai.wandering.retriever.common.storekit.converter.asLocal
 import ai.wandering.retriever.common.storekit.converter.asNodeOutput
 import ai.wandering.retriever.common.storekit.db.queries.user_action_page.findAndPopulateUserActionPage
-import ai.wandering.retriever.common.storekit.entity.Identifiable
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.Graph
+import ai.wandering.retriever.common.storekit.entity.Identifiable
 import ai.wandering.retriever.common.storekit.entity.Note
 import ai.wandering.retriever.common.storekit.entity.Thread
 import ai.wandering.retriever.common.storekit.entity.User
@@ -57,28 +57,33 @@ class UserActionPagingStoreProvider(
     override fun provideConverter(): Converter<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>> =
         Converter.Builder<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>>()
             .fromNetworkToOutput { pagingResponse ->
-                require(pagingResponse is PagingResponse.Data)
 
-                val userActions = pagingResponse.objects.map { userAction ->
-                    when (val model = UserAction.Model.lookup(userAction.model)) {
-                        UserAction.Model.Note -> userAction.asPopulatedOutput<Note.Network.Populated>(serializer)
-                        UserAction.Model.Thread -> userAction.asPopulatedOutput<Thread.Network>(serializer)
-                        UserAction.Model.Channel -> userAction.asPopulatedOutput<Channel.Network.Populated>(serializer)
-                        UserAction.Model.Graph -> userAction.asPopulatedOutput<Graph.Network.Populated>(serializer)
-                        UserAction.Model.User -> userAction.asPopulatedOutput<User.Network>(serializer)
+                try {
+                    require(pagingResponse is PagingResponse.Data)
+
+                    val userActions = pagingResponse.objects.map { userAction ->
+                        when (val model = UserAction.Model.lookup(userAction.model)) {
+                            UserAction.Model.Note -> userAction.asPopulatedOutput<Note.Network.Populated>(serializer)
+                            UserAction.Model.Thread -> userAction.asPopulatedOutput<Thread.Network>(serializer)
+                            UserAction.Model.Channel -> userAction.asPopulatedOutput<Channel.Network.Populated>(serializer)
+                            UserAction.Model.Graph -> userAction.asPopulatedOutput<Graph.Network.Populated>(serializer)
+                            UserAction.Model.User -> userAction.asPopulatedOutput<User.Network>(serializer)
+                        }
+
                     }
 
+                    PagingResponse.Data(
+                        pageId = pagingResponse.pageId,
+                        nextPageId = pagingResponse.nextPageId,
+                        prevPageId = pagingResponse.prevPageId,
+                        totalPages = pagingResponse.totalPages,
+                        totalObjects = pagingResponse.totalObjects,
+                        offset = pagingResponse.offset,
+                        objects = userActions
+                    )
+                } catch (error: Throwable) {
+                    TODO()
                 }
-
-                PagingResponse.Data(
-                    pageId = pagingResponse.pageId,
-                    nextPageId = pagingResponse.nextPageId,
-                    prevPageId = pagingResponse.prevPageId,
-                    totalPages = pagingResponse.totalPages,
-                    totalObjects = pagingResponse.totalObjects,
-                    offset = pagingResponse.offset,
-                    objects = userActions
-                )
             }
             .fromOutputToLocal { pagingResponse ->
                 require(pagingResponse is PagingResponse.Data)
@@ -120,7 +125,7 @@ class UserActionPagingStoreProvider(
     }
 
     override fun provideBookkeeper(): Bookkeeper<Int> = Bookkeeper.by(
-        getLastFailedSync = { id -> db.userActionPageBookkeeperQueries.findById(id).executeAsOne().timestamp },
+        getLastFailedSync = { id -> db.userActionPageBookkeeperQueries.findById(id).executeAsOneOrNull()?.timestamp },
         setLastFailedSync = { id, timestamp ->
             try {
                 db.userActionPageBookkeeperQueries.upsert(UserActionPageBookkeeper(id, timestamp))
