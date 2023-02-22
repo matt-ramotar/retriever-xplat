@@ -21,9 +21,12 @@ class RealUserActionPagingRepository(private val userActionPagingStore: UserActi
 
         println("Repository")
         if (nextPageId.value != null) {
+
             val request: StoreReadRequest<Int> = StoreReadRequest.fresh(nextPageId.value!!)
+            println("Request = $request")
             when (val storeResponse = userActionPagingStore.stream<Boolean>(request).first { it.dataOrNull() != null }) {
                 is StoreReadResponse.Data -> {
+                    println("STORE READ RESPONSE ${storeResponse.value}")
 
                     val pagingResponse = storeResponse.value
                     if (pagingResponse is PagingResponse.Data) {
@@ -42,7 +45,7 @@ class RealUserActionPagingRepository(private val userActionPagingStore: UserActi
                 }
 
                 else -> {
-                    println(storeResponse.toString())
+                    println("STORE RESPONSE = ${storeResponse.toString()}")
                     // TODO(mramotar)
                 }
             }

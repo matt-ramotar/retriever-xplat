@@ -9,10 +9,10 @@ import kotlinx.serialization.Serializable
 sealed class Note {
 
     @Serializable
-    sealed class Network : Note() {
+    sealed class Network : Note(), Identifiable.Network {
         @Serializable
         data class Unpopulated(
-            val _id: String,
+            override val _id: String,
             val userId: String,
             val content: String,
             val is_read: Boolean,
@@ -29,7 +29,7 @@ sealed class Note {
 
         @Serializable
         data class Populated(
-            val _id: String,
+            override val _id: String,
             val user: User.Network,
             val content: String,
             val is_read: Boolean,
@@ -46,7 +46,7 @@ sealed class Note {
 
         @Serializable
         data class Node(
-            val _id: String,
+            override val _id: String,
             val userId: String,
             val content: String,
             val is_read: Boolean,
@@ -58,12 +58,10 @@ sealed class Note {
 
 
     @Serializable
-    sealed class Output : Note() {
+    sealed class Output : Note(), Identifiable.Output {
 
         @Serializable
-        sealed class Populated {
-
-            abstract val id: String
+        sealed class Populated : Output() {
             abstract val user: User.Output.Node
             abstract val content: String
             abstract val isRead: Boolean
@@ -111,7 +109,7 @@ sealed class Note {
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val userId: String,
             val content: String,
             val isRead: Boolean,
@@ -129,7 +127,7 @@ sealed class Note {
 
         @Serializable
         data class Node(
-            val id: String,
+            override val id: String,
             val userId: String,
             val content: String,
             val isRead: Boolean,

@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface UserActionPagingRepository {
 
-    val userActions: Flow<List<UserAction.Output.Populated<*>>?>
+    val userActions: StateFlow<List<UserAction.Output.Populated<*>>?>
     suspend fun load()
 }

@@ -45,7 +45,7 @@ sealed class UserNotification {
     @Serializable
     sealed class Output : UserNotification() {
         @Serializable
-        data class Populated<out T : Any>(
+        data class Populated<out T : Identifiable>(
             val id: String,
             val user: User.Output.Node,
             val action: UserAction.Output.Populated<T>,

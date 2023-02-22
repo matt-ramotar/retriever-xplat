@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FeedViewModel(private val userActionPagingRepository: UserActionPagingRepository) : ViewModel() {
@@ -15,10 +14,9 @@ class FeedViewModel(private val userActionPagingRepository: UserActionPagingRepo
 
     init {
         viewModelScope.launch {
+            println("Loading")
             userActionPagingRepository.load()
-            userActionPagingRepository.userActions.collectLatest {
-                _feed.value = it
-            }
+            _feed.value = userActionPagingRepository.userActions.value
 
         }
     }

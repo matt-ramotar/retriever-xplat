@@ -3,10 +3,8 @@
 
 package ai.wandering.retriever.common.storekit.entity
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 sealed class UserAction {
 
@@ -80,7 +78,7 @@ sealed class UserAction {
     @Serializable
     sealed class Output : UserAction() {
         @Serializable
-        data class Populated<out T : Any>(
+        data class Populated<out T : Identifiable>(
             val id: String,
             val user: User.Output.Node,
             val obj: T,

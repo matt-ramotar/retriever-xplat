@@ -9,10 +9,10 @@ sealed class Graph {
 
 
     @Serializable
-    sealed class Network : Graph() {
+    sealed class Network : Graph(), Identifiable.Network {
         @Serializable
         data class Unpopulated(
-            val _id: String,
+            override val _id: String,
             val userId: String,
             val name: String,
             val createdAt: String,
@@ -24,7 +24,7 @@ sealed class Graph {
 
         @Serializable
         data class Node(
-            val _id: String,
+            override val _id: String,
             val userId: String,
             val name: String,
             val createdAt: String,
@@ -32,7 +32,7 @@ sealed class Graph {
 
         @Serializable
         data class Populated(
-            val _id: String,
+            override val _id: String,
             val user: User.Network,
             val name: String,
             val createdAt: String,
@@ -44,10 +44,10 @@ sealed class Graph {
     }
 
     @Serializable
-    sealed class Output : Graph() {
+    sealed class Output : Graph(), Identifiable.Output {
         @Serializable
         data class Populated(
-            val id: String,
+            override val id: String,
             val user: User.Output.Node,
             val name: String,
             val createdAt: Instant,
@@ -59,7 +59,7 @@ sealed class Graph {
 
         @Serializable
         data class Unpopulated(
-            val id: String,
+            override val id: String,
             val userId: String,
             val name: String,
             val createdAt: Instant,
@@ -71,7 +71,7 @@ sealed class Graph {
 
         @Serializable
         data class Node(
-            val id: String,
+            override val id: String,
             val userId: String,
             val name: String,
             val createdAt: Instant

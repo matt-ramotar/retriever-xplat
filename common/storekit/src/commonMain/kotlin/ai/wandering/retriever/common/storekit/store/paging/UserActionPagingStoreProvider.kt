@@ -1,11 +1,13 @@
 package ai.wandering.retriever.common.storekit.store.paging
 
-import ai.wandering.retriever.common.storekit.LocalUserActionPage
+
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.api.paging.collection.UserActionPagingApi
 import ai.wandering.retriever.common.storekit.bookkeeper.UserActionPageBookkeeper
+import ai.wandering.retriever.common.storekit.converter.asLocal
 import ai.wandering.retriever.common.storekit.converter.asNodeOutput
-import ai.wandering.retriever.common.storekit.db.queries.user_action.findAndPopulateUserAction
+import ai.wandering.retriever.common.storekit.db.queries.user_action_page.findAndPopulateUserActionPage
+import ai.wandering.retriever.common.storekit.entity.Identifiable
 import ai.wandering.retriever.common.storekit.entity.AuthenticatedUser
 import ai.wandering.retriever.common.storekit.entity.Channel
 import ai.wandering.retriever.common.storekit.entity.Graph
@@ -30,7 +32,10 @@ import org.mobilenativefoundation.store.store5.Updater
 import org.mobilenativefoundation.store.store5.UpdaterResult
 
 
-inline fun <reified T : Any> UserAction.Network.Populated.asPopulatedOutput(serializer: Json): UserAction.Output.Populated<T> {
+// Refactor output to populated output
+// Update SOT write to also write each useraction
+
+inline fun <reified T : Identifiable> UserAction.Network.Populated.asPopulatedOutput(serializer: Json): UserAction.Output.Populated<T> {
     println("Hitting $this")
 
     return UserAction.Output.Populated<T>(
@@ -48,9 +53,9 @@ class UserActionPagingStoreProvider(
     private val api: UserActionPagingApi,
     private val db: RetrieverDatabase,
     private val serializer: Json,
-) : MutableStoreProvider<Int, PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, LocalUserActionPage, Boolean> {
-    override fun provideConverter(): Converter<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, LocalUserActionPage> =
-        Converter.Builder<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, LocalUserActionPage>()
+) : MutableStoreProvider<Int, PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>, Boolean> {
+    override fun provideConverter(): Converter<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>> =
+        Converter.Builder<PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>>()
             .fromNetworkToOutput { pagingResponse ->
                 require(pagingResponse is PagingResponse.Data)
 
@@ -78,28 +83,26 @@ class UserActionPagingStoreProvider(
             .fromOutputToLocal { pagingResponse ->
                 require(pagingResponse is PagingResponse.Data)
 
-                LocalUserActionPage(
+                PagingResponse.Data(
                     pageId = pagingResponse.pageId,
                     nextPageId = pagingResponse.nextPageId,
                     prevPageId = pagingResponse.prevPageId,
-                    userActionIds = pagingResponse.objects.map { it.id },
+                    objects = pagingResponse.objects,
                     totalPages = pagingResponse.totalPages,
                     offset = pagingResponse.offset,
-                    totalUserActions = pagingResponse.totalObjects,
-                    userId = user.id,
+                    totalObjects = pagingResponse.totalObjects,
                 )
             }
             .fromLocalToOutput { localPage ->
-                val userActions = localPage.userActionIds?.map { userActionId -> db.findAndPopulateUserAction(userActionId) } ?: listOf()
-
+                require(localPage is PagingResponse.Data)
                 PagingResponse.Data(
                     pageId = localPage.pageId,
                     nextPageId = localPage.nextPageId,
                     prevPageId = localPage.prevPageId,
                     totalPages = localPage.totalPages,
-                    totalObjects = localPage.totalUserActions,
+                    totalObjects = localPage.totalObjects,
                     offset = localPage.offset,
-                    objects = userActions
+                    objects = localPage.objects
                 )
             }
             .build()
@@ -144,14 +147,28 @@ class UserActionPagingStoreProvider(
         }
     )
 
-    override fun provideSot(): SourceOfTruth<Int, LocalUserActionPage> = SourceOfTruth.of(
+    override fun provideSot(): SourceOfTruth<Int, PagingResponse<Int, UserAction.Output.Populated<*>>> = SourceOfTruth.of(
         reader = { pageId ->
+
             flow {
-                emit(db.localUserActionPageQueries.find(pageId, user.id).executeAsOne())
+                emit(db.findAndPopulateUserActionPage(pageId, user.id))
             }
         },
-        writer = { _, localPage ->
-            db.localUserActionPageQueries.upsert(localPage)
+        writer = { _, pagingResponse ->
+            println("Trying to save")
+            try {
+                require(pagingResponse is PagingResponse.Data)
+                db.localUserActionPageQueries.upsert(pagingResponse.asLocal(user.id))
+
+                pagingResponse.objects.forEach { userAction ->
+                    db.localUserQueries.upsert(userAction.user.asLocal())
+                    db.localUserActionQueries.upsert(userAction.asLocal())
+                }
+
+            } catch (error: Throwable) {
+                println(error.message)
+                println(error.cause)
+            }
         },
         delete = { pageId -> db.localUserActionPageQueries.clear(pageId, user.id) },
         deleteAll = { db.localUserActionPageQueries.clearAll() }
@@ -162,7 +179,7 @@ class UserActionPagingStoreProvider(
     )
 
     override fun provideMutableStore(): MutableStore<Int, PagingResponse<Int, UserAction.Output.Populated<*>>> = StoreBuilder
-        .from<Int, PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, LocalUserActionPage>(
+        .from<Int, PagingResponse<Int, UserAction.Network.Populated>, PagingResponse<Int, UserAction.Output.Populated<*>>, PagingResponse<Int, UserAction.Output.Populated<*>>>(
             fetcher = provideFetcher(),
             sourceOfTruth = provideSot()
         )

@@ -1,20 +1,21 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package ai.wandering.retriever.common.storekit.db.queries.user_action
 
 import ai.wandering.retriever.common.storekit.RetrieverDatabase
 import ai.wandering.retriever.common.storekit.db.queries.graph.findAndPopulate
 import ai.wandering.retriever.common.storekit.db.queries.note.findAndPopulate
 import ai.wandering.retriever.common.storekit.db.queries.user.findAndPopulate
+import ai.wandering.retriever.common.storekit.entity.Identifiable
 import ai.wandering.retriever.common.storekit.entity.User
 import ai.wandering.retriever.common.storekit.entity.UserAction
 
 fun RetrieverDatabase.findAndPopulateUserAction(userActionId: String): UserAction.Output.Populated<*> {
 
 
+    println("Id = $userActionId")
     val userAction = localUserActionQueries.findByIdAndPopulateUser(userActionId).executeAsOne()
 
-    val obj: Any = when (userAction.userActionModel) {
+    println("User action = $userAction")
+    val obj: Identifiable.Output = when (userAction.userActionModel) {
         UserAction.Model.Note -> localNoteQueries.findAndPopulate(userAction.userActionObjectId)
         UserAction.Model.Thread -> TODO() // db.localThreadQueries.findAndPopulate(userAction.userActionObjectId)
         UserAction.Model.Channel -> TODO() // db.localChannelQueries.findAndPopulate(userAction.userActionObjectId)
