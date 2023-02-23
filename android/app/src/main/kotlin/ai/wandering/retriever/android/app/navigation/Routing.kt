@@ -6,6 +6,7 @@ import ai.wandering.retriever.android.app.wiring.AppDependencies
 import ai.wandering.retriever.android.common.navigation.Screen
 import ai.wandering.retriever.android.common.scoping.UserDependencies
 import ai.wandering.retriever.android.feature.account_tab.AccountTab
+import ai.wandering.retriever.android.feature.account_tab.CampaignViewModel
 import ai.wandering.retriever.android.feature.create_note.CreateNoteScreen
 import ai.wandering.retriever.android.feature.create_note.NoteCreationViewModel
 import ai.wandering.retriever.android.feature.feed_tab.FeedTab
@@ -49,7 +50,13 @@ data class NotificationsResponse(
 )
 
 @Composable
-fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteCreationViewModel: NoteCreationViewModel = viewModel(), feedViewModel: FeedViewModel = viewModel()) {
+fun Routing(
+    navController: NavHostController,
+    innerPadding: PaddingValues,
+    noteCreationViewModel: NoteCreationViewModel = viewModel(),
+    feedViewModel: FeedViewModel = viewModel(),
+    campaignViewModel: CampaignViewModel = viewModel()
+) {
 
 
     val app = LocalContext.current.applicationContext as RetrieverApp
@@ -109,7 +116,7 @@ fun Routing(navController: NavHostController, innerPadding: PaddingValues, noteC
         composable(Screen.Account.route) {
             // TODO(mramotar)
             val populatedUser = database.localUserQueries.findAndPopulate(user.id)
-            AccountTab(populatedUser) {
+            AccountTab(populatedUser, campaignViewModel = campaignViewModel) {
                 navController.navigate("users/${user.id}")
             }
         }

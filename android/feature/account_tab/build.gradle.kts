@@ -37,4 +37,13 @@ dependencies {
 
     implementation(project(":android:common:sig"))
     implementation(project(":common:storekit"))
+    implementation(libs.dagger.dagger)
+    kapt(libs.dagger.compiler)
+
+    implementation(project(":android:common:navigation"))
+    implementation(project(":android:common:sig"))
+
+    implementation(libs.compose.richtext.material3)
+    implementation(libs.compose.richtext.commonmark)
+    implementation(libs.coil.compose)
 }

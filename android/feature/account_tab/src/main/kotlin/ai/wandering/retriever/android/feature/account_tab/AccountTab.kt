@@ -29,20 +29,30 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun AccountTab(user: User.Output.Populated, onNavigateToProfile: () -> Unit) {
+fun AccountTab(user: User.Output.Populated, campaignViewModel: CampaignViewModel = viewModel(), onNavigateToProfile: () -> Unit) {
 
     val colors = systemThemeColors()
 
+    val campaign = campaignViewModel.state.collectAsState()
 
     SigTheme {
 
         Column {
+
+            if (campaign.value != null) {
+                Row {
+                    Text(text = campaign.value!!.content?._id ?: "Empty")
+                }
+            }
+
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
 
                 Text(text = "Account", style = MaterialTheme.typography.titleLarge)

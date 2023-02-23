@@ -10,11 +10,9 @@ import ai.wandering.retriever.common.storekit.entity.UserAction
 
 fun RetrieverDatabase.findAndPopulateUserAction(userActionId: String): UserAction.Output.Populated<*> {
 
-
-    println("Id = $userActionId")
+    
     val userAction = localUserActionQueries.findByIdAndPopulateUser(userActionId).executeAsOne()
 
-    println("User action = $userAction")
     val obj: Identifiable.Output = when (userAction.userActionModel) {
         UserAction.Model.Note -> localNoteQueries.findAndPopulate(userAction.userActionObjectId)
         UserAction.Model.Thread -> TODO() // db.localThreadQueries.findAndPopulate(userAction.userActionObjectId)

@@ -25,25 +25,25 @@ class RealUserActionPagingApi(private val user: AuthenticatedUser, private val c
     override suspend fun get(key: Int, type: PagingType, query: Json?): RequestResult<PagingResponse<Int, UserAction.Network.Populated>> = try {
 
         val endpoint = Endpoints.paging(user.id, Collection.UserAction)
-        println("Endpoint: $endpoint")
+
 
         val pagingRequest = PagingRequest(pageId = key, limit = limit, type = type)
-        println("Paging request: $pagingRequest")
+
 
         val response = client.post(endpoint) {
             setBody(pagingRequest)
             contentType(ContentType.Application.Json)
         }
 
-        println("RESPONSE = ${response.bodyAsText()}")
+
 
         val pagingResponse = response.body<PagingResponse.Data<Int, UserAction.Network.Populated>>()
 
-        println("Paging Response: $pagingResponse")
+
         RequestResult.Success(pagingResponse)
     } catch (error: Throwable) {
-        println("Error: ${error.message}")
-        println("Error: ${error.cause}")
+
+
         RequestResult.Exception(error)
     }
 

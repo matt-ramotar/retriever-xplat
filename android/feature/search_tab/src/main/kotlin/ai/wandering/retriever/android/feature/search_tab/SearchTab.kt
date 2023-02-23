@@ -26,6 +26,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import ai.wandering.retriever.android.common.sig.SigTheme
 import ai.wandering.retriever.android.common.sig.color.systemThemeColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
 
 @Composable
 fun SearchTab() {
@@ -34,6 +36,12 @@ fun SearchTab() {
     val searchState = remember { mutableStateOf(TextFieldValue()) }
 
     SigTheme {
+        
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            
+            Text(text = "", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onBackground)
+            
+        }
 
         Column {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {

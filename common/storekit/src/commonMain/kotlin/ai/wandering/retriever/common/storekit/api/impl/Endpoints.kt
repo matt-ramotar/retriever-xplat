@@ -1,5 +1,7 @@
 package ai.wandering.retriever.common.storekit.api.impl
 
+import ai.wandering.retriever.common.storekit.entity.Campaign
+
 object Endpoints {
     private const val ROOT = "https://www.api.retriever.wandering.ai"
 
@@ -17,4 +19,5 @@ object Endpoints {
     fun upsert(collection: Collection) = "$ROOT/${collection.value}"
     fun collection(userId: String, collection: Collection, populate: Boolean = false) = "$USER/$userId/${collection.value}?populate=$populate"
     fun paging(userId: String, collection: Collection) = "$USER/$userId/paging/${collection.value}"
+    fun campaign(userId: String, campaignType: Campaign.Type) = "$USER/$userId/campaigns/${campaignType.value}"
 }

@@ -36,7 +36,7 @@ import org.mobilenativefoundation.store.store5.UpdaterResult
 // Update SOT write to also write each useraction
 
 inline fun <reified T : Identifiable> UserAction.Network.Populated.asPopulatedOutput(serializer: Json): UserAction.Output.Populated<T> {
-    println("Hitting $this")
+
 
     return UserAction.Output.Populated<T>(
         id = _id,
@@ -116,7 +116,7 @@ class UserActionPagingStoreProvider(
     override fun provideFetcher(): Fetcher<Int, PagingResponse<Int, UserAction.Network.Populated>> = Fetcher.of { pageId ->
         val userId = user.id
         val query = Json { "userId" to userId }
-        println("Fetcher")
+
 
         when (val result = api.get(pageId, PagingType.Append, query)) {
             is RequestResult.Exception -> PagingResponse.Error
@@ -160,7 +160,7 @@ class UserActionPagingStoreProvider(
             }
         },
         writer = { _, pagingResponse ->
-            println("Trying to save")
+
             try {
                 require(pagingResponse is PagingResponse.Data)
                 db.localUserActionPageQueries.upsert(pagingResponse.asLocal(user.id))
@@ -171,8 +171,8 @@ class UserActionPagingStoreProvider(
                 }
 
             } catch (error: Throwable) {
-                println(error.message)
-                println(error.cause)
+
+
             }
         },
         delete = { pageId -> db.localUserActionPageQueries.clear(pageId, user.id) },

@@ -66,7 +66,7 @@ fun FeedTab(feedViewModel: FeedViewModel = viewModel()) {
 
             feed.value.run {
                 data.addAll(this ?: listOf())
-                println("ADD ALL")
+
             }
 
             data

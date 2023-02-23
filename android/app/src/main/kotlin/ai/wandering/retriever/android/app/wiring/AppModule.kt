@@ -3,8 +3,10 @@ package ai.wandering.retriever.android.app.wiring
 import ai.wandering.retriever.android.common.scoping.AppScope
 import ai.wandering.retriever.android.common.scoping.SingleIn
 import ai.wandering.retriever.common.socket.Socket
+import ai.wandering.retriever.common.storekit.api.CampaignApi
 import ai.wandering.retriever.common.storekit.api.RetrieverApi
 import ai.wandering.retriever.common.storekit.api.impl.Endpoints
+import ai.wandering.retriever.common.storekit.api.impl.RealCampaignApi
 import ai.wandering.retriever.common.storekit.api.impl.RealRetrieverApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealAuthApi
 import ai.wandering.retriever.common.storekit.api.impl.auth.RealDemoSignInApi
@@ -28,9 +30,12 @@ import ai.wandering.retriever.common.storekit.api.rest.single.MentionRestApi
 import ai.wandering.retriever.common.storekit.api.rest.single.NoteRestApi
 import ai.wandering.retriever.common.storekit.api.rest.single.TagRestApi
 import ai.wandering.retriever.common.storekit.api.socket.collection.UserNotificationsSocketApi
+import ai.wandering.retriever.common.storekit.entity.Component
 import ai.wandering.retriever.common.storekit.networking.HttpClientProvider
+import ai.wandering.retriever.common.storekit.repository.CampaignRepository
 import ai.wandering.retriever.common.storekit.repository.auth.AuthRepository
 import ai.wandering.retriever.common.storekit.repository.impl.RealAuthRepository
+import ai.wandering.retriever.common.storekit.repository.impl.RealCampaignRepository
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -38,6 +43,9 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 @Module
 @ContributesTo(AppScope::class)
@@ -49,7 +57,15 @@ object AppModule {
 
     @SingleIn(AppScope::class)
     @Provides
-    fun provideSerializer(): Json = Json { ignoreUnknownKeys = true; isLenient = true; }
+    fun provideSerializer(): Json = Json {
+        ignoreUnknownKeys = true; isLenient = true; serializersModule = SerializersModule {
+        polymorphic(Component::class) {
+            subclass(Component.Text::class)
+            subclass(Component.Row::class)
+            subclass(Component.Column::class)
+        }
+    }
+    }
 
     @Provides
     fun provideOneTapSignInApi(httpClient: HttpClient): OneTapSignInApi = RealOneTapSignInApi(httpClient)
@@ -122,4 +138,10 @@ object AppModule {
 
     @Provides
     fun provideAuthRepository(authApi: AuthApi): AuthRepository = RealAuthRepository(authApi)
+
+    @Provides
+    fun provideCampaignApi(httpClient: HttpClient): CampaignApi = RealCampaignApi(httpClient)
+
+    @Provides
+    fun provideCampaignRepository(serializer: Json, campaignApi: CampaignApi): CampaignRepository = RealCampaignRepository(serializer, campaignApi)
 }
